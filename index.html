@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tiệm giấy Thứ Ba — Tư vấn & Đặt giấy thủ công</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #F4EFE6;
+      --bg-app: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-soft: #F1EBE1;
+      --border: #E5DDD0;
+      --primary: #5C4033;
+      --primary-hover: #473026;
+      --accent: #4B6B50;
+      --accent-soft: #E8F0E9;
+      --warn-bg: #FDF3E7;
+      --warn-text: #9C5A1E;
+      --text-main: #2D241E;
+      --text-muted: #786B61;
+      --shadow-sm: 0 2px 8px rgba(45, 36, 30, 0.05);
+      --shadow-md: 0 8px 24px rgba(45, 36, 30, 0.08);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100dvh;
+      line-height: 1.5;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      height: 100dvh;
+      background: var(--bg-app);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(250, 247, 242, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #FAF7F2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 16px;
+      flex-shrink: 0;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-info h1 {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4CAF50;
+      display: inline-block;
+    }
+
+    .status-dot.loading {
+      background: #E6A23C;
+      animation: pulse 1.2s infinite;
+    }
+
+    .status-dot.error {
+      background: #D9534F;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    .cart-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+    }
+
+    .cart-btn:active {
+      transform: scale(0.96);
+    }
+
+    .cart-badge {
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      min-width: 19px;
+      height: 19px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+    }
+
+    /* Chat Stream */
+    .chat-stream {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+    }
+
+    .msg-row {
+      display: flex;
+      flex-direction: column;
+      max-width: 88%;
+      animation: fadeUp 0.22s ease-out;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-row.bot {
+      align-self: flex-start;
+    }
+
+    .msg-row.user {
+      align-self: flex-end;
+    }
+
+    .msg-row.full-width {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .bubble {
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.52;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    .msg-row.bot .bubble {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .msg-row.user .bubble {
+      background: var(--primary);
+      color: #FAF7F2;
+      border-bottom-right-radius: 4px;
+    }
+
+    /* Quick Action Chips inside chat */
+    .quick-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .chip-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chip-btn:hover {
+      background: var(--bg-soft);
+    }
+
+    .chip-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Product Catalog Strip inside Chat */
+    .catalog-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cat-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+    }
+
+    .cat-tabs::-webkit-scrollbar { display: none; }
+
+    .cat-tab {
+      border: 1px solid var(--border);
+      background: var(--bg-app);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 11px;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .cat-tab.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .product-carousel {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+    }
+
+    .product-card {
+      min-width: 205px;
+      max-width: 205px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+
+    .product-thumb {
+      width: 100%;
+      height: 118px;
+      background: var(--bg-soft);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .paper-art {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      font-family: 'Lora', serif;
+      font-size: 12px;
+      color: var(--primary);
+      background-image: radial-gradient(rgba(92, 64, 51, 0.12) 1px, transparent 0);
+      background-size: 12px 12px;
+    }
+
+    .stock-pill {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--accent);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .stock-pill.out {
+      background: var(--warn-bg);
+      color: var(--warn-text);
+    }
+
+    .product-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .product-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .product-meta {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .product-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .btn-outline {
+      flex: 1;
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-primary-sm {
+      flex: 1.3;
+      background: var(--primary);
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-preorder-sm {
+      flex: 1.3;
+      background: var(--warn-bg);
+      border: 1px solid #EBD3B5;
+      color: var(--warn-text);
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Suggested Items Card inside AI Reply */
+    .suggest-box {
+      margin-top: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .suggest-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+
+    .suggest-add {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Contact Social Card (Wholesale / Out of stock / Preorder) */
+    .contact-card {
+      margin-top: 8px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .prefill-box {
+      background: #fff;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 12px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .copy-mini {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .social-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 6px;
+      border-radius: 8px;
+      color: #fff;
+      text-align: center;
+    }
+
+    .social-fb { background: #1877F2; }
+    .social-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+    .social-th { background: #1C1C1E; }
+
+    /* Bottom Composer */
+    .composer-wrap {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 8px 12px 12px;
+      flex-shrink: 0;
+    }
+
+    .hint-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+    }
+    .hint-strip::-webkit-scrollbar { display: none; }
+
+    .hint-pill {
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 4px 6px 4px 14px;
+    }
+
+    .input-row:focus-within {
+      border-color: var(--primary);
+    }
+
+    .input-row input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+      padding: 7px 0;
+    }
+
+    .send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .send-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Modals / Drawers */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 22, 17, 0.48);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .overlay.open {
+      display: flex;
+    }
+
+    .sheet-modal {
+      width: 100%;
+      max-width: 480px;
+      max-height: 90dvh;
+      background: var(--bg-app);
+      border-top-left-radius: 22px;
+      border-top-right-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: slideUp 0.24s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-head {
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-head h2 {
+      font-family: 'Lora', serif;
+      font-size: 17px;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-app);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body {
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cart-item-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px 6px;
+    }
+
+    .qty-btn {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: #fff;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-group label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-group small {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 13.5px;
+      color: var(--text-main);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .platform-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .plat-option {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 10px;
+      padding: 8px;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .plat-option.selected {
+      border-color: var(--primary);
+      background: var(--bg-soft);
+      color: var(--primary);
+    }
+
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .summary-total {
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
+      margin-top: 2px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--primary);
+    }
+
+    .submit-order-btn {
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 13px;
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .submit-order-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .toast {
+      position: fixed;
+      top: 66px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2D241E;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .toast.show { opacity: 1; }
+
+    .typing-dots {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px 2px;
+    }
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-avatar">TB</div>
+        <div class="brand-info">
+          <h1>Tiệm giấy Thứ Ba</h1>
+          <div class="status-line">
+            <span id="statusDot" class="status-dot loading"></span>
+            <span id="statusText">Đang cập nhật kho giấy...</span>
+          </div>
+        </div>
+      </div>
+      <button class="cart-btn" onclick="openCartModal()">
+        <span>Giỏ hàng</span>
+        <span id="cartCount" class="cart-badge">0</span>
+      </button>
+    </header>
+
+    <!-- Chat Area -->
+    <main id="chatStream" class="chat-stream"></main>
+
+    <!-- Input Bar -->
+    <div class="composer-wrap">
+      <div class="hint-strip">
+        <button class="hint-pill" onclick="sendQuickText('Xem các loại giấy đang có sẵn')">📄 Giấy đang có sẵn</button>
+        <button class="hint-pill" onclick="sendQuickText('Giấy nào viết bút máy không lem ạ?')">✒️ Viết bút máy</button>
+        <button class="hint-pill" onclick="sendQuickText('Phí ship và ưu đãi như thế nào ạ?')">🚚 Phí ship</button>
+        <button class="hint-pill" onclick="openCartModal()">🛒 Lên đơn ngay</button>
+      </div>
+      <form class="input-row" onsubmit="handleFormSubmit(event)">
+        <input id="chatInput" type="text" placeholder="Hỏi tiệm loại giấy, số lượng, giá tiền..." autocomplete="off" />
+        <button id="sendBtn" type="submit" class="send-btn" aria-label="Gửi">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Product Detail Modal -->
+  <div id="detailOverlay" class="overlay" onclick="closeOverlay(event, 'detailOverlay')">
+    <div class="sheet-modal">
+      <div class="modal-head">
+        <h2 id="detailTitle">Chi tiết sản phẩm</h2>
+        <button class="close-btn" onclick="hideModal('detailOverlay')">✕</button>
+      </div>
+      <div id="detailBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Cart & Checkout Modal -->
+  <div id="cartOverlay" class="overlay" onclick="closeOverlay(event, 'cartOverlay')">
+    <div class="sheet-modal">
+      <div class="modal-head">
+        <h2>Giỏ giấy & Thông tin gửi hàng</h2>
+        <button class="close-btn" onclick="hideModal('cartOverlay')">✕</button>
+      </div>
+      <div id="cartBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // CẤU HÌNH KẾT NỐI GOOGLE APPS SCRIPT & LIÊN KẾT MẠNG XÃ HỘI CỦA TIỆM
+    // =========================================================================
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
+
+    // Bạn có thể thay bằng link trang cá nhân/fanpage trực tiếp của tiệm nếu muốn
+    const SOCIAL_LINKS = {
+      facebook: "https://www.facebook.com/search/top?q=Ti%E1%BB%87m%20gi%E1%BA%A5y%20Th%E1%BB%A9%20Ba",
+      instagram: "https://www.instagram.com/",
+      threads: "https://www.threads.net/"
+    };
+
+    // State
+    let products = [];
+    let cart = [];
+    let chatHistory = [];
+    let selectedCategory = "Tất cả";
+    let selectedPlatform = "Instagram";
+    let isSending = false;
+
+    const chatStream = document.getElementById("chatStream");
+    const chatInput = document.getElementById("chatInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    function formatVND(num) {
+      return Number(num || 0).toLocaleString("vi-VN") + "đ";
+    }
+
+    function formatShortK(num) {
+      const n = Number(num || 0);
+      if (n >= 1000 && n % 1000 === 0) return (n / 1000) + "K";
+      return formatVND(n);
+    }
+
+    function showToast(text) {
+      const t = document.getElementById("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2400);
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast("Đã copy nội dung để bạn dán tin nhắn"));
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("Đã copy nội dung để bạn dán tin nhắn");
+      }
+    }
+
+    function scrollBottom() {
+      requestAnimationFrame(() => {
+        chatStream.scrollTop = chatStream.scrollHeight;
+      });
+    }
+
+    // Load inventory from Google Sheets via Apps Script
+    async function loadInventory() {
+      const dot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+      dot.className = "status-dot loading";
+      statusText.textContent = "Đang cập nhật kho giấy...";
+
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || "Không tải được kho");
+
+        products = (json.products || []).map(p => ({
+          ...p,
+          price: Number(p.price || 0),
+          stock: Number(p.stock || 0),
+          itemsPerUnit: Number(p.itemsPerUnit || 1),
+          totalPieces: Number(p.stock || 0) * Number(p.itemsPerUnit || 1)
+        }));
+
+        dot.className = "status-dot";
+        const availableCount = products.filter(p => p.stock > 0).length;
+        statusText.textContent = `Sẵn sàng • ${availableCount} mẫu đang có sẵn`;
+      } catch (err) {
+        dot.className = "status-dot error";
+        statusText.textContent = "Lỗi kết nối kho — chạm để thử lại";
+        statusText.style.cursor = "pointer";
+        statusText.onclick = loadInventory;
+        console.error(err);
+      }
+    }
+
+    // Render initial welcome message
+    function renderWelcome() {
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+      row.innerHTML = `
+        <div class="bubble">Dạ chào mình, tiệm là Tiệm giấy Thứ Ba ạ.
+Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng/giá tiền hoặc lên đơn trực tiếp ở đây mà không cần chờ tiệm rep nhé.</div>
+        <div class="quick-grid">
+          <button class="chip-btn" onclick="renderCatalogMessage()">📄 Xem các loại giấy đang có</button>
+          <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">💡 Tư vấn chọn giấy</button>
+          <button class="chip-btn" onclick="openCartModal()">🛒 Lên đơn nhanh</button>
+        </div>
+      `;
+      chatStream.appendChild(row);
+    }
+
+    // Render interactive product catalog card inside chat
+    function renderCatalogMessage(filterCat = "Tất cả") {
+      selectedCategory = filterCat;
+      const existing = document.getElementById("catalogCardRow");
+      if (existing) existing.remove();
+
+      const row = document.createElement("div");
+      row.id = "catalogCardRow";
+      row.className = "msg-row bot full-width";
+
+      if (!products.length) {
+        row.innerHTML = `<div class="bubble">Dạ kho giấy đang tải hoặc chưa có dữ liệu, mình đợi vài giây rồi bấm lại giúp tiệm nhé ạ.</div>`;
+        chatStream.appendChild(row);
+        scrollBottom();
+        return;
+      }
+
+      const categories = ["Tất cả", ...new Set(products.map(p => p.category).filter(Boolean))];
+      const filtered = filterCat === "Tất cả" ? products : products.filter(p => p.category === filterCat);
+
+      const tabsHtml = categories.map(c =>
+        `<button class="cat-tab ${c === filterCat ? 'active' : ''}" onclick="renderCatalogMessage('${c.replace(/'/g, "\\'")}')">${c}</button>`
+      ).join("");
+
+      const cardsHtml = filtered.map(p => {
+        const isOut = p.stock <= 0;
+        const unitLabel = p.itemsPerUnit > 1 ? `1 ${p.unit} (${p.itemsPerUnit} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})` : `1 ${p.unit}`;
+        const stockLabel = isOut
+          ? "Tạm hết sẵn"
+          : (p.itemsPerUnit > 1 ? `Còn ${p.stock} ${p.unit} (${p.totalPieces} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})` : `Còn ${p.stock} ${p.unit}`);
+
+        const thumbHtml = p.imageUrl
+          ? `<img src="${p.imageUrl}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <div class="paper-art" style="display:none;"><span>${p.name}</span></div>`
+          : `<div class="paper-art"><span>${p.name}</span></div>`;
+
+        const actionBtn = isOut
+          ? `<button class="btn-preorder-sm" onclick="askPreorder('${p.name.replace(/'/g, "\\'")}')">Đặt làm thêm</button>`
+          : `<button class="btn-primary-sm" onclick="addToCart('${p.id}', 1)">+ Thêm giỏ</button>`;
+
+        return `
+          <div class="product-card">
+            <div class="product-thumb">
+              ${thumbHtml}
+              <span class="stock-pill ${isOut ? 'out' : ''}">${stockLabel}</span>
+            </div>
+            <div class="product-body">
+              <div>
+                <div class="product-title">${p.name}</div>
+                <div class="product-meta">Quy cách: ${unitLabel}</div>
+                <div class="product-price">${formatShortK(p.price)} / ${p.unit}</div>
+              </div>
+              <div class="card-actions">
+                <button class="btn-outline" onclick="openDetailModal('${p.id}')">Chi tiết</button>
+                ${actionBtn}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      row.innerHTML = `
+        <div class="catalog-box">
+          <div class="cat-tabs">${tabsHtml}</div>
+          <div class="product-carousel">${cardsHtml}</div>
+        </div>
+      `;
+      chatStream.appendChild(row);
+      scrollBottom();
+    }
+
+    function askPreorder(productName) {
+      sendQuickText(`Mẫu "${productName}" đang tạm hết, mình muốn hỏi đặt làm thêm ạ`);
+    }
+
+    function openDetailModal(id) {
+      const p = products.find(item => item.id === id);
+      if (!p) return;
+      const isOut = p.stock <= 0;
+      const unitDesc = p.itemsPerUnit > 1
+        ? `${p.unit} (${p.itemsPerUnit} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})`
+        : p.unit;
+      const stockDesc = isOut
+        ? "Tạm hết sẵn (có thể nhắn tiệm đặt làm mẻ mới)"
+        : (p.itemsPerUnit > 1 ? `Còn ${p.stock} ${p.unit} (tổng ${p.totalPieces} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})` : `Còn ${p.stock} ${p.unit}`);
+
+      document.getElementById("detailTitle").textContent = p.name;
+      document.getElementById("detailBody").innerHTML = `
+        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:1px solid var(--border);" />` : ""}
+        <div class="summary-card">
+          <div class="summary-line"><span>Đơn giá:</span><strong>${formatVND(p.price)} / ${unitDesc}</strong></div>
+          <div class="summary-line"><span>Tình trạng kho:</span><strong>${stockDesc}</strong></div>
+          <div class="summary-line"><span>Nhóm:</span><span>${p.category}</span></div>
+        </div>
+        <div class="summary-card">
+          <strong style="font-size:13px;">Đặc điểm chi tiết:</strong>
+          <p style="font-size:13.5px; color:var(--text-main);">${p.specs || "Giấy tái chế thủ công từ sợi tự nhiên tại Tiệm giấy Thứ Ba."}</p>
+        </div>
+        ${isOut
+          ? `<button class="submit-order-btn" onclick="hideModal('detailOverlay'); askPreorder('${p.name.replace(/'/g, "\\'")}')">Nhắn tiệm đặt làm thêm mẫu này</button>`
+          : `<button class="submit-order-btn" onclick="addToCart('${p.id}', 1); hideModal('detailOverlay');">+ Thêm vào giỏ (${formatShortK(p.price)})</button>`
+        }
+      `;
+      document.getElementById("detailOverlay").classList.add("open");
+    }
+
+    function hideModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    function closeOverlay(e, id) {
+      if (e.target.id === id) hideModal(id);
+    }
+
+    // Cart functions
+    function updateCartBadge() {
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("cartCount").textContent = totalQty;
+    }
+
+    function addToCart(id, qty = 1) {
+      const p = products.find(item => item.id === id);
+      if (!p || p.stock <= 0) {
+        showToast("Mẫu này hiện tạm hết sẵn ạ");
+        return;
+      }
+      const existing = cart.find(c => c.id === id);
+      const currentQty = existing ? existing.qty : 0;
+      if (currentQty + qty > p.stock) {
+        showToast(`Kho chỉ còn tối đa ${p.stock} ${p.unit} ạ`);
+        return;
+      }
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({ id: p.id, name: p.name, qty: qty, price: p.price, unit: p.unit, maxStock: p.stock });
+      }
+      updateCartBadge();
+      showToast(`Đã thêm ${p.name} vào giỏ`);
+    }
+
+    function changeCartQty(id, delta) {
+      const idx = cart.findIndex(c => c.id === id);
+      if (idx === -1) return;
+      const item = cart[idx];
+      const p = products.find(prod => prod.id === id);
+      const maxStock = p ? p.stock : item.maxStock;
+      const nextQty = item.qty + delta;
+
+      if (nextQty <= 0) {
+        cart.splice(idx, 1);
+      } else if (nextQty > maxStock) {
+        showToast(`Kho hiện chỉ còn ${maxStock} ${item.unit} ạ`);
+        return;
+      } else {
+        item.qty = nextQty;
+      }
+      updateCartBadge();
+      renderCartModalContent();
+    }
+
+    function calcCartTotals() {
+      const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+      const hasKit = cart.some(i => i.name.toLowerCase().includes("kit"));
+      const totalUnits = cart.reduce((sum, i) => sum + i.qty, 0);
+      const shipFee = (subtotal === 0 || subtotal >= 200000 || hasKit) ? 0 : 15000;
+      return { subtotal, shipFee, total: subtotal + shipFee, totalUnits };
+    }
+
+    function openCartModal() {
+      renderCartModalContent();
+      document.getElementById("cartOverlay").classList.add("open");
+    }
+
+    function renderCartModalContent() {
+      const body = document.getElementById("cartBody");
+      if (!cart.length) {
+        body.innerHTML = `
+          <div style="text-align:center; padding:24px 10px;">
+            <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px;">Giỏ giấy của mình đang trống ạ.</p>
+            <button class="submit-order-btn" onclick="hideModal('cartOverlay'); renderCatalogMessage();">Xem các loại giấy đang có</button>
+          </div>
+        `;
+        return;
+      }
+
+      const { subtotal, shipFee, total, totalUnits } = calcCartTotals();
+      const itemsHtml = cart.map(item => `
+        <div class="cart-item-row">
+          <div>
+            <div style="font-size:13.5px; font-weight:600;">${item.name}</div>
+            <div style="font-size:12px; color:var(--text-muted);">${formatVND(item.price)} / ${item.unit}</div>
+          </div>
+          <div class="qty-control">
+            <button type="button" class="qty-btn" onclick="changeCartQty('${item.id}', -1)">−</button>
+            <span style="font-size:13px; font-weight:600; min-width:18px; text-align:center;">${item.qty}</span>
+            <button type="button" class="qty-btn" onclick="changeCartQty('${item.id}', 1)">+</button>
+          </div>
+        </div>
+      `).join("");
+
+      const wholesaleNotice = totalUnits >= 10 ? `
+        <div style="background:var(--warn-bg); color:var(--warn-text); padding:10px 12px; border-radius:10px; font-size:12.5px;">
+          Mình đang chọn từ <strong>${totalUnits} gói/món</strong> trở lên — đơn số lượng lớn tiệm có áp dụng chiết khấu riêng. Mình có thể nhắn trực tiếp cho tiệm trước để chốt giá ưu đãi nhé!
+        </div>
+      ` : "";
+
+      body.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${itemsHtml}
+        </div>
+        ${wholesaleNotice}
+        <div class="summary-card">
+          <div class="summary-line"><span>Tiền giấy:</span><span>${formatVND(subtotal)}</span></div>
+          <div class="summary-line"><span>Phí ship (Freeship đơn từ 200K & Bộ kit):</span><span>${shipFee === 0 ? "Miễn phí" : formatVND(shipFee)}</span></div>
+          <div class="summary-line summary-total"><span>Tổng thanh toán (COD):</span><span>${formatVND(total)}</span></div>
+        </div>
+
+        <form id="orderForm" onsubmit="submitOrder(event)" style="display:flex; flex-direction:column; gap:11px;">
+          <div class="form-group">
+            <label>1. Tên người nhận *</label>
+            <input id="custName" class="form-control" type="text" placeholder="Ví dụ: Minh Anh" required />
+          </div>
+
+          <div class="form-group">
+            <label>2. Số điện thoại nhận hàng *</label>
+            <input id="custPhone" class="form-control" type="tel" placeholder="Ví dụ: 0912345678" required />
+          </div>
+
+          <div class="form-group">
+            <label>3. Địa chỉ giao hàng *</label>
+            <textarea id="custAddress" class="form-control" rows="2" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>4. Ứng dụng bạn dùng để nhắn với tiệm *</label>
+            <div class="platform-pills">
+              <div class="plat-option ${selectedPlatform === 'Instagram' ? 'selected' : ''}" onclick="selectPlatform('Instagram', this)">Instagram</div>
+              <div class="plat-option ${selectedPlatform === 'Threads' ? 'selected' : ''}" onclick="selectPlatform('Threads', this)">Threads</div>
+              <div class="plat-option ${selectedPlatform === 'Facebook' ? 'selected' : ''}" onclick="selectPlatform('Facebook', this)">Facebook</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>5. Tên tài khoản (User / Nickname) trên ${selectedPlatform} *</label>
+            <small>Tiệm lưu lại để tìm đúng tài khoản của mình và nhắn xác nhận đơn ạ</small>
+            <input id="custSocial" class="form-control" type="text" placeholder="Ví dụ: @minhanh.paper hoặc tên Facebook của mình" required />
+          </div>
+
+          <div class="form-group">
+            <label>6. Ghi chú thêm (nếu có)</label>
+            <input id="custNote" class="form-control" type="text" placeholder="Ví dụ: Mix 5 tờ quế + 5 tờ vỏ quýt..." />
+          </div>
+
+          <button id="confirmOrderBtn" type="submit" class="submit-order-btn">Gửi đơn đặt hàng</button>
+        </form>
+      `;
+    }
+
+    function selectPlatform(plat, el) {
+      selectedPlatform = plat;
+      document.querySelectorAll(".plat-option").forEach(node => node.classList.remove("selected"));
+      el.classList.add("selected");
+      const label = el.closest(".form-group").nextElementSibling.querySelector("label");
+      if (label) label.textContent = `5. Tên tài khoản (User / Nickname) trên ${plat} *`;
+    }
+
+    async function submitOrder(e) {
+      e.preventDefault();
+      const btn = document.getElementById("confirmOrderBtn");
+      const customerName = document.getElementById("custName").value.trim();
+      const phone = document.getElementById("custPhone").value.trim();
+      const address = document.getElementById("custAddress").value.trim();
+      const socialHandle = document.getElementById("custSocial").value.trim();
+      const note = document.getElementById("custNote").value.trim();
+
+      if (!customerName || !phone || !address || !socialHandle) {
+        showToast("Mình điền đủ thông tin giúp tiệm nhé ạ");
+        return;
+      }
+
+      const { subtotal, shipFee, total } = calcCartTotals();
+      const orderPayload = {
+        customerName,
+        phone,
+        address,
+        platform: selectedPlatform,
+        socialHandle,
+        note,
+        items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, id: i.id })),
+        subtotal,
+        shipFee,
+        total
+      };
+
+      btn.disabled = true;
+      btn.textContent = "Đang gửi đơn về tiệm...";
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "create_order", order: orderPayload })
+        });
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || "Không gửi được đơn");
+
+        const itemsSummary = cart.map(i => `• ${i.name} x${i.qty} (${formatVND(i.price * i.qty)})`).join("\n");
+        cart = [];
+        updateCartBadge();
+        hideModal("cartOverlay");
+        await loadInventory();
+
+        appendBotMessage(`Dạ tiệm đã nhận được đơn của mình rồi ạ!\n\nNgười nhận: ${customerName} (${phone})\nĐịa chỉ: ${address}\nTài khoản liên hệ: ${socialHandle} (${selectedPlatform})\nĐơn giấy:\n${itemsSummary}\nTổng cộng: ${formatVND(total)} (gồm ship ${formatVND(shipFee)})\n\nMình vui lòng chờ tiệm kiểm tra và nhắn tin xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng nhé ạ.`);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Gửi đơn đặt hàng";
+        showToast("Có lỗi kết nối, mình thử bấm gửi lại giúp tiệm nhé");
+        console.error(err);
+      }
+    }
+
+    // Chat messaging with Gemini via Apps Script
+    function appendUserMessage(text) {
+      const row = document.createElement("div");
+      row.className = "msg-row user";
+      row.innerHTML = `<div class="bubble"></div>`;
+      row.querySelector(".bubble").textContent = text;
+      chatStream.appendChild(row);
+      chatHistory.push({ role: "user", text });
+      scrollBottom();
+    }
+
+    function appendTypingIndicator() {
+      const row = document.createElement("div");
+      row.id = "typingRow";
+      row.className = "msg-row bot";
+      row.innerHTML = `<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+      chatStream.appendChild(row);
+      scrollBottom();
+    }
+
+    function removeTypingIndicator() {
+      const el = document.getElementById("typingRow");
+      if (el) el.remove();
+    }
+
+    function appendBotMessage(replyText, extra = {}) {
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = replyText;
+      row.appendChild(bubble);
+
+      // Suggested items from AI
+      if (Array.isArray(extra.suggestedItems) && extra.suggestedItems.length > 0) {
+        const validSuggestions = extra.suggestedItems.filter(s => {
+          const prod = products.find(p => p.id === s.id || p.name === s.name);
+          return prod && prod.stock > 0;
+        });
+
+        if (validSuggestions.length > 0) {
+          const box = document.createElement("div");
+          box.className = "suggest-box";
+          validSuggestions.forEach(s => {
+            const prod = products.find(p => p.id === s.id || p.name === s.name);
+            const qty = Math.min(Number(s.qty || 1), prod.stock);
+            const itemEl = document.createElement("div");
+            itemEl.className = "suggest-item";
+            itemEl.innerHTML = `
+              <span><strong>${prod.name}</strong> (x${qty} • ${formatShortK(prod.price * qty)})</span>
+              <button class="suggest-add">+ Thêm giỏ</button>
+            `;
+            itemEl.querySelector("button").onclick = () => addToCart(prod.id, qty);
+            box.appendChild(itemEl);
+          });
+          row.appendChild(box);
+        }
+      }
+
+      // Direct contact buttons when wholesale / out of stock / custom request
+      if (extra.showContactButtons) {
+        const prefill = extra.contactPrefill || replyText;
+        const contactCard = document.createElement("div");
+        contactCard.className = "contact-card";
+        contactCard.innerHTML = `
+          <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:var(--primary);">Nhắn trực tiếp cho tiệm qua ứng dụng bạn đang dùng:</div>
+          <div class="prefill-box">
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${prefill}</span>
+            <button type="button" class="copy-mini">Copy nội dung</button>
+          </div>
+          <div class="social-links">
+            <a class="social-btn social-fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a class="social-btn social-ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer">Threads</a>
+          </div>
+        `;
+        contactCard.querySelector(".copy-mini").onclick = () => copyText(prefill);
+        contactCard.querySelectorAll(".social-btn").forEach(a => {
+          a.addEventListener("click", () => copyText(prefill));
+        });
+        row.appendChild(contactCard);
+      }
+
+      chatStream.appendChild(row);
+      chatHistory.push({ role: "model", text: replyText });
+      scrollBottom();
+    }
+
+    function sendQuickText(text) {
+      if (isSending) return;
+      chatInput.value = text;
+      handleFormSubmit(new Event("submit"));
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text || isSending) return;
+
+      chatInput.value = "";
+      appendUserMessage(text);
+
+      // If user asks to view catalog directly
+      if (/^(xem|danh sách|các loại giấy|menu|bảng giá)/i.test(text) && text.length < 38) {
+        appendBotMessage("Dạ dưới đây là các mẫu giấy hiện có của tiệm (kèm số lượng còn sẵn và quy cách từng loại), mình lướt ngang để xem nhé ạ:");
+        renderCatalogMessage("Tất cả");
+        return;
+      }
+
+      isSending = true;
+      sendBtn.disabled = true;
+      appendTypingIndicator();
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "chat",
+            message: text,
+            history: chatHistory.slice(-8)
+          })
+        });
+        const json = await res.json();
+        removeTypingIndicator();
+
+        if (!json.ok || !json.data) {
+          throw new Error(json.error || "Phản hồi AI không hợp lệ");
+        }
+
+        const ai = json.data;
+        appendBotMessage(ai.reply || "Dạ mình cần tiệm hỗ trợ thêm mẫu nào ạ?", {
+          intent: ai.intent,
+          showContactButtons: Boolean(ai.showContactButtons),
+          contactPrefill: ai.contactPrefill || text,
+          suggestedItems: ai.suggestedItems || []
+        });
+      } catch (err) {
+        removeTypingIndicator();
+        appendBotMessage("Dạ hệ thống đang bận một chút, mình có thể xem kho trực tiếp hoặc nhắn thẳng cho tiệm qua Facebook/Instagram/Threads giúp tiệm nhé ạ.", {
+          showContactButtons: true,
+          contactPrefill: text
+        });
+        console.error(err);
+      } finally {
+        isSending = false;
+        sendBtn.disabled = false;
+      }
+    }
+
+    // Boot
+    (async function init() {
+      renderWelcome();
+      await loadInventory();
+    })();
+  </script>
+</body>
+</html>
