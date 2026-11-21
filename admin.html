@@ -4,856 +4,1058 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quản lý Tiệm giấy Thứ Ba</title>
-  <link rel="icon" type="image/png" href="logo.png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:wght@600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&family=Montserrat:wght@600;700&display=swap" rel="stylesheet" />
+
   <style>
     :root {
-      --bg: #F4EFE6;
-      --surface: #FAF7F2;
-      --card: #FFFFFF;
-      --soft: #F1EBE1;
-      --border: #E5DDD0;
-      --primary: #5C4033;
-      --accent: #4B6B50;
-      --warn-bg: #FDF3E7;
-      --warn-text: #9C5A1E;
-      --danger: #C94A4A;
-      --text: #2D241E;
-      --muted: #786B61;
+      --bg-paper: #FAF7F2;
+      --bg-card: #FFFFFF;
+      --bg-soft: #F3EDE3;
+      --bark: #5C4033;
+      --bark-dark: #3E2A21;
+      --moss: #4A5D4E;
+      --moss-light: #E8EFE9;
+      --greige: #E5DDD0;
+      --text-main: #2D241E;
+      --text-muted: #786B61;
+      --vip-bg: #FDF3E7;
+      --vip-border: #E8C79B;
+      --vip-text: #8C5219;
+      --danger: #B84A39;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Be Vietnam Pro', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+      font-family: 'Lexend', sans-serif;
+      background: var(--bg-paper);
+      color: var(--text-main);
+      line-height: 1.55;
     }
 
-    .container {
-      max-width: 780px;
-      margin: 0 auto;
-      background: var(--surface);
+    /* Login Screen */
+    .login-wrap {
       min-height: 100vh;
-      box-shadow: 0 6px 24px rgba(45, 36, 30, 0.08);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .topbar {
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 18px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 20;
+      justify-content: center;
+      padding: 18px;
     }
-
-    .topbar h1 { font-family: 'Lora', serif; font-size: 18px; color: var(--primary); }
-
-    .nav-tabs {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-tab {
-      padding: 11px 6px;
-      border: none;
-      background: transparent;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      border-bottom: 2px solid transparent;
-      cursor: pointer;
-    }
-
-    .nav-tab.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      background: var(--surface);
-    }
-
-    .content { padding: 16px; flex: 1; }
-
-    .login-box {
-      max-width: 360px;
-      margin: 60px auto;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      text-align: center;
-    }
-
-    .login-box h2 { font-family: 'Lora', serif; margin-bottom: 8px; }
-    .login-box p { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
-
-    .input, .select, .textarea {
+    .login-card {
+      background: var(--bg-card);
+      border: 1px solid var(--greige);
+      border-radius: 18px;
+      padding: 28px 24px;
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
+      max-width: 390px;
+      box-shadow: 0 10px 30px rgba(62,42,33,0.08);
+    }
+    .login-card h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.25rem;
+      color: var(--bark);
+      margin-bottom: 6px;
+    }
+    .login-card p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; }
+    .input-full {
+      width: 100%;
+      border: 1px solid var(--greige);
+      background: var(--bg-paper);
       border-radius: 10px;
-      font-family: inherit;
-      font-size: 13.5px;
-      background: #fff;
-      color: var(--text);
-    }
-
-    .btn {
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: none;
-      font-family: inherit;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-accent { background: var(--accent); color: #fff; }
-    .btn-soft { background: var(--soft); color: var(--primary); border: 1px solid var(--border); }
-    .btn-danger { background: #FDECEC; color: var(--danger); border: 1px solid #F5C6C6; }
-    .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
-
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-    .stat-box {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
       padding: 10px 12px;
-    }
-    .stat-label { font-size: 11.5px; color: var(--muted); }
-    .stat-val { font-size: 16px; font-weight: 700; color: var(--primary); margin-top: 2px; }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
+      font-family: inherit;
+      font-size: 0.9rem;
       margin-bottom: 12px;
     }
-
-    .card.hidden-prod {
-      opacity: 0.72;
-      background: #F8F5F0;
-      border-style: dashed;
-    }
-
-    .card-top {
+    .input-full:focus { outline: none; border-color: var(--bark); background: #fff; }
+    .remember-row {
       display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .remember-row input { width: 16px; height: 16px; accent-color: var(--bark); }
+
+    /* Buttons */
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 15px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-primary { background: var(--bark); color: #FAF7F2; }
+    .btn-primary:hover { background: var(--bark-dark); }
+    .btn-moss { background: var(--moss); color: #fff; }
+    .btn-soft { background: var(--bg-soft); color: var(--bark); border: 1px solid var(--greige); }
+    .btn-danger { background: #FDECE8; color: var(--danger); border: 1px solid #F3C4BC; }
+
+    /* Admin Dashboard */
+    .topbar {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--greige);
+      padding: 12px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       justify-content: space-between;
-      align-items: flex-start;
       gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+    .topbar-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 1.08rem;
+      color: var(--bark);
+    }
+    .tabs {
+      max-width: 1120px;
+      margin: 16px auto 0;
+      padding: 0 18px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      border: 1px solid var(--greige);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .tab-btn.active { background: var(--bark); color: #FAF7F2; border-color: var(--bark); }
+    .main { max-width: 1120px; margin: 16px auto 60px; padding: 0 18px; }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Filter Pills */
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+      align-items: center;
+    }
+    .pill {
+      border: 1px solid var(--greige);
+      background: #fff;
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .pill.active { background: var(--moss); color: #fff; border-color: var(--moss); }
+
+    /* Order Card */
+    .order-card {
+      background: var(--bg-card);
+      border: 1px solid var(--greige);
+      border-radius: 14px;
+      padding: 15px 16px;
+      margin-bottom: 12px;
+    }
+    .order-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
       margin-bottom: 8px;
     }
-
-    .badge {
-      display: inline-block;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 11px;
+    .vip-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--vip-bg);
+      border: 1px solid var(--vip-border);
+      color: var(--vip-text);
+      font-size: 0.75rem;
       font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 999px;
+      margin-left: 6px;
     }
-    .badge-ok { background: #E8F0E9; color: #2E5A36; }
-    .badge-warn { background: var(--warn-bg); color: var(--warn-text); }
-    .badge-danger { background: #FDECEC; color: var(--danger); }
-    .badge-muted { background: #EAE4DC; color: #6B6057; }
+    .vip-gift-note {
+      background: var(--vip-bg);
+      color: var(--vip-text);
+      font-size: 0.78rem;
+      padding: 5px 10px;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: inline-block;
+    }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .form-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-    .form-field label { font-size: 12px; font-weight: 600; }
-    .form-field small { font-size: 11px; color: var(--muted); }
+    /* Product Grid in Admin */
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 14px;
+    }
+    .prod-card {
+      background: var(--bg-card);
+      border: 1px solid var(--greige);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .mini-thumbs { display: flex; gap: 6px; }
+    .mini-thumbs img {
+      width: 56px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 7px;
+      border: 1px solid var(--greige);
+    }
 
-    .modal-bg {
+    /* Product Modal (3 Image Slots) */
+    .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.45);
+      background: rgba(45,36,30,0.48);
+      z-index: 60;
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
-      z-index: 50;
+      padding: 16px;
     }
-    .modal-bg.open { display: flex; }
-
-    .modal-card {
-      width: 100%;
-      max-width: 500px;
-      max-height: 90vh;
-      overflow-y: auto;
-      background: var(--surface);
+    .overlay.open { display: flex; }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--greige);
       border-radius: 16px;
-      padding: 18px;
+      max-width: 620px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    .fg { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+    .fg label { font-size: 0.79rem; color: var(--text-muted); font-weight: 500; }
+    .fg input, .fg select, .fg textarea {
+      border: 1px solid var(--greige);
+      background: var(--bg-paper);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-family: inherit;
+      font-size: 0.85rem;
     }
 
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #2D241E;
-      color: #fff;
-      padding: 9px 16px;
-      border-radius: 999px;
-      font-size: 13px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-      z-index: 100;
+    .photo-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
     }
-    .toast.show { opacity: 1; }
+    @media (max-width: 560px) {
+      .photo-slots { grid-template-columns: 1fr; }
+    }
+    .photo-slot {
+      border: 1px dashed #C7BCB0;
+      background: var(--bg-paper);
+      border-radius: 11px;
+      padding: 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .slot-preview {
+      aspect-ratio: 4 / 3;
+      background: var(--bg-soft);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .slot-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .slot-remove {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: rgba(45,36,30,0.75);
+      color: #fff;
+      border: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="topbar">
-      <h1>Quản lý Tiệm giấy Thứ Ba</h1>
-      <button id="refreshBtn" class="btn btn-soft btn-sm" style="display:none;" onclick="loadAllData()">↻ Làm mới</button>
+
+<!-- Login Screen -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <h1>Tiệm giấy Thứ Ba</h1>
+    <p id="loginHint">Đăng nhập trang quản lý kho giấy và đơn hàng</p>
+    <input type="password" class="input-full" id="adminPassInput" placeholder="Nhập mật khẩu quản trị" onkeydown="if(event.key==='Enter') doLogin(false)" />
+    <label class="remember-row">
+      <input type="checkbox" id="rememberLoginChk" checked />
+      <span>Ghi nhớ đăng nhập trên thiết bị này</span>
+    </label>
+    <button class="btn btn-primary" style="width:100%;" id="loginBtn" onclick="doLogin(false)">Vào trang quản lý</button>
+  </div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboardWrap" style="display:none;">
+  <header class="topbar">
+    <span class="topbar-title">Quản lý Tiệm giấy Thứ Ba</span>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-soft" onclick="refreshAll()">Làm mới</button>
+      <button class="btn btn-danger" onclick="logoutAdmin()">Đăng xuất</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" onclick="switchTab('orders', this)">Đơn hàng (<span id="orderCountBadge">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab('products', this)">Kho giấy (<span id="prodCountBadge">0</span>)</button>
+    <button class="tab-btn" onclick="switchTab('faqs', this)">Hỏi - Đáp AI</button>
+    <button class="tab-btn" onclick="switchTab('settings', this)">Cài đặt</button>
+  </nav>
+
+  <main class="main">
+    <!-- Tab 1: Orders -->
+    <section class="tab-pane active" id="tab-orders">
+      <div class="filter-row">
+        <button class="pill active" onclick="setOrderFilter('ALL', this)">Tất cả</button>
+        <button class="pill" onclick="setOrderFilter('Chờ xác nhận', this)">Chờ xác nhận</button>
+        <button class="pill" onclick="setOrderFilter('Đang gói / Gửi', this)">Đang gói / Gửi</button>
+        <button class="pill" onclick="setOrderFilter('Hoàn thành', this)">Hoàn thành</button>
+        <button class="pill" onclick="setOrderFilter('VIP', this)">★ Khách quen</button>
+        <button class="pill" onclick="setOrderFilter('Đã hủy', this)">Đã hủy</button>
+        <input type="text" id="orderSearchInput" placeholder="Tìm tên, SĐT, mã đơn..." oninput="renderOrders()"
+          style="border:1px solid var(--greige);border-radius:999px;padding:5px 13px;font-family:inherit;font-size:0.82rem;margin-left:auto;" />
+      </div>
+      <div id="ordersList"></div>
+    </section>
+
+    <!-- Tab 2: Products -->
+    <section class="tab-pane" id="tab-products">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+        <span style="font-size:0.86rem;color:var(--text-muted);">Hỗ trợ tối đa 3 ảnh/sản phẩm (tổng thể, cận vân sợi, test mực bút)</span>
+        <button class="btn btn-primary" onclick="openProductModal()">+ Thêm mẫu giấy mới</button>
+      </div>
+      <div class="prod-grid" id="adminProdGrid"></div>
+    </section>
+
+    <!-- Tab 3: FAQs -->
+    <section class="tab-pane" id="tab-faqs">
+      <div style="background:#fff;border:1px solid var(--greige);border-radius:14px;padding:15px;margin-bottom:16px;">
+        <h3 style="font-size:0.95rem;color:var(--bark);margin-bottom:10px;">Thêm / Sửa câu hỏi thường gặp</h3>
+        <input type="hidden" id="faqIdInput" />
+        <div class="fg">
+          <label>Câu hỏi khách hay hỏi</label>
+          <input type="text" id="faqQInput" placeholder="Ví dụ: Giấy có viết được bút mực không?" />
+        </div>
+        <div class="fg">
+          <label>Câu trả lời chuẩn của tiệm</label>
+          <textarea id="faqAInput" rows="2" placeholder="Ví dụ: Có gia keo nhẹ nên hạn chế lem khi viết bằng bút mực."></textarea>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary" onclick="saveFaq()">Lưu hỏi đáp</button>
+          <button class="btn btn-soft" onclick="resetFaqForm()">Làm mới ô nhập</button>
+        </div>
+      </div>
+      <div id="faqList"></div>
+    </section>
+
+    <!-- Tab 4: Settings -->
+    <section class="tab-pane" id="tab-settings">
+      <div style="background:#fff;border:1px solid var(--greige);border-radius:14px;padding:18px;max-width:520px;">
+        <h3 style="font-size:0.98rem;color:var(--bark);margin-bottom:12px;">Thông báo đơn hàng & Trợ lý AI</h3>
+        <div class="fg">
+          <label>Email nhận thông báo khi có đơn mới</label>
+          <input type="email" id="notifyEmailInput" placeholder="tiemgiaythuba@gmail.com" />
+        </div>
+        <label class="remember-row">
+          <input type="checkbox" id="aiEnabledChk" checked />
+          <span>Bật Gemini AI hỗ trợ diễn đạt câu trả lời (luôn có bộ lọc nội bộ dự phòng)</span>
+        </label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="saveSettings()">Lưu cài đặt</button>
+          <button class="btn btn-soft" onclick="testEmail()">Gửi email thử</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Product Add/Edit Modal (3 Photos) -->
+<div class="overlay" id="prodModalOverlay" onclick="if(event.target===this) closeProductModal()">
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:1.08rem;color:var(--bark);" id="prodModalTitle">Thêm mẫu giấy</h2>
+      <button class="btn btn-soft" style="padding:4px 10px;" onclick="closeProductModal()">×</button>
     </div>
 
-    <!-- Login View -->
-    <div id="loginView" class="content">
-      <div class="login-box">
-        <h2>Đăng nhập chủ tiệm</h2>
-        <p>Nhập mật khẩu quản trị đã cài trong Apps Script</p>
-        <form onsubmit="handleLogin(event)">
-          <input id="adminPass" type="password" class="input" placeholder="Mật khẩu chủ tiệm..." style="margin-bottom:12px;" required />
-          <button type="submit" class="btn btn-primary" style="width:100%;">Vào trang quản lý</button>
-        </form>
+    <input type="hidden" id="pId" />
+    <div class="form-grid">
+      <div class="fg">
+        <label>Tên sản phẩm *</label>
+        <input type="text" id="pName" placeholder="Giấy tái chế lá tre A5" />
+      </div>
+      <div class="fg">
+        <label>Nhóm sản phẩm</label>
+        <input type="text" id="pCategory" placeholder="Giấy A5 / Thiệp / Bao thư / Kit" />
       </div>
     </div>
 
-    <!-- Main Dashboard -->
-    <div id="dashboardView" style="display:none;">
-      <div class="nav-tabs">
-        <button class="nav-tab active" onclick="switchTab('orders', this)">Đơn hàng</button>
-        <button class="nav-tab" onclick="switchTab('inventory', this)">Kho giấy</button>
-        <button class="nav-tab" onclick="switchTab('faqs', this)">Hỏi - Đáp AI</button>
-        <button class="nav-tab" onclick="switchTab('settings', this)">Cài đặt</button>
+    <div class="form-grid">
+      <div class="fg">
+        <label>Đơn vị gốc (tờ / bao / bộ)</label>
+        <input type="text" id="pBaseUnit" value="tờ" />
       </div>
-
-      <!-- TAB 1: ĐƠN HÀNG -->
-      <div id="tab-orders" class="content">
-        <div id="orderStats" class="stats-row"></div>
-        <div style="display:flex; gap:6px; overflow-x:auto; margin-bottom:12px;">
-          <button class="btn btn-soft btn-sm" onclick="filterOrders('Tất cả')">Tất cả</button>
-          <button class="btn btn-soft btn-sm" onclick="filterOrders('Chờ xác nhận')">Chờ xác nhận</button>
-          <button class="btn btn-soft btn-sm" onclick="filterOrders('Đã xác nhận')">Đã xác nhận</button>
-          <button class="btn btn-soft btn-sm" onclick="filterOrders('Đang giao')">Đang giao</button>
-          <button class="btn btn-soft btn-sm" onclick="filterOrders('Hoàn thành')">Hoàn thành</button>
-          <button class="btn btn-soft btn-sm" onclick="filterOrders('Đã hủy')">Đã hủy</button>
-        </div>
-        <div id="ordersList"></div>
+      <div class="fg">
+        <label>Tồn kho (tính theo đơn vị gốc)</label>
+        <input type="number" id="pStock" value="0" min="0" />
       </div>
+    </div>
 
-      <!-- TAB 2: KHO GIẤY -->
-      <div id="tab-inventory" class="content" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:8px; flex-wrap:wrap;">
-          <div style="display:flex; gap:6px;">
-            <button class="btn btn-soft btn-sm" onclick="filterProducts('all')">Tất cả</button>
-            <button class="btn btn-soft btn-sm" onclick="filterProducts('visible')">Đang hiện</button>
-            <button class="btn btn-soft btn-sm" onclick="filterProducts('hidden')">Đang ẩn</button>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="openProductModal()">+ Thêm sản phẩm</button>
-        </div>
-        <div style="font-size:12px; color:var(--muted); margin-bottom:12px;">
-          * Các mẫu <strong>Đang hiện</strong> có tồn kho = 0 vẫn hiển thị trên web để khách xem và nhắn đặt trước. Các mẫu <strong>Đang ẩn</strong> sẽ ẩn hoàn toàn khỏi web khách.
-        </div>
-        <div id="productsList"></div>
+    <div class="form-grid">
+      <div class="fg">
+        <label>Đơn vị bán theo gói (để trống nếu bán lẻ)</label>
+        <input type="text" id="pPackUnit" placeholder="gói / xấp / set" />
       </div>
-
-      <!-- TAB 3: HỎI ĐÁP AI -->
-      <div id="tab-faqs" class="content" style="display:none;">
-        <div class="card" style="background:var(--soft);">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-            <div style="font-size:12.5px; color:var(--text);">
-              Chatbot dựa vào danh sách này để trả lời đúng ý khách (kể cả khi khách dùng từ hơi khác). Các câu hỏi ngoài danh sách và ngoài kho sẽ được mời nhắn trực tiếp cho tiệm.
-            </div>
-            <button class="btn btn-primary btn-sm" style="white-space:nowrap;" onclick="openFaqModal()">+ Thêm câu hỏi</button>
-          </div>
-        </div>
-        <div id="faqsList"></div>
+      <div class="fg">
+        <label>Số lượng trong 1 gói</label>
+        <input type="number" id="pPackSize" value="1" min="1" />
       </div>
+    </div>
 
-      <!-- TAB 4: CÀI ĐẶT & EMAIL -->
-      <div id="tab-settings" class="content" style="display:none;">
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:8px;">1. Email nhận thông báo đơn hàng mới</h3>
-          <p style="font-size:12.5px; color:var(--muted); margin-bottom:10px;">Mỗi khi khách gửi đơn trên web, hệ thống sẽ gửi email chi tiết về địa chỉ này.</p>
-          <div class="form-field">
-            <input id="notifyEmailInput" type="email" class="input" placeholder="Nhập email nhận thông báo..." />
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn btn-primary btn-sm" onclick="saveNotifyEmail()">Lưu Email</button>
-            <button class="btn btn-soft btn-sm" onclick="testSendEmail()">Gửi email test thử</button>
-          </div>
+    <div class="form-grid">
+      <div class="fg">
+        <label>Giá 1 gói (VNĐ)</label>
+        <input type="number" id="pPackPrice" value="0" min="0" />
+      </div>
+      <div class="fg">
+        <label>Giá bán lẻ 1 tờ/cái (0 nếu không bán lẻ)</label>
+        <input type="number" id="pUnitPrice" value="0" min="0" />
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Bộ 2–3 ảnh sản phẩm (tổng thể, cận vân sợi, test mực bút)</label>
+      <div class="photo-slots">
+        <div class="photo-slot">
+          <div class="slot-preview" id="slotPreview0">Ảnh 1: Tổng thể</div>
+          <input type="file" id="slotFile0" accept="image/*" style="display:none;" onchange="handleSlotUpload(0, this)" />
+          <button type="button" class="btn btn-soft" style="padding:5px 8px;font-size:0.76rem;" onclick="document.getElementById('slotFile0').click()">Tải ảnh 1</button>
+          <input type="text" id="slotUrl0" placeholder="Hoặc dán link ảnh 1" oninput="syncSlotPreview(0)" style="font-size:0.75rem;padding:5px 7px;" />
         </div>
-
-        <div class="card">
-          <h3 style="font-size:15px; margin-bottom:8px;">2. Chế độ phản hồi Chatbot</h3>
-          <p style="font-size:12.5px; color:var(--muted); margin-bottom:10px;">
-            Hệ thống luôn ưu tiên bộ xử lý thông minh nội bộ (trả lời trong 0.1 giây, không bao giờ lỗi 503). Khi bật thêm Gemini AI, các câu hỏi mở sẽ được diễn đạt tự nhiên hơn (và tự động lùi về bộ xử lý nội bộ nếu máy chủ Google quá tải).
-          </p>
-          <label style="display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; margin-bottom:10px; cursor:pointer;">
-            <input id="aiEnabledCheckbox" type="checkbox" checked onchange="toggleAiMode(this.checked)" />
-            <span>Bật hỗ trợ diễn đạt bằng Gemini AI (tự động dự phòng khi quá tải)</span>
-          </label>
-          <button class="btn btn-accent btn-sm" onclick="runAiDiagnostic()">Chạy kiểm tra phản hồi ngay</button>
-          <pre id="aiDiagResult" style="margin-top:10px; background:var(--soft); padding:10px; border-radius:8px; font-size:12px; white-space:pre-wrap; display:none;"></pre>
+        <div class="photo-slot">
+          <div class="slot-preview" id="slotPreview1">Ảnh 2: Cận bề mặt</div>
+          <input type="file" id="slotFile1" accept="image/*" style="display:none;" onchange="handleSlotUpload(1, this)" />
+          <button type="button" class="btn btn-soft" style="padding:5px 8px;font-size:0.76rem;" onclick="document.getElementById('slotFile1').click()">Tải ảnh 2</button>
+          <input type="text" id="slotUrl1" placeholder="Hoặc dán link ảnh 2" oninput="syncSlotPreview(1)" style="font-size:0.75rem;padding:5px 7px;" />
+        </div>
+        <div class="photo-slot">
+          <div class="slot-preview" id="slotPreview2">Ảnh 3: Test mực</div>
+          <input type="file" id="slotFile2" accept="image/*" style="display:none;" onchange="handleSlotUpload(2, this)" />
+          <button type="button" class="btn btn-soft" style="padding:5px 8px;font-size:0.76rem;" onclick="document.getElementById('slotFile2').click()">Tải ảnh 3</button>
+          <input type="text" id="slotUrl2" placeholder="Hoặc dán link ảnh 3" oninput="syncSlotPreview(2)" style="font-size:0.75rem;padding:5px 7px;" />
         </div>
       </div>
+    </div>
+
+    <div class="fg">
+      <label>Mô tả kích thước, định lượng, đặc điểm bề mặt</label>
+      <textarea id="pSpecs" rows="3" placeholder="Kích thước 148x210mm, định lượng 120-180gsm, bề mặt xử lý keo nhẹ hạn chế lem mực..."></textarea>
+    </div>
+
+    <label class="remember-row">
+      <input type="checkbox" id="pVisible" checked />
+      <span>Hiển thị sản phẩm này trên trang khách hàng</span>
+    </label>
+
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+      <button class="btn btn-soft" onclick="closeProductModal()">Hủy</button>
+      <button class="btn btn-primary" id="saveProdBtn" onclick="saveProduct()">Lưu sản phẩm</button>
     </div>
   </div>
+</div>
 
-  <!-- Modal Thêm/Sửa Sản phẩm -->
-  <div id="productModal" class="modal-bg">
-    <div class="modal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 id="prodModalTitle">Thêm / Sửa sản phẩm</h3>
-        <button class="btn btn-soft btn-sm" onclick="closeProductModal()">✕</button>
-      </div>
-      <form onsubmit="saveProductForm(event)">
-        <input type="hidden" id="pId" />
-        <div class="form-field">
-          <label>Tên sản phẩm *</label>
-          <input id="pName" class="input" placeholder="VD: Giấy A5 vỏ quýt" required />
-        </div>
-        <div class="grid-2">
-          <div class="form-field">
-            <label>Nhóm sản phẩm *</label>
-            <input id="pCategory" class="input" placeholder="VD: Giấy A5, Bao thư, Bộ kit..." required />
-          </div>
-          <div class="form-field">
-            <label>Đơn vị lưu kho (tờ/cái) *</label>
-            <input id="pBaseUnit" class="input" placeholder="VD: tờ, bao, bộ" value="tờ" required />
-          </div>
-        </div>
+<script>
+  // DÁN LINK WEB APP GOOGLE APPS SCRIPT (/exec) CỦA BẠN VÀO DÒNG DƯỚI ĐÂY:
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
 
-        <div class="form-field">
-          <label>Tổng số lượng tồn kho (tính theo tờ/cái lẻ) *</label>
-          <input id="pStock" type="number" min="0" class="input" placeholder="VD: 120" oninput="updatePackPreview()" required />
-          <small id="packConvertPreview" style="color:var(--accent); font-weight:600;"></small>
-        </div>
+  const SESSION_KEY = "tgtb_admin_session_v1";
+  const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
-        <div style="background:var(--soft); padding:10px; border-radius:10px; margin-bottom:10px;">
-          <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--primary);">Cài đặt quy đổi gói & bảng giá</div>
-          <div class="grid-2">
-            <div class="form-field">
-              <label>Tên đơn vị gói (nếu bán gói)</label>
-              <input id="pPackUnit" class="input" placeholder="VD: gói (để trống nếu bán lẻ)" oninput="updatePackPreview()" />
-            </div>
-            <div class="form-field">
-              <label>Số tờ/cái trong 1 gói</label>
-              <input id="pPackSize" type="number" min="1" class="input" value="10" oninput="updatePackPreview()" />
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-field" style="margin-bottom:0;">
-              <label>Giá theo gói (VNĐ)</label>
-              <input id="pPackPrice" type="number" min="0" class="input" placeholder="VD: 65000 (0 nếu không bán gói)" />
-            </div>
-            <div class="form-field" style="margin-bottom:0;">
-              <label>Giá lẻ từng tờ/cái (VNĐ)</label>
-              <input id="pUnitPrice" type="number" min="0" class="input" placeholder="VD: 8000 (0 nếu không bán lẻ)" />
-            </div>
-          </div>
-        </div>
+  let adminPassword = "";
+  let allProducts = [];
+  let allOrders = [];
+  let allFaqs = [];
+  let currentOrderFilter = "ALL";
 
-        <div class="form-field" style="flex-direction:row; align-items:center; gap:8px; background:var(--card); border:1px solid var(--border); padding:9px 11px; border-radius:10px;">
-          <input id="pVisible" type="checkbox" checked />
-          <label for="pVisible" style="margin:0; cursor:pointer;">Hiển thị sản phẩm trên trang khách hàng (tắt nếu tạm ngưng làm)</label>
-        </div>
+  const SLOT_PLACEHOLDERS = ["Ảnh 1: Tổng thể", "Ảnh 2: Cận bề mặt", "Ảnh 3: Test mực"];
 
-        <div class="form-field">
-          <label>Đặc điểm chi tiết</label>
-          <textarea id="pSpecs" class="textarea" rows="2" placeholder="Định lượng, kích thước, thành phần sợi..."></textarea>
-        </div>
+  function fmtPrice(n) {
+    return Number(n || 0).toLocaleString("vi-VN") + "đ";
+  }
 
-        <div class="form-field">
-          <label>Ảnh sản phẩm (tải lên từ máy hoặc dán link)</label>
-          <input id="pImageFile" type="file" accept="image/*" class="input" onchange="uploadProductImage(this)" />
-          <input id="pImageUrl" class="input" placeholder="https://..." style="margin-top:4px;" />
-        </div>
-
-        <button id="saveProdBtn" type="submit" class="btn btn-primary" style="width:100%;">Lưu sản phẩm</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal Thêm/Sửa Hỏi Đáp -->
-  <div id="faqModal" class="modal-bg">
-    <div class="modal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h3 id="faqModalTitle">Thêm câu hỏi thường gặp</h3>
-        <button class="btn btn-soft btn-sm" onclick="closeFaqModal()">✕</button>
-      </div>
-      <form onsubmit="saveFaqForm(event)">
-        <input type="hidden" id="fId" />
-        <div class="form-field">
-          <label>Câu hỏi khách hay hỏi *</label>
-          <input id="fQuestion" class="input" placeholder="VD: Giấy có viết được bút mực không?" required />
-        </div>
-        <div class="form-field">
-          <label>Nội dung trả lời chuẩn (ngắn gọn, đúng ý) *</label>
-          <textarea id="fAnswer" class="textarea" rows="3" placeholder="VD: Có gia keo nhẹ nên hạn chế lem khi viết bằng bút mực." required></textarea>
-        </div>
-        <div class="form-field" style="flex-direction:row; align-items:center; gap:8px;">
-          <input id="fActive" type="checkbox" checked />
-          <label for="fActive" style="margin:0;">Đang bật cho AI sử dụng</label>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;">Lưu mục Hỏi - Đáp</button>
-      </form>
-    </div>
-  </div>
-
-  <div id="toast" class="toast"></div>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
-
-    let adminPassword = "";
-    let allProducts = [];
-    let allFaqs = [];
-    let allOrders = [];
-    let orderFilter = "Tất cả";
-    let productFilter = "all";
-
-    function fmtVND(n) { return Number(n || 0).toLocaleString("vi-VN") + "đ"; }
-
-    function showToast(msg) {
-      const t = document.getElementById("toast");
-      t.textContent = msg;
-      t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2500);
+  function normalizePhone(phone) {
+    let digits = String(phone || "").replace(/\D/g, "");
+    if (digits.startsWith("84") && digits.length >= 11) {
+      digits = "0" + digits.slice(2);
     }
+    return digits;
+  }
 
-    async function callApi(payload) {
+  function parseImageUrls(raw) {
+    return String(raw || "")
+      .split(/[\r\n|,]+/)
+      .map(s => s.trim())
+      .filter(s => /^https?:\/\//i.test(s))
+      .slice(0, 3);
+  }
+
+  // Ghi nhớ phiên đăng nhập Admin trên máy cá nhân
+  function getSavedSession() {
+    try {
+      const raw = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+      if (!raw || !raw.password) return null;
+      if (Date.now() - Number(raw.savedAt || 0) > SESSION_TTL_MS) {
+        localStorage.removeItem(SESSION_KEY);
+        return null;
+      }
+      return raw.password;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveSession(pw) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      password: pw,
+      savedAt: Date.now()
+    }));
+  }
+
+  function logoutAdmin() {
+    localStorage.removeItem(SESSION_KEY);
+    adminPassword = "";
+    document.getElementById("dashboardWrap").style.display = "none";
+    document.getElementById("loginWrap").style.display = "flex";
+    document.getElementById("adminPassInput").value = "";
+  }
+
+  async function doLogin(isAuto) {
+    const passInput = document.getElementById("adminPassInput");
+    const pw = isAuto ? getSavedSession() : passInput.value.trim();
+    if (!pw) return;
+
+    const btn = document.getElementById("loginBtn");
+    btn.disabled = true;
+    btn.textContent = isAuto ? "Đang khôi phục phiên đăng nhập..." : "Đang kiểm tra...";
+
+    try {
       const res = await fetch(SCRIPT_URL, {
         method: "POST",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ ...payload, password: adminPassword })
+        body: JSON.stringify({ action: "admin_login", password: pw })
       });
-      const json = await res.json();
-      if (!json.ok) throw new Error(json.error || "Có lỗi xảy ra");
-      return json;
-    }
-
-    async function handleLogin(e) {
-      e.preventDefault();
-      adminPassword = document.getElementById("adminPass").value.trim();
-      try {
-        const data = await callApi({ action: "admin_login" });
-        document.getElementById("loginView").style.display = "none";
-        document.getElementById("dashboardView").style.display = "block";
-        document.getElementById("refreshBtn").style.display = "inline-block";
-        applyAllData(data);
-        showToast("Đăng nhập thành công");
-      } catch (err) {
-        alert(err.message);
-      }
-    }
-
-    async function loadAllData() {
-      try {
-        const data = await callApi({ action: "get_all" });
-        applyAllData(data);
-        showToast("Đã cập nhật dữ liệu mới nhất");
-      } catch (err) {
-        showToast("Lỗi tải dữ liệu: " + err.message);
-      }
-    }
-
-    function applyAllData(data) {
-      allProducts = data.products || [];
-      allFaqs = data.faqs || [];
-      allOrders = data.orders || [];
-      if (data.notifyEmail !== undefined) {
-        document.getElementById("notifyEmailInput").value = data.notifyEmail || "";
-      }
-      if (data.aiEnabled !== undefined) {
-        document.getElementById("aiEnabledCheckbox").checked = Boolean(data.aiEnabled);
-      }
-      renderOrders();
-      renderProducts();
-      renderFaqs();
-    }
-
-    function switchTab(tab, btn) {
-      document.querySelectorAll(".nav-tab").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      ["orders", "inventory", "faqs", "settings"].forEach(t => {
-        document.getElementById("tab-" + t).style.display = t === tab ? "block" : "none";
-      });
-    }
-
-    // --- ORDERS ---
-    function filterOrders(status) {
-      orderFilter = status;
-      renderOrders();
-    }
-
-    function renderOrders() {
-      const pendingCount = allOrders.filter(o => o.status === "Chờ xác nhận").length;
-      const validOrders = allOrders.filter(o => o.status !== "Đã hủy");
-      const totalRev = validOrders.reduce((s, o) => s + Number(o.total || 0), 0);
-
-      document.getElementById("orderStats").innerHTML = `
-        <div class="stat-box"><div class="stat-label">Chờ xác nhận</div><div class="stat-val">${pendingCount} đơn</div></div>
-        <div class="stat-box"><div class="stat-label">Tổng đơn hợp lệ</div><div class="stat-val">${validOrders.length} đơn</div></div>
-        <div class="stat-box"><div class="stat-label">Doanh thu (gồm ship)</div><div class="stat-val">${fmtVND(totalRev)}</div></div>
-      `;
-
-      const filtered = orderFilter === "Tất cả" ? allOrders : allOrders.filter(o => o.status === orderFilter);
-      const container = document.getElementById("ordersList");
-      if (!filtered.length) {
-        container.innerHTML = `<div class="card" style="text-align:center; color:var(--muted);">Chưa có đơn hàng nào trong mục này.</div>`;
-        return;
-      }
-
-      container.innerHTML = filtered.map(o => {
-        const statuses = ["Chờ xác nhận", "Đã xác nhận", "Đang giao", "Hoàn thành", "Đã hủy"];
-        const options = statuses.map(s => `<option value="${s}" ${o.status === s ? "selected" : ""}>${s}</option>`).join("");
-        const shipCopy = `${o.customerName} | ${String(o.phone).replace(/^'/, "")} | ${o.address} | COD: ${fmtVND(o.total)} | Hàng: ${o.itemsSummary}`;
-
-        return `
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <strong>#${o.orderId} — ${o.customerName}</strong>
-                <div style="font-size:12px; color:var(--muted);">${o.createdAt} • SĐT: ${String(o.phone).replace(/^'/, "")}</div>
-              </div>
-              <span class="badge ${o.status === 'Đã hủy' ? 'badge-danger' : (o.status === 'Hoàn thành' ? 'badge-ok' : 'badge-warn')}">${o.status}</span>
-            </div>
-            <div style="font-size:13px; margin-bottom:6px;">
-              <div><strong>Liên hệ:</strong> ${o.platform} — <strong>${o.socialHandle}</strong></div>
-              <div><strong>Địa chỉ:</strong> ${o.address}</div>
-              <div style="margin-top:4px; background:var(--soft); padding:7px 9px; border-radius:8px;"><strong>Đơn giấy:</strong> ${o.itemsSummary}</div>
-              ${o.note ? `<div style="margin-top:4px; color:var(--warn-text);"><strong>Ghi chú:</strong> ${o.note}</div>` : ""}
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:10px; flex-wrap:wrap;">
-              <strong style="color:var(--primary);">Tổng COD: ${fmtVND(o.total)}</strong>
-              <div style="display:flex; gap:6px; align-items:center;">
-                <button class="btn btn-soft btn-sm" onclick="copyShipping('${shipCopy.replace(/'/g, "\\'")}')">Copy gửi vận chuyển</button>
-                <select class="select" style="padding:5px 8px; font-size:12px; width:auto;" onchange="changeOrderStatus('${o.orderId}', this.value)">
-                  ${options}
-                </select>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function copyShipping(text) {
-      navigator.clipboard.writeText(text).then(() => showToast("Đã copy thông tin giao hàng"));
-    }
-
-    async function changeOrderStatus(orderId, status) {
-      try {
-        const res = await callApi({ action: "update_order_status", orderId, status });
-        allOrders = res.orders || allOrders;
-        if (res.products) allProducts = res.products;
-        renderOrders();
-        renderProducts();
-        showToast(status === "Đã hủy" ? "Đã hủy đơn & hoàn trả tồn kho" : "Đã cập nhật trạng thái đơn");
-      } catch (err) {
-        showToast("Lỗi: " + err.message);
-      }
-    }
-
-    // --- PRODUCTS ---
-    function filterProducts(mode) {
-      productFilter = mode;
-      renderProducts();
-    }
-
-    function renderProducts() {
-      const container = document.getElementById("productsList");
-      const list = allProducts.filter(p => {
-        if (productFilter === "visible") return p.visible;
-        if (productFilter === "hidden") return !p.visible;
-        return true;
-      });
-
-      if (!list.length) {
-        container.innerHTML = `<div class="card" style="text-align:center; color:var(--muted);">Không có sản phẩm nào trong mục này.</div>`;
-        return;
-      }
-
-      container.innerHTML = list.map(p => {
-        const hasPack = Number(p.packPrice) > 0 && Number(p.packSize) > 1;
-        const packs = hasPack ? Math.floor(p.stock / p.packSize) : 0;
-        const rem = hasPack ? (p.stock % p.packSize) : 0;
-        const stockText = hasPack
-          ? `${p.stock} ${p.baseUnit} (= ${packs} ${p.packUnit || "gói"} ${p.packSize} ${p.baseUnit}${rem > 0 ? " + " + rem + " lẻ" : ""})`
-          : `${p.stock} ${p.baseUnit}`;
-        const lowStock = p.stock <= 0 ? "badge-danger" : (p.stock < (hasPack ? p.packSize * 2 : 5) ? "badge-warn" : "badge-ok");
-        const isVis = p.visible !== false;
-
-        return `
-          <div class="card ${isVis ? '' : 'hidden-prod'}">
-            <div class="card-top">
-              <div>
-                <strong>${p.name}</strong> <span style="font-size:12px; color:var(--muted);">(${p.category})</span>
-                <div style="margin-top:4px; display:flex; gap:6px; flex-wrap:wrap;">
-                  <span class="badge ${isVis ? 'badge-ok' : 'badge-muted'}">${isVis ? 'Đang hiện trên web' : 'Đang ẩn khỏi web'}</span>
-                  <span class="badge ${lowStock}">Tồn: ${stockText}</span>
-                </div>
-                <div style="font-size:12.5px; margin-top:5px;">
-                  ${hasPack ? `<span>Giá gói: <strong>${fmtVND(p.packPrice)}</strong>/${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})</span> • ` : ""}
-                  ${Number(p.unitPrice) > 0 ? `<span>Giá lẻ: <strong>${fmtVND(p.unitPrice)}</strong>/${p.baseUnit}</span>` : ""}
-                </div>
-              </div>
-            </div>
-            <div style="display:flex; gap:8px; justify-content:flex-end; flex-wrap:wrap;">
-              <button class="btn btn-soft btn-sm" onclick="toggleVisibility('${p.id}', ${!isVis})">${isVis ? 'Ẩn khỏi web' : 'Bật hiển thị'}</button>
-              <button class="btn btn-soft btn-sm" onclick="openProductModal('${p.id}')">Sửa</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteProduct('${p.id}')">Xóa</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
-    async function toggleVisibility(id, nextVisible) {
-      try {
-        const res = await callApi({ action: "toggle_product_visibility", id, visible: nextVisible });
-        allProducts = res.products || allProducts;
-        renderProducts();
-        showToast(nextVisible ? "Đã bật hiển thị sản phẩm trên web" : "Đã ẩn sản phẩm khỏi web khách");
-      } catch (err) {
-        showToast("Lỗi: " + err.message);
-      }
-    }
-
-    function updatePackPreview() {
-      const stock = Number(document.getElementById("pStock").value || 0);
-      const baseUnit = document.getElementById("pBaseUnit").value.trim() || "tờ";
-      const packUnit = document.getElementById("pPackUnit").value.trim();
-      const packSize = Math.max(1, Number(document.getElementById("pPackSize").value || 1));
-      const el = document.getElementById("packConvertPreview");
-
-      if (packUnit && packSize > 1) {
-        const packs = Math.floor(stock / packSize);
-        const rem = stock % packSize;
-        el.textContent = `Quy đổi: ${packs} ${packUnit} (${packSize} ${baseUnit}/${packUnit})${rem > 0 ? ` + dư ${rem} ${baseUnit}` : ""}`;
-      } else {
-        el.textContent = `Tính theo ${baseUnit} lẻ`;
-      }
-    }
-
-    function openProductModal(id = "") {
-      const p = allProducts.find(item => item.id === id);
-      document.getElementById("prodModalTitle").textContent = p ? "Sửa sản phẩm" : "Thêm sản phẩm mới";
-      document.getElementById("pId").value = p ? p.id : "";
-      document.getElementById("pName").value = p ? p.name : "";
-      document.getElementById("pCategory").value = p ? p.category : "Giấy A5";
-      document.getElementById("pBaseUnit").value = p ? p.baseUnit : "tờ";
-      document.getElementById("pStock").value = p ? p.stock : 0;
-      document.getElementById("pPackUnit").value = p ? p.packUnit : "gói";
-      document.getElementById("pPackSize").value = p ? p.packSize : 10;
-      document.getElementById("pPackPrice").value = p ? p.packPrice : 65000;
-      document.getElementById("pUnitPrice").value = p ? p.unitPrice : 0;
-      document.getElementById("pVisible").checked = p ? (p.visible !== false) : true;
-      document.getElementById("pSpecs").value = p ? p.specs : "";
-      document.getElementById("pImageUrl").value = p ? p.imageUrl : "";
-      document.getElementById("pImageFile").value = "";
-      updatePackPreview();
-      document.getElementById("productModal").classList.add("open");
-    }
-
-    function closeProductModal() { document.getElementById("productModal").classList.remove("open"); }
-
-    async function uploadProductImage(input) {
-      const file = input.files[0];
-      if (!file) return;
-      const btn = document.getElementById("saveProdBtn");
-      btn.disabled = true;
-      btn.textContent = "Đang tải ảnh lên Drive...";
-
-      const reader = new FileReader();
-      reader.onload = async () => {
-        try {
-          const base64 = reader.result.split(",")[1];
-          const res = await callApi({
-            action: "upload_image",
-            base64,
-            mimeType: file.type,
-            fileName: file.name
-          });
-          document.getElementById("pImageUrl").value = res.imageUrl;
-          showToast("Đã tải ảnh lên xong");
-        } catch (err) {
-          showToast("Lỗi tải ảnh: " + err.message);
-        } finally {
-          btn.disabled = false;
-          btn.textContent = "Lưu sản phẩm";
+      const data = await res.json();
+      if (data.ok) {
+        adminPassword = pw;
+        if (isAuto || document.getElementById("rememberLoginChk").checked) {
+          saveSession(pw);
+        } else {
+          localStorage.removeItem(SESSION_KEY);
         }
-      };
-      reader.readAsDataURL(file);
+        applyDashboardData(data);
+        document.getElementById("loginWrap").style.display = "none";
+        document.getElementById("dashboardWrap").style.display = "block";
+      } else {
+        localStorage.removeItem(SESSION_KEY);
+        if (!isAuto) alert(data.error || "Sai mật khẩu");
+      }
+    } catch (e) {
+      if (!isAuto) alert("Lỗi kết nối Apps Script. Bạn kiểm tra lại SCRIPT_URL nhé!");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Vào trang quản lý";
+    }
+  }
+
+  async function refreshAll() {
+    if (!adminPassword) return;
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "get_all", password: adminPassword })
+    });
+    const data = await res.json();
+    if (data.ok) applyDashboardData(data);
+  }
+
+  function applyDashboardData(data) {
+    allProducts = data.products || [];
+    allOrders = data.orders || [];
+    allFaqs = data.faqs || [];
+
+    document.getElementById("orderCountBadge").textContent = String(allOrders.length);
+    document.getElementById("prodCountBadge").textContent = String(allProducts.length);
+    if (data.notifyEmail !== undefined) {
+      document.getElementById("notifyEmailInput").value = data.notifyEmail;
+    }
+    if (data.aiEnabled !== undefined) {
+      document.getElementById("aiEnabledChk").checked = Boolean(data.aiEnabled);
     }
 
-    async function saveProductForm(e) {
-      e.preventDefault();
-      const product = {
-        id: document.getElementById("pId").value,
-        name: document.getElementById("pName").value.trim(),
-        category: document.getElementById("pCategory").value.trim(),
-        baseUnit: document.getElementById("pBaseUnit").value.trim() || "tờ",
-        stock: Number(document.getElementById("pStock").value || 0),
-        packUnit: document.getElementById("pPackUnit").value.trim(),
-        packSize: Math.max(1, Number(document.getElementById("pPackSize").value || 1)),
-        packPrice: Number(document.getElementById("pPackPrice").value || 0),
-        unitPrice: Number(document.getElementById("pUnitPrice").value || 0),
-        visible: document.getElementById("pVisible").checked,
-        specs: document.getElementById("pSpecs").value.trim(),
-        imageUrl: document.getElementById("pImageUrl").value.trim()
-      };
+    renderOrders();
+    renderAdminProducts();
+    renderFaqs();
+  }
 
-      try {
-        const res = await callApi({ action: "save_product", product });
-        allProducts = res.products || [];
-        renderProducts();
-        closeProductModal();
-        showToast("Đã lưu sản phẩm vào kho");
-      } catch (err) {
-        showToast("Lỗi lưu: " + err.message);
+  function switchTab(tabName, btnEl) {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+    btnEl.classList.add("active");
+    document.getElementById("tab-" + tabName).classList.add("active");
+  }
+
+  // Orders + Gắn nhãn "Khách quen"
+  function setOrderFilter(status, btnEl) {
+    currentOrderFilter = status;
+    btnEl.parentElement.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+    btnEl.classList.add("active");
+    renderOrders();
+  }
+
+  function buildCustomerOrderCounts() {
+    const counts = {};
+    allOrders.forEach(o => {
+      if (String(o.status || "") === "Đã hủy") return;
+      const p = normalizePhone(o.phone);
+      if (p.length >= 9) {
+        counts[p] = (counts[p] || 0) + 1;
       }
+    });
+    return counts;
+  }
+
+  function renderOrders() {
+    const kw = document.getElementById("orderSearchInput").value.trim().toLowerCase();
+    const phoneCounts = buildCustomerOrderCounts();
+
+    const filtered = allOrders.filter(o => {
+      const p = normalizePhone(o.phone);
+      const count = phoneCounts[p] || 0;
+      const isVip = count >= 2;
+
+      if (currentOrderFilter === "VIP" && !isVip) return false;
+      if (currentOrderFilter !== "ALL" && currentOrderFilter !== "VIP" && o.status !== currentOrderFilter) return false;
+
+      if (kw) {
+        const hay = `${o.orderId} ${o.customerName} ${o.phone} ${o.socialHandle} ${o.itemsSummary}`.toLowerCase();
+        if (!hay.includes(kw)) return false;
+      }
+      return true;
+    });
+
+    const wrap = document.getElementById("ordersList");
+    if (!filtered.length) {
+      wrap.innerHTML = `<p style="color:var(--text-muted);font-size:0.86rem;">Chưa có đơn hàng nào trong mục này.</p>`;
+      return;
     }
 
-    async function deleteProduct(id) {
-      if (!confirm("Xóa sản phẩm này khỏi kho?")) return;
-      try {
-        const res = await callApi({ action: "delete_product", id });
-        allProducts = res.products || [];
-        renderProducts();
-        showToast("Đã xóa sản phẩm");
-      } catch (err) {
-        showToast("Lỗi xóa: " + err.message);
-      }
-    }
+    const statuses = ["Chờ xác nhận", "Đang gói / Gửi", "Hoàn thành", "Đã hủy"];
 
-    // --- FAQS ---
-    function renderFaqs() {
-      const container = document.getElementById("faqsList");
-      if (!allFaqs.length) {
-        container.innerHTML = `<div class="card" style="text-align:center; color:var(--muted);">Chưa có mục hỏi đáp nào.</div>`;
-        return;
-      }
+    wrap.innerHTML = filtered.map(o => {
+      const normP = normalizePhone(o.phone);
+      const orderCount = phoneCounts[normP] || 0;
+      const isReturning = orderCount >= 2;
+      const cleanPhone = String(o.phone || "").replace(/^'/, "");
 
-      container.innerHTML = allFaqs.map(f => `
-        <div class="card">
-          <div class="card-top">
+      return `
+        <div class="order-card">
+          <div class="order-top">
             <div>
-              <strong>Hỏi: ${f.question}</strong>
-              <p style="font-size:13px; color:var(--text); margin-top:4px;">Đáp: ${f.answer}</p>
+              <strong style="color:var(--bark);">#${o.orderId}</strong> •
+              <strong>${o.customerName}</strong>
+              ${isReturning ? `<span class="vip-badge">★ Khách quen (${orderCount} đơn)</span>` : ""}
+              <div style="font-size:0.78rem;color:var(--text-muted);">${o.createdAt} • ${o.platform}: <strong>${o.socialHandle}</strong></div>
             </div>
-            <span class="badge ${f.active ? 'badge-ok' : 'badge-warn'}">${f.active ? 'Đang bật' : 'Tạm tắt'}</span>
+            <select onchange="updateOrderStatus('${o.orderId}', this.value)"
+              style="border:1px solid var(--greige);background:var(--bg-paper);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:0.82rem;">
+              ${statuses.map(st => `<option value="${st}" ${o.status === st ? "selected" : ""}>${st}</option>`).join("")}
+            </select>
           </div>
-          <div style="display:flex; gap:8px; justify-content:flex-end;">
-            <button class="btn btn-soft btn-sm" onclick="openFaqModal('${f.id}')">Sửa</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteFaq('${f.id}')">Xóa</button>
+          <div style="font-size:0.84rem;margin-bottom:5px;">
+            SĐT: <a href="tel:${cleanPhone}" style="color:var(--bark);font-weight:500;">${cleanPhone}</a> — ${o.address}
+          </div>
+          <div style="background:var(--bg-paper);border:1px solid var(--greige);border-radius:9px;padding:8px 11px;font-size:0.84rem;">
+            <div>${o.itemsSummary}</div>
+            <div style="margin-top:4px;font-weight:600;color:var(--bark);">
+              Tổng COD: ${fmtPrice(o.total)} (Giấy ${fmtPrice(o.subtotal)} + Ship ${o.shipFee === 0 ? "0đ" : fmtPrice(o.shipFee)})
+            </div>
+          </div>
+          ${o.note ? `<div style="font-size:0.8rem;color:var(--text-muted);margin-top:6px;">Ghi chú: ${o.note}</div>` : ""}
+          ${isReturning ? `<div class="vip-gift-note">Gợi ý: Gửi kèm mẫu giấy thử nhỏ tri ân khách quen</div>` : ""}
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function updateOrderStatus(orderId, status) {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "update_order_status", password: adminPassword, orderId, status })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      allOrders = data.orders || [];
+      allProducts = data.products || [];
+      renderOrders();
+      renderAdminProducts();
+    }
+  }
+
+  // Admin Products (2-3 Photos)
+  function renderAdminProducts() {
+    const grid = document.getElementById("adminProdGrid");
+    if (!allProducts.length) {
+      grid.innerHTML = `<p style="color:var(--text-muted);">Chưa có sản phẩm nào trong kho.</p>`;
+      return;
+    }
+
+    grid.innerHTML = allProducts.map(p => {
+      const imgs = parseImageUrls(p.imageUrl);
+      const hasPack = p.packPrice > 0 && p.packSize > 1;
+      const priceText = hasPack
+        ? `${fmtPrice(p.packPrice)}/${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})`
+        : `${fmtPrice(p.unitPrice)}/${p.baseUnit}`;
+
+      return `
+        <div class="prod-card" style="opacity:${p.visible ? 1 : 0.6};">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+            <div>
+              <span style="font-size:0.74rem;color:var(--text-muted);">${p.id} • ${p.category || ""}</span>
+              <h3 style="font-size:0.96rem;color:var(--bark-dark);">${p.name}</h3>
+            </div>
+            <span style="font-size:0.75rem;padding:2px 8px;border-radius:999px;background:${p.visible ? "var(--moss-light)" : "#EEE"};color:${p.visible ? "var(--moss)" : "#666"};">
+              ${p.visible ? "Đang hiện" : "Đang ẩn"}
+            </span>
+          </div>
+          ${imgs.length ? `<div class="mini-thumbs">${imgs.map(u => `<img src="${u}" alt="" />`).join("")}</div>` : `<div style="font-size:0.76rem;color:var(--text-muted);">Chưa có ảnh</div>`}
+          <div style="font-size:0.84rem;">
+            Tồn kho: <strong>${p.stock} ${p.baseUnit}</strong> • Giá: <strong>${priceText}</strong>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;">
+            <button class="btn btn-soft" style="padding:6px 10px;font-size:0.78rem;" onclick="openProductModal('${p.id}')">Sửa</button>
+            <button class="btn btn-soft" style="padding:6px 10px;font-size:0.78rem;" onclick="toggleVisibility('${p.id}', ${!p.visible})">${p.visible ? "Ẩn" : "Hiện"}</button>
+            <button class="btn btn-danger" style="padding:6px 10px;font-size:0.78rem;" onclick="deleteProduct('${p.id}')">Xóa</button>
           </div>
         </div>
-      `).join("");
+      `;
+    }).join("");
+  }
+
+  function openProductModal(prodId) {
+    const p = prodId ? allProducts.find(item => item.id === prodId) : null;
+    document.getElementById("prodModalTitle").textContent = p ? `Sửa ${p.name}` : "Thêm mẫu giấy mới";
+    document.getElementById("pId").value = p ? p.id : "";
+    document.getElementById("pName").value = p ? p.name : "";
+    document.getElementById("pCategory").value = p ? p.category : "";
+    document.getElementById("pBaseUnit").value = p ? p.baseUnit : "tờ";
+    document.getElementById("pStock").value = p ? p.stock : 0;
+    document.getElementById("pPackUnit").value = p ? p.packUnit : "";
+    document.getElementById("pPackSize").value = p ? p.packSize : 1;
+    document.getElementById("pPackPrice").value = p ? p.packPrice : 0;
+    document.getElementById("pUnitPrice").value = p ? p.unitPrice : 0;
+    document.getElementById("pSpecs").value = p ? p.specs : "";
+    document.getElementById("pVisible").checked = p ? p.visible !== false : true;
+
+    const imgs = p ? parseImageUrls(p.imageUrl) : [];
+    for (let i = 0; i < 3; i++) {
+      document.getElementById("slotUrl" + i).value = imgs[i] || "";
+      syncSlotPreview(i);
     }
 
-    function openFaqModal(id = "") {
-      const f = allFaqs.find(item => item.id === id);
-      document.getElementById("faqModalTitle").textContent = f ? "Sửa mục Hỏi - Đáp" : "Thêm câu hỏi thường gặp";
-      document.getElementById("fId").value = f ? f.id : "";
-      document.getElementById("fQuestion").value = f ? f.question : "";
-      document.getElementById("fAnswer").value = f ? f.answer : "";
-      document.getElementById("fActive").checked = f ? Boolean(f.active) : true;
-      document.getElementById("faqModal").classList.add("open");
+    document.getElementById("prodModalOverlay").classList.add("open");
+  }
+
+  function closeProductModal() {
+    document.getElementById("prodModalOverlay").classList.remove("open");
+  }
+
+  function syncSlotPreview(idx) {
+    const url = document.getElementById("slotUrl" + idx).value.trim();
+    const box = document.getElementById("slotPreview" + idx);
+    if (/^https?:\/\//i.test(url)) {
+      box.innerHTML = `<img src="${url}" alt="" /><button type="button" class="slot-remove" onclick="clearSlot(${idx})">×</button>`;
+    } else {
+      box.innerHTML = SLOT_PLACEHOLDERS[idx];
     }
+  }
 
-    function closeFaqModal() { document.getElementById("faqModal").classList.remove("open"); }
+  function clearSlot(idx) {
+    document.getElementById("slotUrl" + idx).value = "";
+    syncSlotPreview(idx);
+  }
 
-    async function saveFaqForm(e) {
-      e.preventDefault();
-      const faq = {
-        id: document.getElementById("fId").value,
-        question: document.getElementById("fQuestion").value.trim(),
-        answer: document.getElementById("fAnswer").value.trim(),
-        active: document.getElementById("fActive").checked
+  function compressImageFile(file, maxDim = 1200, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) {
+              h = Math.round((h * maxDim) / w);
+              w = maxDim;
+            } else {
+              w = Math.round((w * maxDim) / h);
+              h = maxDim;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve(dataUrl.split(",")[1]);
+        };
+        img.onerror = reject;
+        img.src = ev.target.result;
       };
-      try {
-        const res = await callApi({ action: "save_faq", faq });
-        allFaqs = res.faqs || [];
-        renderFaqs();
-        closeFaqModal();
-        showToast("Đã lưu mục Hỏi - Đáp");
-      } catch (err) {
-        showToast("Lỗi lưu: " + err.message);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function handleSlotUpload(idx, inputEl) {
+    const file = inputEl.files && inputEl.files[0];
+    if (!file) return;
+    const box = document.getElementById("slotPreview" + idx);
+    box.innerHTML = "Đang tải ảnh...";
+
+    try {
+      const base64 = await compressImageFile(file);
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({
+          action: "upload_image",
+          password: adminPassword,
+          base64,
+          mimeType: "image/jpeg",
+          fileName: `giay_${Date.now()}_${idx + 1}.jpg`
+        })
+      });
+      const data = await res.json();
+      if (data.ok && data.imageUrl) {
+        document.getElementById("slotUrl" + idx).value = data.imageUrl;
+        syncSlotPreview(idx);
+      } else {
+        alert("Lỗi tải ảnh: " + (data.error || ""));
+        syncSlotPreview(idx);
       }
+    } catch (e) {
+      alert("Không tải được ảnh lên Drive.");
+      syncSlotPreview(idx);
+    } finally {
+      inputEl.value = "";
+    }
+  }
+
+  async function saveProduct() {
+    const name = document.getElementById("pName").value.trim();
+    if (!name) {
+      alert("Bạn nhập tên sản phẩm nhé!");
+      return;
     }
 
-    async function deleteFaq(id) {
-      if (!confirm("Xóa câu hỏi này?")) return;
-      try {
-        const res = await callApi({ action: "delete_faq", id });
-        allFaqs = res.faqs || [];
-        renderFaqs();
-        showToast("Đã xóa mục Hỏi - Đáp");
-      } catch (err) {
-        showToast("Lỗi xóa: " + err.message);
-      }
-    }
+    const urls = [0, 1, 2]
+      .map(i => document.getElementById("slotUrl" + i).value.trim())
+      .filter(Boolean);
 
-    // --- SETTINGS ---
-    async function saveNotifyEmail() {
-      const notifyEmail = document.getElementById("notifyEmailInput").value.trim();
-      try {
-        const res = await callApi({ action: "save_settings", notifyEmail });
-        document.getElementById("notifyEmailInput").value = res.notifyEmail;
-        showToast("Đã lưu email nhận thông báo");
-      } catch (err) {
-        showToast("Lỗi: " + err.message);
-      }
-    }
+    const product = {
+      id: document.getElementById("pId").value.trim(),
+      name,
+      category: document.getElementById("pCategory").value.trim(),
+      baseUnit: document.getElementById("pBaseUnit").value.trim() || "tờ",
+      stock: Number(document.getElementById("pStock").value || 0),
+      packUnit: document.getElementById("pPackUnit").value.trim(),
+      packSize: Math.max(1, Number(document.getElementById("pPackSize").value || 1)),
+      packPrice: Number(document.getElementById("pPackPrice").value || 0),
+      unitPrice: Number(document.getElementById("pUnitPrice").value || 0),
+      specs: document.getElementById("pSpecs").value.trim(),
+      visible: document.getElementById("pVisible").checked,
+      imageUrl: urls.join("\n")
+    };
 
-    async function toggleAiMode(enabled) {
-      try {
-        await callApi({ action: "save_settings", aiEnabled: enabled });
-        showToast(enabled ? "Đã bật chế độ Gemini AI + Dự phòng nội bộ" : "Đã chuyển sang 100% Bộ xử lý nội bộ");
-      } catch (err) {
-        showToast("Lỗi: " + err.message);
-      }
-    }
+    const btn = document.getElementById("saveProdBtn");
+    btn.disabled = true;
+    btn.textContent = "Đang lưu...";
 
-    async function testSendEmail() {
-      try {
-        const res = await callApi({ action: "test_email" });
-        showToast("Đã gửi email test tới " + res.sentTo);
-      } catch (err) {
-        alert("Lỗi gửi email: " + err.message);
+    try {
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify({ action: "save_product", password: adminPassword, product })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        allProducts = data.products || [];
+        document.getElementById("prodCountBadge").textContent = String(allProducts.length);
+        renderAdminProducts();
+        closeProductModal();
       }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Lưu sản phẩm";
     }
+  }
 
-    async function runAiDiagnostic() {
-      const box = document.getElementById("aiDiagResult");
-      box.style.display = "block";
-      box.textContent = "Đang kiểm tra phản hồi Chatbot...";
-      try {
-        const res = await callApi({ action: "test_ai" });
-        box.textContent = `HOẠT ĐỘNG TỐT (Nguồn: ${res.source || "local"})\nCâu trả lời thử: ${res.data.reply}`;
-      } catch (err) {
-        box.textContent = `LỖI:\n${err.message}`;
-      }
+  async function toggleVisibility(id, visible) {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "toggle_product_visibility", password: adminPassword, id, visible })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      allProducts = data.products || [];
+      renderAdminProducts();
     }
-  </script>
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm("Xóa hẳn sản phẩm này khỏi Google Sheet?")) return;
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "delete_product", password: adminPassword, id })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      allProducts = data.products || [];
+      document.getElementById("prodCountBadge").textContent = String(allProducts.length);
+      renderAdminProducts();
+    }
+  }
+
+  // FAQs
+  function renderFaqs() {
+    const wrap = document.getElementById("faqList");
+    wrap.innerHTML = allFaqs.map(f => `
+      <div style="background:#fff;border:1px solid var(--greige);border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+        <div style="font-weight:600;color:var(--bark);font-size:0.88rem;">${f.question}</div>
+        <div style="font-size:0.84rem;color:var(--text-muted);margin:4px 0 8px;">${f.answer}</div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-soft" style="padding:4px 10px;font-size:0.76rem;" onclick="editFaq('${f.id}')">Sửa</button>
+          <button class="btn btn-danger" style="padding:4px 10px;font-size:0.76rem;" onclick="deleteFaq('${f.id}')">Xóa</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function editFaq(id) {
+    const f = allFaqs.find(item => item.id === id);
+    if (!f) return;
+    document.getElementById("faqIdInput").value = f.id;
+    document.getElementById("faqQInput").value = f.question;
+    document.getElementById("faqAInput").value = f.answer;
+  }
+
+  function resetFaqForm() {
+    document.getElementById("faqIdInput").value = "";
+    document.getElementById("faqQInput").value = "";
+    document.getElementById("faqAInput").value = "";
+  }
+
+  async function saveFaq() {
+    const question = document.getElementById("faqQInput").value.trim();
+    const answer = document.getElementById("faqAInput").value.trim();
+    if (!question || !answer) return;
+
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "save_faq",
+        password: adminPassword,
+        faq: { id: document.getElementById("faqIdInput").value.trim(), question, answer, active: true }
+      })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      allFaqs = data.faqs || [];
+      resetFaqForm();
+      renderFaqs();
+    }
+  }
+
+  async function deleteFaq(id) {
+    if (!confirm("Xóa câu hỏi này?")) return;
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "delete_faq", password: adminPassword, id })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      allFaqs = data.faqs || [];
+      renderFaqs();
+    }
+  }
+
+  // Settings
+  async function saveSettings() {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "save_settings",
+        password: adminPassword,
+        notifyEmail: document.getElementById("notifyEmailInput").value.trim(),
+        aiEnabled: document.getElementById("aiEnabledChk").checked
+      })
+    });
+    const data = await res.json();
+    if (data.ok) alert("Đã lưu cài đặt!");
+  }
+
+  async function testEmail() {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify({ action: "test_email", password: adminPassword })
+    });
+    const data = await res.json();
+    alert(data.ok ? ("Đã gửi email thử tới " + data.sentTo) : ("Lỗi: " + data.error));
+  }
+
+  // Tự động đăng nhập nếu thiết bị đã lưu phiên
+  window.addEventListener("DOMContentLoaded", () => {
+    if (getSavedSession()) {
+      doLogin(true);
+    }
+  });
+</script>
 </body>
 </html>
