@@ -892,6 +892,7 @@
                 <select class="select" style="padding:5px 8px; font-size:12px; width:auto;" onchange="changeOrderStatus('${escapeHtml(o.orderId)}', this.value)">
                   ${statusOptions}
                 </select>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteOrder('${escapeHtml(o.orderId)}')">Xóa</button>
               </div>
             </div>
           </div>
@@ -960,7 +961,20 @@
         showToast("Lỗi: " + err.message);
       }
     }
-
+    async function deleteOrder(orderId) {
+      if (!confirm(`Xóa vĩnh viễn đơn #${orderId}?\n(Nếu đơn chưa hủy, số lượng giấy sẽ được tự động hoàn lại vào kho)`)) return;
+      try {
+        const res = await callApi({ action: "delete_order", orderId });
+        applyAllData({
+          orders: res.orders || allOrders,
+          products: res.products || allProducts,
+          faqs: allFaqs
+        });
+        showToast("Đã xóa đơn hàng");
+      } catch (err) {
+        showToast("Lỗi xóa đơn: " + err.message);
+      }
+    }
     // --- CHỈNH SỬA ĐƠN HÀNG (SẢN PHẨM, GIÁ, GIẢM GIÁ, PHÍ SHIP, COD/CK, VẬN ĐƠN) ---
     function openOrderEditModal(orderId) {
       const o = allOrders.find(item => item.orderId === orderId);
