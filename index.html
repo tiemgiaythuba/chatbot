@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Tiệm giấy Thứ Ba — Tư vấn & Đặt giấy thủ công</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -28,12 +30,7 @@
       --radius-md: 12px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
     body {
       font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -70,15 +67,11 @@
       flex-shrink: 0;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .brand { display: flex; align-items: center; gap: 10px; }
 
     .brand-avatar {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: var(--primary);
       color: #FAF7F2;
@@ -89,7 +82,18 @@
       font-weight: 600;
       font-size: 16px;
       flex-shrink: 0;
-      letter-spacing: 0.5px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
+    }
+
+    .brand-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      background: #FFFFFF;
     }
 
     .brand-info h1 {
@@ -109,27 +113,10 @@
       margin-top: 2px;
     }
 
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #4CAF50;
-      display: inline-block;
-    }
-
-    .status-dot.loading {
-      background: #E6A23C;
-      animation: pulse 1.2s infinite;
-    }
-
-    .status-dot.error {
-      background: #D9534F;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.35; }
-    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4CAF50; display: inline-block; }
+    .status-dot.loading { background: #E6A23C; animation: pulse 1.2s infinite; }
+    .status-dot.error { background: #D9534F; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
     .cart-btn {
       background: var(--bg-card);
@@ -144,11 +131,6 @@
       gap: 6px;
       cursor: pointer;
       box-shadow: var(--shadow-sm);
-      transition: all 0.15s ease;
-    }
-
-    .cart-btn:active {
-      transform: scale(0.96);
     }
 
     .cart-badge {
@@ -187,18 +169,9 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .msg-row.bot {
-      align-self: flex-start;
-    }
-
-    .msg-row.user {
-      align-self: flex-end;
-    }
-
-    .msg-row.full-width {
-      max-width: 100%;
-      width: 100%;
-    }
+    .msg-row.bot { align-self: flex-start; }
+    .msg-row.user { align-self: flex-end; }
+    .msg-row.full-width { max-width: 100%; width: 100%; }
 
     .bubble {
       padding: 11px 14px;
@@ -223,13 +196,7 @@
       border-bottom-right-radius: 4px;
     }
 
-    /* Quick Action Chips inside chat */
-    .quick-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 8px;
-    }
+    .quick-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
 
     .chip-btn {
       background: var(--bg-card);
@@ -241,19 +208,10 @@
       padding: 7px 12px;
       border-radius: 999px;
       cursor: pointer;
-      transition: all 0.15s;
       box-shadow: var(--shadow-sm);
     }
 
-    .chip-btn:hover {
-      background: var(--bg-soft);
-    }
-
-    .chip-btn:active {
-      transform: scale(0.97);
-    }
-
-    /* Product Catalog Strip inside Chat */
+    /* Catalog Carousel */
     .catalog-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -262,14 +220,7 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .cat-tabs {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      scrollbar-width: none;
-    }
-
+    .cat-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
     .cat-tabs::-webkit-scrollbar { display: none; }
 
     .cat-tab {
@@ -284,25 +235,13 @@
       white-space: nowrap;
       cursor: pointer;
     }
+    .cat-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .cat-tab.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-    }
-
-    .product-carousel {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: thin;
-    }
+    .product-carousel { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
 
     .product-card {
-      min-width: 205px;
-      max-width: 205px;
+      min-width: 222px;
+      max-width: 222px;
       background: var(--bg-app);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
@@ -315,7 +254,7 @@
 
     .product-thumb {
       width: 100%;
-      height: 118px;
+      height: 122px;
       background: var(--bg-soft);
       position: relative;
       overflow: hidden;
@@ -324,11 +263,7 @@
       justify-content: center;
     }
 
-    .product-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
     .paper-art {
       width: 100%;
@@ -340,7 +275,7 @@
       padding: 10px;
       text-align: center;
       font-family: 'Lora', serif;
-      font-size: 12px;
+      font-size: 12.5px;
       color: var(--primary);
       background-image: radial-gradient(rgba(92, 64, 51, 0.12) 1px, transparent 0);
       background-size: 12px 12px;
@@ -358,11 +293,7 @@
       color: var(--accent);
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
     }
-
-    .stock-pill.out {
-      background: var(--warn-bg);
-      color: var(--warn-text);
-    }
+    .stock-pill.out { background: var(--warn-bg); color: var(--warn-text); }
 
     .product-body {
       padding: 10px;
@@ -373,60 +304,57 @@
       gap: 8px;
     }
 
-    .product-title {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.3;
-    }
+    .product-title { font-size: 13.5px; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+    .price-block { margin-top: 4px; display: flex; flex-direction: column; gap: 2px; }
+    .price-main { font-size: 13.5px; font-weight: 700; color: var(--primary); }
+    .price-sub { font-size: 11.5px; color: var(--text-muted); }
 
-    .product-meta {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .product-price {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-top: 4px;
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 6px;
-      margin-top: 4px;
-    }
+    .card-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+    .buy-btn-row { display: flex; gap: 5px; }
 
     .btn-outline {
-      flex: 1;
+      width: 100%;
       background: #fff;
       border: 1px solid var(--border);
       color: var(--text-main);
       font-family: inherit;
       font-size: 11.5px;
       font-weight: 500;
-      padding: 6px 8px;
+      padding: 5px 8px;
       border-radius: 8px;
       cursor: pointer;
     }
 
     .btn-primary-sm {
-      flex: 1.3;
+      flex: 1;
       background: var(--primary);
       border: none;
       color: #fff;
       font-family: inherit;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
-      padding: 6px 8px;
+      padding: 7px 6px;
       border-radius: 8px;
       cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-accent-sm {
+      flex: 1;
+      background: var(--accent-soft);
+      border: 1px solid #C8DBC9;
+      color: #2E5A36;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     .btn-preorder-sm {
-      flex: 1.3;
+      width: 100%;
       background: var(--warn-bg);
       border: 1px solid #EBD3B5;
       color: var(--warn-text);
@@ -450,13 +378,7 @@
       gap: 7px;
     }
 
-    .suggest-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 12.5px;
-    }
+    .suggest-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; }
 
     .suggest-add {
       background: var(--accent);
@@ -470,7 +392,7 @@
       white-space: nowrap;
     }
 
-    /* Contact Social Card (Wholesale / Out of stock / Preorder) */
+    /* Contact Social Card */
     .contact-card {
       margin-top: 8px;
       background: var(--bg-soft);
@@ -505,26 +427,18 @@
       white-space: nowrap;
     }
 
-    .social-links {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-    }
-
+    .social-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .social-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 4px;
       text-decoration: none;
       font-size: 12px;
       font-weight: 600;
       padding: 8px 6px;
       border-radius: 8px;
       color: #fff;
-      text-align: center;
     }
-
     .social-fb { background: #1877F2; }
     .social-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
     .social-th { background: #1C1C1E; }
@@ -537,13 +451,7 @@
       flex-shrink: 0;
     }
 
-    .hint-strip {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      scrollbar-width: none;
-    }
+    .hint-strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
     .hint-strip::-webkit-scrollbar { display: none; }
 
     .hint-pill {
@@ -566,11 +474,7 @@
       border-radius: 24px;
       padding: 4px 6px 4px 14px;
     }
-
-    .input-row:focus-within {
-      border-color: var(--primary);
-    }
-
+    .input-row:focus-within { border-color: var(--primary); }
     .input-row input {
       flex: 1;
       border: none;
@@ -595,13 +499,9 @@
       cursor: pointer;
       flex-shrink: 0;
     }
+    .send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-    .send-btn:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    /* Modals / Drawers */
+    /* Modals */
     .overlay {
       position: fixed;
       inset: 0;
@@ -611,10 +511,7 @@
       justify-content: center;
       z-index: 50;
     }
-
-    .overlay.open {
-      display: flex;
-    }
+    .overlay.open { display: flex; }
 
     .sheet-modal {
       width: 100%;
@@ -628,11 +525,7 @@
       overflow: hidden;
       animation: slideUp 0.24s ease-out;
     }
-
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
     .modal-head {
       padding: 14px 16px;
@@ -642,12 +535,7 @@
       align-items: center;
       justify-content: space-between;
     }
-
-    .modal-head h2 {
-      font-family: 'Lora', serif;
-      font-size: 17px;
-      font-weight: 600;
-    }
+    .modal-head h2 { font-family: 'Lora', serif; font-size: 17px; font-weight: 600; }
 
     .close-btn {
       width: 30px;
@@ -657,18 +545,9 @@
       background: var(--bg-app);
       font-size: 16px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .modal-body {
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+    .modal-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
 
     .cart-item-row {
       background: var(--bg-card);
@@ -690,34 +569,11 @@
       border-radius: 8px;
       padding: 3px 6px;
     }
+    .qty-btn { width: 24px; height: 24px; border: none; background: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
 
-    .qty-btn {
-      width: 24px;
-      height: 24px;
-      border: none;
-      background: #fff;
-      border-radius: 6px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .form-group label {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-main);
-    }
-
-    .form-group small {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 12.5px; font-weight: 600; color: var(--text-main); }
+    .form-group small { font-size: 11px; color: var(--text-muted); }
     .form-control {
       width: 100%;
       padding: 10px 12px;
@@ -729,17 +585,7 @@
       color: var(--text-main);
     }
 
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    .platform-pills {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
+    .platform-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .plat-option {
       border: 1px solid var(--border);
       background: #fff;
@@ -750,12 +596,7 @@
       font-weight: 600;
       cursor: pointer;
     }
-
-    .plat-option.selected {
-      border-color: var(--primary);
-      background: var(--bg-soft);
-      color: var(--primary);
-    }
+    .plat-option.selected { border-color: var(--primary); background: var(--bg-soft); color: var(--primary); }
 
     .summary-card {
       background: var(--bg-card);
@@ -767,12 +608,7 @@
       flex-direction: column;
       gap: 6px;
     }
-
-    .summary-line {
-      display: flex;
-      justify-content: space-between;
-    }
-
+    .summary-line { display: flex; justify-content: space-between; }
     .summary-total {
       border-top: 1px dashed var(--border);
       padding-top: 8px;
@@ -794,11 +630,7 @@
       font-weight: 600;
       cursor: pointer;
     }
-
-    .submit-order-btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
+    .submit-order-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
     .toast {
       position: fixed;
@@ -816,14 +648,9 @@
       transition: opacity 0.2s;
       white-space: nowrap;
     }
-
     .toast.show { opacity: 1; }
 
-    .typing-dots {
-      display: inline-flex;
-      gap: 4px;
-      padding: 4px 2px;
-    }
+    .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; }
     .typing-dots span {
       width: 6px;
       height: 6px;
@@ -833,18 +660,17 @@
     }
     .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
-      40% { transform: scale(1); opacity: 1; }
-    }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <!-- Header -->
     <header class="header">
       <div class="brand">
-        <div class="brand-avatar">TB</div>
+        <div class="brand-avatar">
+          <img src="logo.png" alt="Logo Tiệm giấy Thứ Ba" onerror="this.remove();" />
+          <span>TB</span>
+        </div>
         <div class="brand-info">
           <h1>Tiệm giấy Thứ Ba</h1>
           <div class="status-line">
@@ -859,15 +685,13 @@
       </button>
     </header>
 
-    <!-- Chat Area -->
     <main id="chatStream" class="chat-stream"></main>
 
-    <!-- Input Bar -->
     <div class="composer-wrap">
       <div class="hint-strip">
         <button class="hint-pill" onclick="sendQuickText('Xem các loại giấy đang có sẵn')">📄 Giấy đang có sẵn</button>
-        <button class="hint-pill" onclick="sendQuickText('Giấy nào viết bút máy không lem ạ?')">✒️ Viết bút máy</button>
-        <button class="hint-pill" onclick="sendQuickText('Phí ship và ưu đãi như thế nào ạ?')">🚚 Phí ship</button>
+        <button class="hint-pill" onclick="sendQuickText('Giấy có viết được bút mực không?')">✒️ Viết bút mực</button>
+        <button class="hint-pill" onclick="sendQuickText('Phí ship như thế nào ạ?')">🚚 Phí ship</button>
         <button class="hint-pill" onclick="openCartModal()">🛒 Lên đơn ngay</button>
       </div>
       <form class="input-row" onsubmit="handleFormSubmit(event)">
@@ -882,10 +706,8 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toast" class="toast"></div>
 
-  <!-- Product Detail Modal -->
   <div id="detailOverlay" class="overlay" onclick="closeOverlay(event, 'detailOverlay')">
     <div class="sheet-modal">
       <div class="modal-head">
@@ -896,7 +718,6 @@
     </div>
   </div>
 
-  <!-- Cart & Checkout Modal -->
   <div id="cartOverlay" class="overlay" onclick="closeOverlay(event, 'cartOverlay')">
     <div class="sheet-modal">
       <div class="modal-head">
@@ -908,21 +729,18 @@
   </div>
 
   <script>
-    // =========================================================================
-    // CẤU HÌNH KẾT NỐI GOOGLE APPS SCRIPT & LIÊN KẾT MẠNG XÃ HỘI CỦA TIỆM
-    // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
 
-    // Bạn có thể thay bằng link trang cá nhân/fanpage trực tiếp của tiệm nếu muốn
     const SOCIAL_LINKS = {
-      facebook: "https://www.facebook.com/tiemgiaythuba",
-      instagram: "https://www.instagram.com/tiemgiaythuba/",
-      threads: "https://www.threads.com/@tiemgiaythuba"
+      facebook: "https://www.facebook.com/search/top?q=Ti%E1%BB%87m%20gi%E1%BA%A5y%20Th%E1%BB%A9%20Ba",
+      instagram: "https://www.instagram.com/",
+      threads: "https://www.threads.net/"
     };
 
-    // State
+    const IS_DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
+
     let products = [];
-    let cart = [];
+    let cart = []; // { key, id, name, buyMode, unitLabel, baseUnitsPerQty, price, qty }
     let chatHistory = [];
     let selectedCategory = "Tất cả";
     let selectedPlatform = "Instagram";
@@ -969,7 +787,23 @@
       });
     }
 
-    // Load inventory from Google Sheets via Apps Script
+    function hasPackOption(p) {
+      return Number(p.packPrice || 0) > 0 && Number(p.packSize || 1) > 1;
+    }
+
+    function hasUnitOption(p) {
+      return Number(p.unitPrice || 0) > 0;
+    }
+
+    function getStockDisplay(p) {
+      if (p.stock <= 0) return "Tạm hết sẵn";
+      if (hasPackOption(p)) {
+        const packs = Math.floor(p.stock / p.packSize);
+        return `Còn ${p.stock} ${p.baseUnit} (${packs} ${p.packUnit || "gói"})`;
+      }
+      return `Còn ${p.stock} ${p.baseUnit}`;
+    }
+
     async function loadInventory() {
       const dot = document.getElementById("statusDot");
       const statusText = document.getElementById("statusText");
@@ -983,10 +817,10 @@
 
         products = (json.products || []).map(p => ({
           ...p,
-          price: Number(p.price || 0),
           stock: Number(p.stock || 0),
-          itemsPerUnit: Number(p.itemsPerUnit || 1),
-          totalPieces: Number(p.stock || 0) * Number(p.itemsPerUnit || 1)
+          packSize: Math.max(1, Number(p.packSize || 1)),
+          packPrice: Number(p.packPrice || 0),
+          unitPrice: Number(p.unitPrice || 0)
         }));
 
         dot.className = "status-dot";
@@ -1001,12 +835,11 @@
       }
     }
 
-    // Render initial welcome message
     function renderWelcome() {
       const row = document.createElement("div");
       row.className = "msg-row bot";
       row.innerHTML = `
-        <div class="bubble">Dạ chào bạn, tiệm là Tiệm giấy Thứ Ba ạ.
+        <div class="bubble">Dạ chào mình, tiệm là Tiệm giấy Thứ Ba ạ.
 Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng/giá tiền hoặc lên đơn trực tiếp ở đây mà không cần chờ tiệm rep nhé.</div>
         <div class="quick-grid">
           <button class="chip-btn" onclick="renderCatalogMessage()">📄 Xem các loại giấy đang có</button>
@@ -1017,7 +850,6 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       chatStream.appendChild(row);
     }
 
-    // Render interactive product catalog card inside chat
     function renderCatalogMessage(filterCat = "Tất cả") {
       selectedCategory = filterCat;
       const existing = document.getElementById("catalogCardRow");
@@ -1043,35 +875,63 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
 
       const cardsHtml = filtered.map(p => {
         const isOut = p.stock <= 0;
-        const unitLabel = p.itemsPerUnit > 1 ? `1 ${p.unit} (${p.itemsPerUnit} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})` : `1 ${p.unit}`;
-        const stockLabel = isOut
-          ? "Tạm hết sẵn"
-          : (p.itemsPerUnit > 1 ? `Còn ${p.stock} ${p.unit} (${p.totalPieces} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})` : `Còn ${p.stock} ${p.unit}`);
+        const canPack = hasPackOption(p) && p.stock >= p.packSize;
+        const canUnit = hasUnitOption(p) && p.stock >= 1;
+
+        let priceHtml = "";
+        if (hasPackOption(p) && hasUnitOption(p)) {
+          priceHtml = `
+            <div class="price-main">${formatShortK(p.packPrice)} / ${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})</div>
+            <div class="price-sub">Mua lẻ: ${formatShortK(p.unitPrice)} / ${p.baseUnit}</div>
+          `;
+        } else if (hasPackOption(p)) {
+          priceHtml = `
+            <div class="price-main">${formatShortK(p.packPrice)} / ${p.packUnit || "gói"}</div>
+            <div class="price-sub">Quy cách: ${p.packSize} ${p.baseUnit}/${p.packUnit || "gói"}</div>
+          `;
+        } else {
+          priceHtml = `
+            <div class="price-main">${formatShortK(p.unitPrice)} / ${p.baseUnit}</div>
+          `;
+        }
 
         const thumbHtml = p.imageUrl
           ? `<img src="${p.imageUrl}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
              <div class="paper-art" style="display:none;"><span>${p.name}</span></div>`
           : `<div class="paper-art"><span>${p.name}</span></div>`;
 
-        const actionBtn = isOut
-          ? `<button class="btn-preorder-sm" onclick="askPreorder('${p.name.replace(/'/g, "\\'")}')">Đặt làm thêm</button>`
-          : `<button class="btn-primary-sm" onclick="addToCart('${p.id}', 1)">+ Thêm giỏ</button>`;
+        let actionButtonsHtml = "";
+        if (isOut) {
+          actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${p.name.replace(/'/g, "\\'")}')">Đặt làm thêm</button>`;
+        } else if (canPack && canUnit) {
+          actionButtonsHtml = `
+            <div class="buy-btn-row">
+              <button class="btn-primary-sm" onclick="addToCart('${p.id}', 'pack', 1)">+ ${p.packUnit || "Gói"} (${formatShortK(p.packPrice)})</button>
+              <button class="btn-accent-sm" onclick="addToCart('${p.id}', 'unit', 1)">+ Lẻ (${formatShortK(p.unitPrice)})</button>
+            </div>
+          `;
+        } else if (canPack) {
+          actionButtonsHtml = `<button class="btn-primary-sm" onclick="addToCart('${p.id}', 'pack', 1)">+ Thêm ${p.packUnit || "gói"} (${formatShortK(p.packPrice)})</button>`;
+        } else if (canUnit) {
+          actionButtonsHtml = `<button class="btn-primary-sm" onclick="addToCart('${p.id}', 'unit', 1)">+ Thêm giỏ (${formatShortK(p.unitPrice)})</button>`;
+        } else {
+          actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${p.name.replace(/'/g, "\\'")}')">Không đủ gói — Đặt thêm</button>`;
+        }
 
         return `
           <div class="product-card">
             <div class="product-thumb">
               ${thumbHtml}
-              <span class="stock-pill ${isOut ? 'out' : ''}">${stockLabel}</span>
+              <span class="stock-pill ${isOut ? 'out' : ''}">${getStockDisplay(p)}</span>
             </div>
             <div class="product-body">
               <div>
                 <div class="product-title">${p.name}</div>
-                <div class="product-meta">Quy cách: ${unitLabel}</div>
-                <div class="product-price">${formatShortK(p.price)} / ${p.unit}</div>
+                <div class="price-block">${priceHtml}</div>
               </div>
               <div class="card-actions">
-                <button class="btn-outline" onclick="openDetailModal('${p.id}')">Chi tiết</button>
-                ${actionBtn}
+                ${actionButtonsHtml}
+                <button class="btn-outline" onclick="openDetailModal('${p.id}')">Xem chi tiết</button>
               </div>
             </div>
           </div>
@@ -1096,82 +956,129 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       const p = products.find(item => item.id === id);
       if (!p) return;
       const isOut = p.stock <= 0;
-      const unitDesc = p.itemsPerUnit > 1
-        ? `${p.unit} (${p.itemsPerUnit} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})`
-        : p.unit;
-      const stockDesc = isOut
-        ? "Tạm hết sẵn (có thể nhắn tiệm đặt làm mẻ mới)"
-        : (p.itemsPerUnit > 1 ? `Còn ${p.stock} ${p.unit} (tổng ${p.totalPieces} ${p.category === 'Bao thư' ? 'bao' : 'tờ'})` : `Còn ${p.stock} ${p.unit}`);
+      const canPack = hasPackOption(p) && p.stock >= p.packSize;
+      const canUnit = hasUnitOption(p) && p.stock >= 1;
+
+      let priceRows = "";
+      if (hasPackOption(p)) {
+        priceRows += `<div class="summary-line"><span>Giá theo ${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit}):</span><strong>${formatVND(p.packPrice)}</strong></div>`;
+      }
+      if (hasUnitOption(p)) {
+        priceRows += `<div class="summary-line"><span>Giá lẻ từng ${p.baseUnit}:</span><strong>${formatVND(p.unitPrice)}</strong></div>`;
+      }
+
+      let modalButtons = "";
+      if (isOut) {
+        modalButtons = `<button class="submit-order-btn" onclick="hideModal('detailOverlay'); askPreorder('${p.name.replace(/'/g, "\\'")}')">Nhắn tiệm đặt làm thêm mẫu này</button>`;
+      } else {
+        modalButtons = `<div style="display:flex; gap:8px;">`;
+        if (canPack) {
+          modalButtons += `<button class="submit-order-btn" style="flex:1;" onclick="addToCart('${p.id}', 'pack', 1); hideModal('detailOverlay');">+ Thêm 1 ${p.packUnit || "gói"} (${formatShortK(p.packPrice)})</button>`;
+        }
+        if (canUnit) {
+          modalButtons += `<button class="submit-order-btn" style="flex:1; background:var(--accent);" onclick="addToCart('${p.id}', 'unit', 1); hideModal('detailOverlay');">+ Thêm 1 ${p.baseUnit} (${formatShortK(p.unitPrice)})</button>`;
+        }
+        modalButtons += `</div>`;
+      }
 
       document.getElementById("detailTitle").textContent = p.name;
       document.getElementById("detailBody").innerHTML = `
         ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:1px solid var(--border);" />` : ""}
         <div class="summary-card">
-          <div class="summary-line"><span>Đơn giá:</span><strong>${formatVND(p.price)} / ${unitDesc}</strong></div>
-          <div class="summary-line"><span>Tình trạng kho:</span><strong>${stockDesc}</strong></div>
+          ${priceRows}
+          <div class="summary-line"><span>Tồn kho hiện tại:</span><strong>${getStockDisplay(p)}</strong></div>
           <div class="summary-line"><span>Nhóm:</span><span>${p.category}</span></div>
         </div>
         <div class="summary-card">
           <strong style="font-size:13px;">Đặc điểm chi tiết:</strong>
           <p style="font-size:13.5px; color:var(--text-main);">${p.specs || "Giấy tái chế thủ công từ sợi tự nhiên tại Tiệm giấy Thứ Ba."}</p>
         </div>
-        ${isOut
-          ? `<button class="submit-order-btn" onclick="hideModal('detailOverlay'); askPreorder('${p.name.replace(/'/g, "\\'")}')">Nhắn tiệm đặt làm thêm mẫu này</button>`
-          : `<button class="submit-order-btn" onclick="addToCart('${p.id}', 1); hideModal('detailOverlay');">+ Thêm vào giỏ (${formatShortK(p.price)})</button>`
-        }
+        ${modalButtons}
       `;
       document.getElementById("detailOverlay").classList.add("open");
     }
 
-    function hideModal(id) {
-      document.getElementById(id).classList.remove("open");
-    }
+    function hideModal(id) { document.getElementById(id).classList.remove("open"); }
+    function closeOverlay(e, id) { if (e.target.id === id) hideModal(id); }
 
-    function closeOverlay(e, id) {
-      if (e.target.id === id) hideModal(id);
-    }
-
-    // Cart functions
     function updateCartBadge() {
       const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
       document.getElementById("cartCount").textContent = totalQty;
     }
 
-    function addToCart(id, qty = 1) {
+    function getUsedBaseUnitsForProduct(productId) {
+      return cart
+        .filter(c => c.id === productId)
+        .reduce((sum, c) => sum + c.qty * c.baseUnitsPerQty, 0);
+    }
+
+    function addToCart(id, buyMode = "pack", qty = 1) {
       const p = products.find(item => item.id === id);
       if (!p || p.stock <= 0) {
         showToast("Mẫu này hiện tạm hết sẵn ạ");
         return;
       }
-      const existing = cart.find(c => c.id === id);
-      const currentQty = existing ? existing.qty : 0;
-      if (currentQty + qty > p.stock) {
-        showToast(`Kho chỉ còn tối đa ${p.stock} ${p.unit} ạ`);
+
+      let mode = buyMode;
+      if (mode === "pack" && !hasPackOption(p)) mode = "unit";
+      if (mode === "unit" && !hasUnitOption(p) && hasPackOption(p)) mode = "pack";
+
+      const baseUnitsPerQty = mode === "pack" ? p.packSize : 1;
+      const price = mode === "pack" ? p.packPrice : p.unitPrice;
+      const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
+
+      if (price <= 0) {
+        showToast("Sản phẩm chưa có giá cho tùy chọn này ạ");
         return;
       }
+
+      const alreadyUsed = getUsedBaseUnitsForProduct(id);
+      const needed = qty * baseUnitsPerQty;
+      if (alreadyUsed + needed > p.stock) {
+        showToast(`Kho chỉ còn ${p.stock} ${p.baseUnit} ạ`);
+        return;
+      }
+
+      const key = `${id}_${mode}`;
+      const existing = cart.find(c => c.key === key);
       if (existing) {
         existing.qty += qty;
       } else {
-        cart.push({ id: p.id, name: p.name, qty: qty, price: p.price, unit: p.unit, maxStock: p.stock });
+        cart.push({
+          key,
+          id: p.id,
+          name: p.name,
+          buyMode: mode,
+          unitLabel,
+          baseUnitsPerQty,
+          price,
+          qty
+        });
       }
+
       updateCartBadge();
-      showToast(`Đã thêm ${p.name} vào giỏ`);
+      showToast(`Đã thêm ${qty} ${unitLabel} ${p.name}`);
     }
 
-    function changeCartQty(id, delta) {
-      const idx = cart.findIndex(c => c.id === id);
+    function changeCartQty(key, delta) {
+      const idx = cart.findIndex(c => c.key === key);
       if (idx === -1) return;
       const item = cart[idx];
-      const p = products.find(prod => prod.id === id);
-      const maxStock = p ? p.stock : item.maxStock;
+      const p = products.find(prod => prod.id === item.id);
       const nextQty = item.qty + delta;
 
       if (nextQty <= 0) {
         cart.splice(idx, 1);
-      } else if (nextQty > maxStock) {
-        showToast(`Kho hiện chỉ còn ${maxStock} ${item.unit} ạ`);
-        return;
       } else {
+        if (p) {
+          const otherUsed = cart
+            .filter(c => c.id === item.id && c.key !== key)
+            .reduce((s, c) => s + c.qty * c.baseUnitsPerQty, 0);
+          if (otherUsed + nextQty * item.baseUnitsPerQty > p.stock) {
+            showToast(`Kho hiện chỉ còn tối đa ${p.stock} ${p.baseUnit} ạ`);
+            return;
+          }
+        }
         item.qty = nextQty;
       }
       updateCartBadge();
@@ -1181,9 +1088,10 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
     function calcCartTotals() {
       const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
       const hasKit = cart.some(i => i.name.toLowerCase().includes("kit"));
-      const totalUnits = cart.reduce((sum, i) => sum + i.qty, 0);
+      const totalPacks = cart.filter(i => i.buyMode === "pack").reduce((sum, i) => sum + i.qty, 0);
+      const totalBaseUnits = cart.reduce((sum, i) => sum + i.qty * i.baseUnitsPerQty, 0);
       const shipFee = (subtotal === 0 || subtotal >= 200000 || hasKit) ? 0 : 15000;
-      return { subtotal, shipFee, total: subtotal + shipFee, totalUnits };
+      return { subtotal, shipFee, total: subtotal + shipFee, totalPacks, totalBaseUnits };
     }
 
     function openCartModal() {
@@ -1203,24 +1111,24 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         return;
       }
 
-      const { subtotal, shipFee, total, totalUnits } = calcCartTotals();
+      const { subtotal, shipFee, total, totalPacks, totalBaseUnits } = calcCartTotals();
       const itemsHtml = cart.map(item => `
         <div class="cart-item-row">
           <div>
             <div style="font-size:13.5px; font-weight:600;">${item.name}</div>
-            <div style="font-size:12px; color:var(--text-muted);">${formatVND(item.price)} / ${item.unit}</div>
+            <div style="font-size:12px; color:var(--text-muted);">${formatVND(item.price)} / ${item.unitLabel}</div>
           </div>
           <div class="qty-control">
-            <button type="button" class="qty-btn" onclick="changeCartQty('${item.id}', -1)">−</button>
+            <button type="button" class="qty-btn" onclick="changeCartQty('${item.key}', -1)">−</button>
             <span style="font-size:13px; font-weight:600; min-width:18px; text-align:center;">${item.qty}</span>
-            <button type="button" class="qty-btn" onclick="changeCartQty('${item.id}', 1)">+</button>
+            <button type="button" class="qty-btn" onclick="changeCartQty('${item.key}', 1)">+</button>
           </div>
         </div>
       `).join("");
 
-      const wholesaleNotice = totalUnits >= 10 ? `
+      const wholesaleNotice = (totalPacks >= 10 || totalBaseUnits >= 100) ? `
         <div style="background:var(--warn-bg); color:var(--warn-text); padding:10px 12px; border-radius:10px; font-size:12.5px;">
-          Mình đang chọn từ <strong>${totalUnits} gói/món</strong> trở lên — đơn số lượng lớn tiệm có áp dụng chiết khấu riêng. Mình có thể nhắn trực tiếp cho tiệm trước để chốt giá ưu đãi nhé!
+          Đơn của mình có <strong>${totalBaseUnits} tờ/cái</strong> — đơn số lượng lớn tiệm có áp dụng chiết khấu riêng. Mình có thể nhắn trực tiếp cho tiệm trước để chốt giá ưu đãi nhé!
         </div>
       ` : "";
 
@@ -1306,7 +1214,15 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         platform: selectedPlatform,
         socialHandle,
         note,
-        items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, id: i.id })),
+        items: cart.map(i => ({
+          id: i.id,
+          name: i.name,
+          buyMode: i.buyMode,
+          unitLabel: i.unitLabel,
+          qty: i.qty,
+          price: i.price,
+          baseUnits: i.qty * i.baseUnitsPerQty
+        })),
         subtotal,
         shipFee,
         total
@@ -1324,7 +1240,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         const json = await res.json();
         if (!json.ok) throw new Error(json.error || "Không gửi được đơn");
 
-        const itemsSummary = cart.map(i => `• ${i.name} x${i.qty} (${formatVND(i.price * i.qty)})`).join("\n");
+        const itemsSummary = cart.map(i => `• ${i.name}: ${i.qty} ${i.unitLabel} (${formatVND(i.price * i.qty)})`).join("\n");
         cart = [];
         updateCartBadge();
         hideModal("cartOverlay");
@@ -1339,7 +1255,6 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       }
     }
 
-    // Chat messaging with Gemini via Apps Script
     function appendUserMessage(text) {
       const row = document.createElement("div");
       row.className = "msg-row user";
@@ -1373,33 +1288,43 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       bubble.textContent = replyText;
       row.appendChild(bubble);
 
-      // Suggested items from AI
       if (Array.isArray(extra.suggestedItems) && extra.suggestedItems.length > 0) {
-        const validSuggestions = extra.suggestedItems.filter(s => {
-          const prod = products.find(p => p.id === s.id || p.name === s.name);
-          return prod && prod.stock > 0;
-        });
+        const validSuggestions = extra.suggestedItems
+          .map(s => {
+            const prod = products.find(p => p.id === s.id || p.name === s.name);
+            if (!prod || prod.stock <= 0) return null;
+            let mode = s.buyMode === "unit" ? "unit" : "pack";
+            if (mode === "pack" && !hasPackOption(prod)) mode = "unit";
+            if (mode === "unit" && !hasUnitOption(prod) && hasPackOption(prod)) mode = "pack";
+
+            const perUnit = mode === "pack" ? prod.packSize : 1;
+            const unitPrice = mode === "pack" ? prod.packPrice : prod.unitPrice;
+            const label = mode === "pack" ? (prod.packUnit || "gói") : prod.baseUnit;
+            const maxQty = Math.floor(prod.stock / perUnit);
+            const qty = Math.min(Math.max(1, Number(s.qty || 1)), maxQty);
+            if (qty <= 0 || unitPrice <= 0) return null;
+
+            return { prod, mode, qty, unitPrice, label };
+          })
+          .filter(Boolean);
 
         if (validSuggestions.length > 0) {
           const box = document.createElement("div");
           box.className = "suggest-box";
-          validSuggestions.forEach(s => {
-            const prod = products.find(p => p.id === s.id || p.name === s.name);
-            const qty = Math.min(Number(s.qty || 1), prod.stock);
+          validSuggestions.forEach(item => {
             const itemEl = document.createElement("div");
             itemEl.className = "suggest-item";
             itemEl.innerHTML = `
-              <span><strong>${prod.name}</strong> (x${qty} • ${formatShortK(prod.price * qty)})</span>
+              <span><strong>${item.prod.name}</strong> (${item.qty} ${item.label} • ${formatShortK(item.unitPrice * item.qty)})</span>
               <button class="suggest-add">+ Thêm giỏ</button>
             `;
-            itemEl.querySelector("button").onclick = () => addToCart(prod.id, qty);
+            itemEl.querySelector("button").onclick = () => addToCart(item.prod.id, item.mode, item.qty);
             box.appendChild(itemEl);
           });
           row.appendChild(box);
         }
       }
 
-      // Direct contact buttons when wholesale / out of stock / custom request
       if (extra.showContactButtons) {
         const prefill = extra.contactPrefill || replyText;
         const contactCard = document.createElement("div");
@@ -1442,7 +1367,6 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       chatInput.value = "";
       appendUserMessage(text);
 
-      // If user asks to view catalog directly
       if (/^(xem|danh sách|các loại giấy|menu|bảng giá)/i.test(text) && text.length < 38) {
         appendBotMessage("Dạ dưới đây là các mẫu giấy hiện có của tiệm (kèm số lượng còn sẵn và quy cách từng loại), mình lướt ngang để xem nhé ạ:");
         renderCatalogMessage("Tất cả");
@@ -1479,7 +1403,10 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         });
       } catch (err) {
         removeTypingIndicator();
-        appendBotMessage("Dạ hệ thống đang bận một chút, mình có thể xem kho trực tiếp hoặc nhắn thẳng cho tiệm qua Facebook/Instagram/Threads giúp tiệm nhé ạ.", {
+        const fallbackMsg = IS_DEBUG
+          ? `[Lỗi kỹ thuật]: ${err.message}`
+          : "Dạ câu này mình nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho mình nhé ạ.";
+        appendBotMessage(fallbackMsg, {
           showContactButtons: true,
           contactPrefill: text
         });
@@ -1490,7 +1417,6 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       }
     }
 
-    // Boot
     (async function init() {
       renderWelcome();
       await loadInventory();
