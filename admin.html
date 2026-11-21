@@ -348,7 +348,9 @@
       <!-- TAB 1: ĐƠN HÀNG -->
       <div id="tab-orders" class="content">
         <div id="orderStats" class="stats-row"></div>
-
+        <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+          <button type="button" class="btn btn-primary btn-sm" onclick="openNewOrderModal()">+ Tạo đơn mới</button>
+        </div>
         <div class="search-filter-bar">
           <select id="orderMonthFilter" class="select" onchange="renderOrders()"></select>
           <input id="orderSearchInput" type="search" class="input" placeholder="Tìm tên, SĐT, tài khoản, địa chỉ, vận đơn..." oninput="renderOrders()" />
@@ -976,11 +978,46 @@
       }
     }
     // --- CHỈNH SỬA ĐƠN HÀNG (SẢN PHẨM, GIÁ, GIẢM GIÁ, PHÍ SHIP, COD/CK, VẬN ĐƠN) ---
+    function openNewOrderModal() {
+      document.getElementById("orderEditTitle").textContent = "Tạo đơn hàng mới";
+      document.getElementById("editOrderId").value = "";
+      document.getElementById("editCustName").value = "";
+      document.getElementById("editCustPhone").value = "";
+      document.getElementById("editCustAddress").value = "";
+      document.getElementById("editPlatform").value = "Instagram";
+      document.getElementById("editSocialHandle").value = "";
+      document.getElementById("editPaymentMethod").value = "COD";
+      document.getElementById("editTrackingCode").value = "";
+      document.getElementById("editNote").value = "";
+      document.getElementById("editDiscountType").value = "amount";
+      document.getElementById("editDiscountValue").value = 0;
+      document.getElementById("editShipFee").value = 15000;
+      document.getElementById("saveOrderEditBtn").textContent = "Tạo đơn hàng";
+
+      editingOrderItems = [];
+
+      const sel = document.getElementById("addCatalogItemSelect");
+      const opts = [];
+      allProducts.forEach(p => {
+        if (Number(p.packPrice) > 0 && Number(p.packSize) > 1) {
+          opts.push(`<option value="${escapeHtml(p.id)}|pack">${escapeHtml(p.name)} — ${escapeHtml(p.packUnit || 'gói')} (${fmtVND(p.packPrice)})</option>`);
+        }
+        if (Number(p.unitPrice) > 0) {
+          opts.push(`<option value="${escapeHtml(p.id)}|unit">${escapeHtml(p.name)} — lẻ ${escapeHtml(p.baseUnit)} (${fmtVND(p.unitPrice)})</option>`);
+        }
+      });
+      sel.innerHTML = opts.join("");
+
+      renderEditOrderItems();
+      recalcEditOrderTotals();
+      document.getElementById("orderEditModal").classList.add("open");
+    }
     function openOrderEditModal(orderId) {
       const o = allOrders.find(item => item.orderId === orderId);
       if (!o) return;
 
       document.getElementById("orderEditTitle").textContent = `Sửa đơn #${o.orderId}`;
+      document.getElementById("saveOrderEditBtn").textContent = "Lưu thay đổi đơn hàng";
       document.getElementById("editOrderId").value = o.orderId;
       document.getElementById("editCustName").value = o.customerName || "";
       document.getElementById("editCustPhone").value = String(o.phone || "").replace(/^'/, "");
@@ -1195,14 +1232,22 @@
       btn.textContent = "Đang lưu...";
 
       try {
-        const res = await callApi({ action: "update_order", order: updatedOrder });
-        applyAllData({
-          orders: res.orders || allOrders,
-          products: res.products || allProducts,
-          faqs: allFaqs
-        });
-        closeOrderEditModal();
-        showToast("Đã cập nhật đơn hàng");
+        if (!orderId) {
+          await callApi({ action: "create_order", order: updatedOrder });
+          const fresh = await callApi({ action: "get_all" });
+          applyAllData(fresh);
+          closeOrderEditModal();
+          showToast("Đã tạo đơn hàng mới & trừ kho");
+        } else {
+          const res = await callApi({ action: "update_order", order: updatedOrder });
+          applyAllData({
+            orders: res.orders || allOrders,
+            products: res.products || allProducts,
+            faqs: allFaqs
+          });
+          closeOrderEditModal();
+          showToast("Đã cập nhật đơn hàng");
+        }
       } catch (err) {
         showToast("Lỗi lưu đơn: " + err.message);
       } finally {
