@@ -341,7 +341,7 @@
       <div class="nav-tabs">
         <button class="nav-tab active" onclick="switchTab('orders', this)">Đơn hàng</button>
         <button class="nav-tab" onclick="switchTab('inventory', this)">Kho giấy</button>
-        <button class="nav-tab" onclick="switchTab('faqs', this)">Hỏi - Đáp AI</button>
+        <button class="nav-tab" onclick="switchTab('faqs', this)">Hỏi - Đáp</button>
         <button class="nav-tab" onclick="switchTab('settings', this)">Cài đặt</button>
       </div>
 
@@ -432,7 +432,7 @@
             <input id="pCategory" class="input" placeholder="VD: Giấy A5, Bao thư, Bộ kit..." required />
           </div>
           <div class="form-field">
-            <label>Đơn vị lưu kho (tờ/cái) *</label>
+            <label>Đơn vị *</label>
             <input id="pBaseUnit" class="input" placeholder="VD: tờ, bao, bộ" value="tờ" oninput="updatePackPreview()" required />
           </div>
         </div>
@@ -441,11 +441,11 @@
           <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--primary);">Phân loại số lượng tồn kho (tính theo tờ/cái lẻ)</div>
           <div class="grid-2">
             <div class="form-field" style="margin-bottom:4px;">
-              <label>1. Đã sẵn sàng giao ngay *</label>
+              <label>1. Sẵn sàng giao *</label>
               <input id="pStock" type="number" min="0" class="input" placeholder="VD: 120" oninput="updatePackPreview()" required />
             </div>
             <div class="form-field" style="margin-bottom:4px;">
-              <label>2. Chưa gia keo (đợi ~1 tuần)</label>
+              <label>2. Chưa gia keo</label>
               <input id="pUnsizedStock" type="number" min="0" class="input" placeholder="VD: 50" oninput="updatePackPreview()" />
             </div>
           </div>
@@ -453,10 +453,10 @@
         </div>
 
         <div style="background:var(--soft); padding:10px; border-radius:10px; margin-bottom:10px;">
-          <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--primary);">Cài đặt quy đổi gói & bảng giá</div>
+          <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--primary);">Cài đặt quy đổi đóng gói & bảng giá</div>
           <div class="grid-2">
             <div class="form-field">
-              <label>Tên đơn vị gói (nếu bán gói)</label>
+              <label>Tên đơn vị gói</label>
               <input id="pPackUnit" class="input" placeholder="VD: gói (để trống nếu bán lẻ)" oninput="updatePackPreview()" />
             </div>
             <div class="form-field">
@@ -487,7 +487,7 @@
         </div>
 
         <div class="form-field">
-          <label>Ảnh sản phẩm (tối đa 3 ảnh — tự động chuyển ảnh cho khách xem)</label>
+          <label>Ảnh sản phẩm (tối đa 3 ảnh)</label>
           <input id="pImageFile" type="file" accept="image/*" multiple class="input" onchange="uploadProductImages(this)" />
           <div style="display:flex; gap:6px; margin-top:4px;">
             <input id="pImageUrlInput" class="input" placeholder="Hoặc dán link ảnh https://..." />
@@ -617,7 +617,7 @@
           <input id="fQuestion" class="input" placeholder="VD: Giấy có viết được bút mực không?" required />
         </div>
         <div class="form-field">
-          <label>Nội dung trả lời chuẩn (ngắn gọn, đúng ý) *</label>
+          <label>Nội dung trả lời *</label>
           <textarea id="fAnswer" class="textarea" rows="3" placeholder="VD: Có gia keo nhẹ nên hạn chế lem khi viết bằng bút mực." required></textarea>
         </div>
         <div class="form-field" style="flex-direction:row; align-items:center; gap:8px;">
