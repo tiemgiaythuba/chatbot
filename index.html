@@ -2,1540 +2,1425 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tiệm giấy Thứ Ba — Giấy tái chế thủ công từ Huế</title>
-  <meta name="description" content="Giấy tái chế thủ công làm tay tại Huế kết hợp lá tre, bã cà phê, vỏ quýt, cánh hoa vàng và bộ kit tự làm giấy tại nhà." />
-
-  <!-- Open Graph / Facebook / Zalo / Threads Preview -->
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="vi_VN" />
-  <meta property="og:site_name" content="Tiệm giấy Thứ Ba" />
-  <meta property="og:title" content="Tiệm giấy Thứ Ba — Giấy tái chế thủ công từ Huế" />
-  <meta property="og:description" content="Giấy tái chế thủ công làm tay tại Huế kết hợp lá tre, bã cà phê, vỏ quýt, cánh hoa vàng và bộ kit tự làm giấy tại nhà." />
-  <meta property="og:url" content="https://tiemgiaythuba.github.io/tiemgiaythuba/" />
-  <meta property="og:image" content="https://tiemgiaythuba.github.io/tiemgiaythuba/og-cover.jpg" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter / Threads Large Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Tiệm giấy Thứ Ba — Giấy tái chế thủ công từ Huế" />
-  <meta name="twitter:description" content="Giấy tái chế thủ công làm tay tại Huế kết hợp lá tre, bã cà phê, vỏ quýt, cánh hoa vàng và bộ kit tự làm giấy tại nhà." />
-  <meta name="twitter:image" content="https://tiemgiaythuba.github.io/tiemgiaythuba/og-cover.jpg" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Tiệm giấy Thứ Ba — Tư vấn & Đặt giấy thủ công</title>
+  <link rel="icon" type="image/png" href="logo.png" />
+  <link rel="apple-touch-icon" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-paper: #FAF7F2;
+      --bg-page: #F4EFE6;
+      --bg-app: #FAF7F2;
       --bg-card: #FFFFFF;
-      --bg-soft: #F3EDE3;
-      --bark: #5C4033;
-      --bark-dark: #3E2A21;
-      --moss: #4A5D4E;
-      --moss-light: #E8EFE9;
-      --greige: #E5DDD0;
+      --bg-soft: #F1EBE1;
+      --border: #E5DDD0;
+      --primary: #5C4033;
+      --primary-hover: #473026;
+      --accent: #4B6B50;
+      --accent-soft: #E8F0E9;
+      --warn-bg: #FDF3E7;
+      --warn-text: #9C5A1E;
       --text-main: #2D241E;
       --text-muted: #786B61;
-      --accent-warm: #B86B35;
-      --accent-warm-bg: #FDF3E7;
-      --danger: #B84A39;
-      --radius: 14px;
-      --shadow: 0 4px 18px rgba(62, 42, 33, 0.06);
+      --shadow-sm: 0 2px 8px rgba(45, 36, 30, 0.05);
+      --shadow-md: 0 8px 24px rgba(45, 36, 30, 0.08);
+      --radius-lg: 18px;
+      --radius-md: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
     body {
-      font-family: 'Lexend', sans-serif;
-      background-color: var(--bg-paper);
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-page);
       color: var(--text-main);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      min-height: 100dvh;
+      line-height: 1.5;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      height: 100dvh;
+      background: var(--bg-app);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
     }
 
     /* Header */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      background: rgba(250, 247, 242, 0.92);
+    .header {
+      background: rgba(250, 247, 242, 0.94);
       backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--greige);
-    }
-    .header-inner {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-    }
-    .brand { display: flex; flex-direction: column; }
-    .brand-title {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700;
-      font-size: 1.18rem;
-      color: var(--bark);
-      letter-spacing: 0.2px;
-    }
-    .brand-sub { font-size: 0.78rem; color: var(--text-muted); }
-    .header-actions { display: flex; align-items: center; gap: 10px; }
-    .cart-btn {
-      background: var(--bark);
-      color: #FAF7F2;
-      border: none;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s;
-    }
-    .cart-btn:hover { background: var(--bark-dark); }
-    .cart-badge {
-      background: var(--accent-warm);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 1px 7px;
-      border-radius: 999px;
-    }
-
-    /* Hero */
-    .hero { max-width: 1120px; margin: 0 auto; padding: 26px 18px 14px; }
-    .hero-box {
-      background: var(--bg-soft);
-      border: 1px solid var(--greige);
-      border-radius: 18px;
-      padding: 22px 24px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .hero-box h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1.35rem;
-      color: var(--bark);
-      margin-bottom: 6px;
-    }
-    .hero-box p { font-size: 0.9rem; color: var(--text-muted); max-width: 640px; }
-    .freeship-pill {
-      background: var(--moss-light);
-      color: var(--moss);
-      border: 1px solid #C8D9CB;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 0.84rem;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    /* Filter Bar */
-    .toolbar {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 10px 18px 18px;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .cat-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-    .cat-pill {
-      border: 1px solid var(--greige);
-      background: var(--bg-card);
-      color: var(--text-muted);
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 0.84rem;
-      cursor: pointer;
-      transition: all 0.18s;
-    }
-    .cat-pill.active, .cat-pill:hover {
-      background: var(--bark);
-      color: #FAF7F2;
-      border-color: var(--bark);
-    }
-    .search-input {
-      border: 1px solid var(--greige);
-      background: var(--bg-card);
-      border-radius: 999px;
-      padding: 7px 15px;
-      font-family: inherit;
-      font-size: 0.86rem;
-      min-width: 220px;
-      color: var(--text-main);
-    }
-    .search-input:focus { outline: none; border-color: var(--bark); }
-
-    /* Product Grid */
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 18px 70px; }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(265px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--greige);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s;
-    }
-    .card:hover { transform: translateY(-2px); }
-
-    .card-img-wrap {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      background: var(--bg-soft);
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .card-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-    .card-img-wrap:hover img { transform: scale(1.03); }
-    .img-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      padding: 16px;
-      text-align: center;
-    }
-    .photo-count-badge {
-      position: absolute;
-      bottom: 9px;
-      right: 9px;
-      background: rgba(45, 36, 30, 0.72);
-      color: #FAF7F2;
-      font-size: 0.72rem;
-      padding: 3px 9px;
-      border-radius: 999px;
-      backdrop-filter: blur(4px);
-    }
-    .photo-dots {
-      position: absolute;
-      bottom: 9px;
-      left: 9px;
-      display: flex;
-      gap: 5px;
-      z-index: 2;
-    }
-    .photo-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      border: 1.5px solid #fff;
-      overflow: hidden;
-      cursor: pointer;
-      opacity: 0.82;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.25);
-      padding: 0;
-      background: #fff;
-    }
-    .photo-dot.active, .photo-dot:hover {
-      opacity: 1;
-      border-color: var(--accent-warm);
-      transform: scale(1.08);
-    }
-    .photo-dot img { width: 100%; height: 100%; object-fit: cover; }
-    .stock-tag {
-      position: absolute;
-      top: 9px;
-      left: 9px;
-      font-size: 0.73rem;
-      font-weight: 500;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.92);
-      color: var(--moss);
-      border: 1px solid var(--greige);
-    }
-    .stock-tag.out {
-      background: #FDECE8;
-      color: var(--danger);
-      border-color: #F3C4BC;
-    }
-
-    .card-body { padding: 15px; display: flex; flex-direction: column; flex: 1; }
-    .card-cat {
-      font-size: 0.74rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
-      margin-bottom: 3px;
-    }
-    .card-title {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--bark-dark);
-      margin-bottom: 6px;
-      cursor: pointer;
-    }
-    .card-title:hover { color: var(--accent-warm); }
-    .card-specs {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      flex: 1;
-    }
-    .card-price-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .card-price { font-weight: 600; color: var(--bark); font-size: 0.98rem; }
-    .card-subprice { font-size: 0.78rem; color: var(--text-muted); }
-    .card-actions { display: flex; gap: 8px; }
-    .btn-detail {
-      flex: 1;
-      border: 1px solid var(--greige);
-      background: var(--bg-paper);
-      color: var(--bark);
-      border-radius: 9px;
-      padding: 8px 10px;
-      font-family: inherit;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .btn-detail:hover { background: var(--bg-soft); }
-    .btn-add {
-      flex: 1.35;
-      border: none;
-      background: var(--moss);
-      color: #fff;
-      border-radius: 9px;
-      padding: 8px 12px;
-      font-family: inherit;
-      font-size: 0.83rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .btn-add:hover:not(:disabled) { background: #3B4C3E; }
-    .btn-add:disabled { background: #CFC7BC; cursor: not-allowed; }
-
-    /* Modals & Drawers */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(45, 36, 30, 0.48);
-      z-index: 60;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .overlay.open { display: flex; }
-
-    /* Product Detail Modal (2-3 Photos + Texture Lightbox) */
-    .detail-modal {
-      background: var(--bg-card);
-      border-radius: 18px;
-      max-width: 820px;
-      width: 100%;
-      max-height: 92vh;
-      overflow-y: auto;
-      border: 1px solid var(--greige);
-      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-    }
-    @media (max-width: 740px) {
-      .detail-modal { grid-template-columns: 1fr; }
-    }
-    .gallery-col {
-      background: var(--bg-soft);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .main-photo-box {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      background: #EAE2D5;
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: zoom-in;
-    }
-    .main-photo-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .zoom-hint {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background: rgba(45, 36, 30, 0.72);
-      color: #FAF7F2;
-      font-size: 0.74rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      pointer-events: none;
-    }
-    .gallery-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.88);
-      border: 1px solid var(--greige);
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-weight: 700;
-      color: var(--bark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .gallery-nav.prev { left: 10px; }
-    .gallery-nav.next { right: 10px; }
-    .thumb-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .thumb-btn {
-      border: 2px solid transparent;
-      border-radius: 10px;
-      background: #fff;
-      padding: 3px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.15s;
-    }
-    .thumb-btn.active { border-color: var(--bark); }
-    .thumb-btn img {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      border-radius: 7px;
-      display: block;
-    }
-    .thumb-label { display: block; font-size: 0.7rem; color: var(--text-muted); margin-top: 3px; }
-    .detail-info-col { padding: 20px 22px; display: flex; flex-direction: column; gap: 12px; }
-    .modal-close-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-    .icon-close {
-      background: var(--bg-soft);
-      border: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      font-size: 1.1rem;
-      cursor: pointer;
-      color: var(--bark);
+      z-index: 20;
       flex-shrink: 0;
     }
-    .mode-selector { display: flex; gap: 8px; flex-wrap: wrap; }
-    .mode-btn {
-      flex: 1;
-      border: 1px solid var(--greige);
-      background: var(--bg-paper);
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-family: inherit;
-      font-size: 0.84rem;
-      cursor: pointer;
-      text-align: left;
-    }
-    .mode-btn.active { border-color: var(--bark); background: var(--bg-soft); font-weight: 600; }
-    .qty-row { display: flex; align-items: center; gap: 10px; }
-    .qty-box {
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid var(--greige);
-      border-radius: 9px;
-      overflow: hidden;
-    }
-    .qty-box button {
-      width: 34px;
-      height: 34px;
-      border: none;
-      background: var(--bg-soft);
-      font-size: 1rem;
-      cursor: pointer;
-      color: var(--bark);
-    }
-    .qty-box span { min-width: 38px; text-align: center; font-weight: 600; font-size: 0.92rem; }
 
-    /* Fullscreen Lightbox for Paper Fiber Inspection */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(20, 16, 13, 0.92);
-      z-index: 90;
-      display: none;
-      flex-direction: column;
+    .brand { display: flex; align-items: center; gap: 10px; }
+
+    .brand-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #FAF7F2;
+      display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      font-family: 'Lora', serif;
+      font-weight: 600;
+      font-size: 16px;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid var(--border);
     }
-    .lightbox.open { display: flex; }
-    .lightbox img { max-width: 94vw; max-height: 82vh; border-radius: 10px; object-fit: contain; }
-    .lightbox-caption { color: #FAF7F2; font-size: 0.88rem; margin-top: 10px; }
 
-    /* Cart Drawer */
-    .drawer-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(45, 36, 30, 0.45);
-      z-index: 70;
-      display: none;
-      justify-content: flex-end;
-    }
-    .drawer-backdrop.open { display: flex; }
-    .cart-drawer {
+    .brand-avatar img {
       width: 100%;
-      max-width: 440px;
-      background: var(--bg-paper);
       height: 100%;
-      display: flex;
-      flex-direction: column;
-      box-shadow: -8px 0 30px rgba(0,0,0,0.14);
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      background: #FFFFFF;
     }
-    .drawer-head {
-      padding: 16px 18px;
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--greige);
+
+    .brand-info h1 {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .status-line {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 5px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
     }
-    .drawer-body {
+
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4CAF50; display: inline-block; }
+    .status-dot.loading { background: #E6A23C; animation: pulse 1.2s infinite; }
+    .status-dot.error { background: #D9534F; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    .cart-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cart-badge {
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      min-width: 19px;
+      height: 19px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+    }
+
+    /* Chat Stream */
+    .chat-stream {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 18px;
+      padding: 16px 14px 20px;
       display: flex;
       flex-direction: column;
       gap: 14px;
+      scroll-behavior: smooth;
     }
 
-    /* Freeship Progress Banner in Cart */
-    .freeship-card {
-      background: var(--bg-card);
-      border: 1px solid var(--greige);
-      border-radius: 12px;
-      padding: 11px 13px;
-    }
-    .freeship-card.reached {
-      background: var(--moss-light);
-      border-color: #BFD4C3;
-      color: #2C4A32;
-    }
-    .freeship-text { font-size: 0.83rem; margin-bottom: 7px; color: var(--bark-dark); }
-    .freeship-card.reached .freeship-text { margin-bottom: 0; font-weight: 500; color: #2C4A32; }
-    .progress-track {
-      width: 100%;
-      height: 7px;
-      background: var(--bg-soft);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--moss);
-      border-radius: 999px;
-      transition: width 0.25s ease;
-    }
-
-    .cart-item {
-      background: var(--bg-card);
-      border: 1px solid var(--greige);
-      border-radius: 12px;
-      padding: 11px 13px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-    .cart-item-info { flex: 1; }
-    .cart-item-name { font-weight: 600; font-size: 0.88rem; color: var(--bark-dark); }
-    .cart-item-meta { font-size: 0.78rem; color: var(--text-muted); }
-
-    /* Checkout Form */
-    .checkout-box {
-      background: var(--bg-card);
-      border: 1px solid var(--greige);
-      border-radius: 12px;
-      padding: 14px;
+    .msg-row {
       display: flex;
       flex-direction: column;
+      max-width: 88%;
+      animation: fadeUp 0.22s ease-out;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .msg-row.bot { align-self: flex-start; }
+    .msg-row.user { align-self: flex-end; }
+    .msg-row.full-width { max-width: 100%; width: 100%; }
+
+    .bubble {
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.52;
+      white-space: pre-line;
+      word-break: break-word;
+    }
+
+    .msg-row.bot .bubble {
+      background: var(--bg-card);
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .msg-row.user .bubble {
+      background: var(--primary);
+      color: #FAF7F2;
+      border-bottom-right-radius: 4px;
+    }
+
+    .quick-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
+
+    .chip-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 7px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Catalog Carousel */
+    .catalog-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .cat-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+
+    .cat-tab {
+      border: 1px solid var(--border);
+      background: var(--bg-app);
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 11px;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .cat-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .product-carousel { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
+
+    .product-card {
+      min-width: 222px;
+      max-width: 222px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+    }
+
+    .product-thumb {
+      width: 100%;
+      height: 122px;
+      background: var(--bg-soft);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .paper-art {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+      font-family: 'Lora', serif;
+      font-size: 12.5px;
+      color: var(--primary);
+      background-image: radial-gradient(rgba(92, 64, 51, 0.12) 1px, transparent 0);
+      background-size: 12px 12px;
+    }
+
+    .stock-pill {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--accent);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .stock-pill.out { background: var(--warn-bg); color: var(--warn-text); }
+
+    .product-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .product-title { font-size: 13.5px; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+    .price-block { margin-top: 4px; display: flex; flex-direction: column; gap: 2px; }
+    .price-main { font-size: 13.5px; font-weight: 700; color: var(--primary); }
+    .price-sub { font-size: 11.5px; color: var(--text-muted); }
+
+    .card-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
+    .buy-btn-row { display: flex; gap: 5px; }
+
+    .btn-outline {
+      width: 100%;
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 5px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .btn-primary-sm {
+      flex: 1;
+      background: var(--primary);
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-accent-sm {
+      flex: 1;
+      background: var(--accent-soft);
+      border: 1px solid #C8DBC9;
+      color: #2E5A36;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 7px 6px;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-preorder-sm {
+      width: 100%;
+      background: var(--warn-bg);
+      border: 1px solid #EBD3B5;
+      color: var(--warn-text);
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* Suggested Items Card inside AI Reply */
+    .suggest-box {
+      margin-top: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .suggest-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; }
+
+    .suggest-add {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Contact Social Card */
+    .contact-card {
+      margin-top: 8px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .prefill-box {
+      background: #fff;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 12px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .copy-mini {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .social-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 6px;
+      border-radius: 8px;
+      color: #fff;
+    }
+    .social-fb { background: #1877F2; }
+    .social-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+    .social-th { background: #1C1C1E; }
+
+    /* Bottom Composer */
+    .composer-wrap {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      padding: 8px 12px 12px;
+      flex-shrink: 0;
+    }
+
+    .hint-strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+    .hint-strip::-webkit-scrollbar { display: none; }
+
+    .hint-pill {
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 4px 6px 4px 14px;
+    }
+    .input-row:focus-within { border-color: var(--primary); }
+    .input-row input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+      padding: 7px 0;
+    }
+
+    .send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* Modals */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 22, 17, 0.48);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 50;
+    }
+    .overlay.open { display: flex; }
+
+    .sheet-modal {
+      width: 100%;
+      max-width: 480px;
+      max-height: 90dvh;
+      background: var(--bg-app);
+      border-top-left-radius: 22px;
+      border-top-right-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: slideUp 0.24s ease-out;
+    }
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+    .modal-head {
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-head h2 { font-family: 'Lora', serif; font-size: 17px; font-weight: 600; }
+
+    .close-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-app);
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .modal-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+
+    .cart-item-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       gap: 10px;
     }
-    .checkout-box h3 { font-family: 'Montserrat', sans-serif; font-size: 0.95rem; color: var(--bark); }
-    .field-group { display: flex; flex-direction: column; gap: 4px; }
-    .field-group label { font-size: 0.79rem; font-weight: 500; color: var(--text-muted); }
-    .field-group input, .field-group select, .field-group textarea {
-      border: 1px solid var(--greige);
-      background: var(--bg-paper);
-      border-radius: 9px;
-      padding: 8px 11px;
+
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px 6px;
+    }
+    .qty-btn { width: 24px; height: 24px; border: none; background: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 12.5px; font-weight: 600; color: var(--text-main); }
+    .form-group small { font-size: 11px; color: var(--text-muted); }
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
       font-family: inherit;
-      font-size: 0.86rem;
+      font-size: 13.5px;
       color: var(--text-main);
     }
-    .field-group input:focus, .field-group select:focus, .field-group textarea:focus {
-      outline: none;
-      border-color: var(--bark);
-      background: #fff;
-    }
-    .returning-badge {
-      background: var(--accent-warm-bg);
-      border: 1px solid #E9C89B;
-      color: #8A4F17;
-      font-size: 0.78rem;
-      padding: 7px 10px;
-      border-radius: 8px;
-      display: none;
-      line-height: 1.45;
-    }
-    .returning-badge.show { display: block; }
 
-    .drawer-foot {
-      padding: 14px 18px;
-      background: var(--bg-card);
-      border-top: 1px solid var(--greige);
-    }
-    .summary-line {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-    .summary-total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.02rem;
-      font-weight: 700;
-      color: var(--bark);
-      margin: 8px 0 12px;
-    }
-    .btn-submit-order {
-      width: 100%;
-      background: var(--bark);
-      color: #FAF7F2;
-      border: none;
-      border-radius: 11px;
-      padding: 12px;
-      font-family: inherit;
-      font-size: 0.92rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .btn-submit-order:hover:not(:disabled) { background: var(--bark-dark); }
-    .btn-submit-order:disabled { opacity: 0.55; cursor: not-allowed; }
-
-    /* Chat Widget */
-    .chat-fab {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 50;
-      background: var(--moss);
-      color: #fff;
-      border: none;
-      border-radius: 999px;
-      padding: 11px 17px;
-      font-family: inherit;
-      font-size: 0.86rem;
-      font-weight: 500;
-      box-shadow: 0 6px 20px rgba(45, 36, 30, 0.22);
-      cursor: pointer;
-    }
-    .chat-panel {
-      position: fixed;
-      bottom: 74px;
-      right: 20px;
-      width: 350px;
-      max-width: calc(100vw - 32px);
-      height: 450px;
-      background: var(--bg-card);
-      border: 1px solid var(--greige);
-      border-radius: 16px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.16);
-      z-index: 55;
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .chat-panel.open { display: flex; }
-    .chat-head {
-      background: var(--bark);
-      color: #FAF7F2;
-      padding: 12px 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      background: var(--bg-paper);
-      font-size: 0.84rem;
-    }
-    .msg { padding: 9px 12px; border-radius: 12px; max-width: 86%; line-height: 1.48; }
-    .msg.bot { background: #fff; border: 1px solid var(--greige); align-self: flex-start; }
-    .msg.user { background: var(--bark); color: #FAF7F2; align-self: flex-end; }
-    .chat-suggest-btn {
-      margin-top: 6px;
-      display: inline-block;
-      background: var(--moss-light);
-      color: var(--moss);
-      border: 1px solid #C3D6C7;
-      border-radius: 8px;
-      padding: 4px 9px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .chat-input-row {
-      display: flex;
-      border-top: 1px solid var(--greige);
+    .platform-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .plat-option {
+      border: 1px solid var(--border);
       background: #fff;
+      border-radius: 10px;
       padding: 8px;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .plat-option.selected { border-color: var(--primary); background: var(--bg-soft); color: var(--primary); }
+
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
       gap: 6px;
     }
-    .chat-input-row input {
-      flex: 1;
-      border: 1px solid var(--greige);
-      border-radius: 999px;
-      padding: 7px 12px;
-      font-family: inherit;
-      font-size: 0.84rem;
+    .summary-line { display: flex; justify-content: space-between; }
+    .summary-total {
+      border-top: 1px dashed var(--border);
+      padding-top: 8px;
+      margin-top: 2px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--primary);
     }
-    .chat-input-row button {
-      background: var(--bark);
+
+    .submit-order-btn {
+      width: 100%;
+      background: var(--primary);
       color: #fff;
       border: none;
-      border-radius: 999px;
-      padding: 7px 14px;
+      border-radius: 12px;
+      padding: 13px;
       font-family: inherit;
-      font-size: 0.82rem;
+      font-size: 14.5px;
+      font-weight: 600;
       cursor: pointer;
     }
+    .submit-order-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .toast {
+      position: fixed;
+      top: 66px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2D241E;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
+
+    .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; }
+    .typing-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
-
-<header>
-  <div class="header-inner">
-    <div class="brand">
-      <span class="brand-title">tiệm giấy Thứ Ba</span>
-      <span class="brand-sub">Giấy tái chế thủ công</span>
-    </div>
-    <div class="header-actions">
-      <button class="cart-btn" onclick="openCart()">
-        <span>Giỏ giấy</span>
-        <span class="cart-badge" id="cartCount">0</span>
+  <div class="app-shell">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-avatar">
+          <img src="logo.png" alt="Logo Tiệm giấy Thứ Ba" onerror="this.remove();" />
+          <span>TB</span>
+        </div>
+        <div class="brand-info">
+          <h1>Tiệm giấy Thứ Ba</h1>
+          <div class="status-line">
+            <span id="statusDot" class="status-dot loading"></span>
+            <span id="statusText">Đang cập nhật kho giấy...</span>
+          </div>
+        </div>
+      </div>
+      <button class="cart-btn" onclick="openCartModal()">
+        <span>Giỏ hàng</span>
+        <span id="cartCount" class="cart-badge">0</span>
       </button>
+    </header>
+
+    <main id="chatStream" class="chat-stream"></main>
+
+    <div class="composer-wrap">
+      <div class="hint-strip">
+        <button class="hint-pill" onclick="sendQuickText('Xem các loại giấy đang có sẵn')">📄 Giấy đang có sẵn</button>
+        <button class="hint-pill" onclick="sendQuickText('Giấy có viết được bút mực không?')">✒️ Viết bút mực</button>
+        <button class="hint-pill" onclick="sendQuickText('Phí ship như thế nào ạ?')">🚚 Phí ship</button>
+        <button class="hint-pill" onclick="openCartModal()">🛒 Lên đơn ngay</button>
+      </div>
+      <form class="input-row" onsubmit="handleFormSubmit(event)">
+        <input id="chatInput" type="text" placeholder="Hỏi tiệm loại giấy, số lượng, giá tiền..." autocomplete="off" />
+        <button id="sendBtn" type="submit" class="send-btn" aria-label="Gửi">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
     </div>
   </div>
-</header>
 
-<section class="hero">
-  <div class="hero-box">
-    <div>
-      <h1>Mỗi tờ giấy là một mẻ thủ công riêng</h1>
-      <p>Làm từ giấy văn phòng tái chế kết hợp các phụ liệu lá tre, bã cà phê, vỏ quýt và cánh hoa khô... Bề mặt đã xử lý keo nhẹ để viết bút mực hạn chế lem tưa.</p>
-    </div>
-    <div class="freeship-pill">Freeship toàn quốc đơn từ 150.000đ</div>
-  </div>
-</section>
+  <div id="toast" class="toast"></div>
 
-<div class="toolbar">
-  <div class="cat-pills" id="categoryPills"></div>
-  <input type="text" class="search-input" id="searchInput" placeholder="Tìm giấy lá tre, bao thư, kit..." oninput="renderProducts()" />
-</div>
-
-<main class="container">
-  <div class="product-grid" id="productGrid">
-    <p style="color:var(--text-muted);">Đang tải kệ giấy của tiệm...</p>
-  </div>
-</main>
-
-<!-- Product Detail Modal (2-3 Photos) -->
-<div class="overlay" id="detailOverlay" onclick="if(event.target===this) closeDetail()">
-  <div class="detail-modal">
-    <div class="gallery-col">
-      <div class="main-photo-box" onclick="openLightbox()">
-        <img id="detailMainImg" src="" alt="Ảnh sản phẩm" />
-        <button class="gallery-nav prev" id="galleryPrevBtn" onclick="event.stopPropagation(); stepGallery(-1)">‹</button>
-        <button class="gallery-nav next" id="galleryNextBtn" onclick="event.stopPropagation(); stepGallery(1)">›</button>
-        <span class="zoom-hint">Bấm ảnh để soi cận vân giấy</span>
+  <div id="detailOverlay" class="overlay" onclick="closeOverlay(event, 'detailOverlay')">
+    <div class="sheet-modal">
+      <div class="modal-head">
+        <h2 id="detailTitle">Chi tiết sản phẩm</h2>
+        <button class="close-btn" onclick="hideModal('detailOverlay')">✕</button>
       </div>
-      <div class="thumb-strip" id="detailThumbStrip"></div>
-    </div>
-    <div class="detail-info-col">
-      <div class="modal-close-row">
-        <div>
-          <div class="card-cat" id="detailCat"></div>
-          <h2 style="font-family:'Montserrat',sans-serif;font-size:1.18rem;color:var(--bark-dark);" id="detailName"></h2>
-        </div>
-        <button class="icon-close" onclick="closeDetail()">×</button>
-      </div>
-      <div style="font-size:0.83rem;color:var(--moss);font-weight:500;" id="detailStock"></div>
-      <p style="font-size:0.87rem;color:var(--text-muted);white-space:pre-line;" id="detailSpecs"></p>
-
-      <div>
-        <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;">Chọn quy cách:</div>
-        <div class="mode-selector" id="detailModes"></div>
-      </div>
-
-      <div class="qty-row">
-        <span style="font-size:0.84rem;color:var(--text-muted);">Số lượng:</span>
-        <div class="qty-box">
-          <button onclick="changeDetailQty(-1)">−</button>
-          <span id="detailQty">1</span>
-          <button onclick="changeDetailQty(1)">+</button>
-        </div>
-      </div>
-
-      <div style="margin-top:auto;padding-top:10px;">
-        <button class="btn-submit-order" id="detailAddBtn" onclick="confirmDetailAdd()">Thêm vào giỏ giấy</button>
-      </div>
+      <div id="detailBody" class="modal-body"></div>
     </div>
   </div>
-</div>
 
-<!-- Texture Lightbox -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <img id="lightboxImg" src="" alt="Soi vân giấy" />
-  <div class="lightbox-caption" id="lightboxCaption">Bấm vào màn hình để đóng</div>
-</div>
-
-<!-- Cart & Checkout Drawer -->
-<div class="drawer-backdrop" id="cartBackdrop" onclick="if(event.target===this) closeCart()">
-  <aside class="cart-drawer">
-    <div class="drawer-head">
-      <strong style="font-family:'Montserrat',sans-serif;color:var(--bark);">Giỏ giấy của bạn</strong>
-      <button class="icon-close" onclick="closeCart()">×</button>
+  <div id="cartOverlay" class="overlay" onclick="closeOverlay(event, 'cartOverlay')">
+    <div class="sheet-modal">
+      <div class="modal-head">
+        <h2>Giỏ giấy & Thông tin gửi hàng</h2>
+        <button class="close-btn" onclick="hideModal('cartOverlay')">✕</button>
+      </div>
+      <div id="cartBody" class="modal-body"></div>
     </div>
-    <div class="drawer-body">
-      <!-- Thanh báo ngưỡng Freeship 150.000đ -->
-      <div class="freeship-card" id="freeshipCard">
-        <div class="freeship-text" id="freeshipText">Freeship toàn quốc cho đơn từ 150.000đ</div>
-        <div class="progress-track" id="freeshipTrack">
-          <div class="progress-fill" id="freeshipFill" style="width:0%"></div>
-        </div>
-      </div>
-
-      <div id="cartItemsList"></div>
-
-      <div class="checkout-box" id="checkoutFormBox" style="display:none;">
-        <h3>Thông tin nhận giấy</h3>
-        <div class="field-group">
-          <label for="custPhone">Số điện thoại *</label>
-          <input type="tel" id="custPhone" placeholder="Ví dụ: 0982325823" oninput="onPhoneInput()" onblur="lookupCustomerByPhone()" />
-          <div class="returning-badge" id="returningBadge"></div>
-        </div>
-        <div class="field-group">
-          <label for="custName">Tên người nhận *</label>
-          <input type="text" id="custName" placeholder="Nhập họ tên người nhận" />
-        </div>
-        <div class="field-group">
-          <label for="custAddress">Địa chỉ nhận hàng *</label>
-          <textarea id="custAddress" rows="2" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố"></textarea>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1.3fr;gap:8px;">
-          <div class="field-group">
-            <label for="custPlatform">Kênh liên hệ</label>
-            <select id="custPlatform">
-              <option value="Zalo">Zalo</option>
-              <option value="Facebook">Facebook</option>
-              <option value="Instagram">Instagram</option>
-              <option value="Threads">Threads</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label for="custSocial">Tên / Link tài khoản *</label>
-            <input type="text" id="custSocial" placeholder="Để tiệm nhắn xác nhận đơn" />
-          </div>
-        </div>
-        <div class="field-group">
-          <label for="custNote">Ghi chú thêm (nếu có)</label>
-          <input type="text" id="custNote" placeholder="Ví dụ: Giao giờ hành chính..." />
-        </div>
-      </div>
-    </div>
-
-    <div class="drawer-foot">
-      <div class="summary-line">
-        <span>Tiền giấy</span>
-        <span id="cartSubtotal">0đ</span>
-      </div>
-      <div class="summary-line">
-        <span>Phí vận chuyển</span>
-        <span id="cartShip">0đ</span>
-      </div>
-      <div class="summary-total">
-        <span>Tổng cộng (COD)</span>
-        <span id="cartTotal">0đ</span>
-      </div>
-      <button class="btn-submit-order" id="submitOrderBtn" onclick="submitOrder()">Đặt đơn giấy</button>
-    </div>
-  </aside>
-</div>
-
-<!-- Chat Assistant -->
-<button class="chat-fab" onclick="toggleChat()">Hỏi tiệm về giấy</button>
-<div class="chat-panel" id="chatPanel">
-  <div class="chat-head">
-    <span>Trò chuyện cùng Tiệm giấy Thứ Ba</span>
-    <button style="background:none;border:none;color:#FAF7F2;font-size:1.15rem;cursor:pointer;" onclick="toggleChat()">×</button>
   </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="msg bot">Dạ chào bạn, bạn cần hỏi về độ ăn mực bút máy, kích thước giấy hay bộ kit làm giấy cứ nhắn tiệm nhé!</div>
-  </div>
-  <div class="chat-input-row">
-    <input type="text" id="chatInput" placeholder="Hỏi tiệm..." onkeydown="if(event.key==='Enter') sendChat()" />
-    <button onclick="sendChat()">Gửi</button>
-  </div>
-</div>
 
-<script>
-  // DÁN LINK WEB APP GOOGLE APPS SCRIPT (/exec) CỦA BẠN VÀO DÒNG DƯỚI ĐÂY:
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
 
-  let FREESHIP_THRESHOLD = 150000;
-  let BASE_SHIP_FEE = 15000;
+    const SOCIAL_LINKS = {
+      facebook: "https://www.facebook.com/search/top?q=Ti%E1%BB%87m%20gi%E1%BA%A5y%20Th%E1%BB%A9%20Ba",
+      instagram: "https://www.instagram.com/",
+      threads: "https://www.threads.net/"
+    };
 
-  let products = [];
-  let activeCategory = "Tất cả";
-  let cart = JSON.parse(localStorage.getItem("tgtb_cart_v1") || "[]");
-  let chatHistory = [];
+    const IS_DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
 
-  let currentDetailProduct = null;
-  let currentGalleryImages = [];
-  let currentGalleryIdx = 0;
-  let currentDetailMode = "pack";
-  let currentDetailQty = 1;
+    let products = [];
+    let cart = []; // { key, id, name, buyMode, unitLabel, baseUnitsPerQty, price, qty }
+    let chatHistory = [];
+    let selectedCategory = "Tất cả";
+    let selectedPlatform = "Instagram";
+    let isSending = false;
 
-  let lastLookedUpPhone = "";
-  let lookupTimer = null;
+    const chatStream = document.getElementById("chatStream");
+    const chatInput = document.getElementById("chatInput");
+    const sendBtn = document.getElementById("sendBtn");
 
-  const PHOTO_LABELS = ["Tổng thể", "Cận bề mặt", "Test mực / Chi tiết"];
-
-  function fmtPrice(n) {
-    return Number(n || 0).toLocaleString("vi-VN") + "đ";
-  }
-
-  function normalizeVi(str) {
-    return String(str || "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/đ/g, "d")
-      .trim();
-  }
-
-  function normalizePhone(phone) {
-    let digits = String(phone || "").replace(/\D/g, "");
-    if (digits.startsWith("84") && digits.length >= 11) {
-      digits = "0" + digits.slice(2);
+    function formatVND(num) {
+      return Number(num || 0).toLocaleString("vi-VN") + "đ";
     }
-    return digits;
-  }
 
-  function parseImageUrls(raw) {
-    return String(raw || "")
-      .split(/[\r\n|,]+/)
-      .map(s => s.trim())
-      .filter(s => /^https?:\/\//i.test(s))
-      .slice(0, 3);
-  }
+    function formatShortK(num) {
+      const n = Number(num || 0);
+      if (n >= 1000 && n % 1000 === 0) return (n / 1000) + "K";
+      return formatVND(n);
+    }
 
-  async function loadProducts() {
-    try {
-      const res = await fetch(SCRIPT_URL);
-      const data = await res.json();
-      if (data.ok) {
-        products = data.products || [];
-        if (data.freeshipThreshold) FREESHIP_THRESHOLD = Number(data.freeshipThreshold);
-        if (data.baseShipFee !== undefined) BASE_SHIP_FEE = Number(data.baseShipFee);
-        renderCategories();
-        renderProducts();
-        updateCartUI();
+    function showToast(text) {
+      const t = document.getElementById("toast");
+      t.textContent = text;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2400);
+    }
 
-        const spParam = new URLSearchParams(window.location.search).get("sp");
-        if (spParam) {
-          const found = products.find(p => p.id === spParam);
-          if (found) openDetail(found.id);
-        }
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast("Đã copy nội dung để bạn dán tin nhắn"));
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("Đã copy nội dung để bạn dán tin nhắn");
       }
-    } catch (e) {
-      document.getElementById("productGrid").innerHTML =
-        `<p style="color:var(--danger);">Chưa kết nối được kho giấy. Bạn kiểm tra lại SCRIPT_URL trong index.html nhé.</p>`;
-    }
-  }
-
-  function renderCategories() {
-    const cats = ["Tất cả", ...new Set(products.map(p => p.category).filter(Boolean))];
-    const wrap = document.getElementById("categoryPills");
-    wrap.innerHTML = cats.map(c => `
-      <button class="cat-pill ${c === activeCategory ? "active" : ""}" onclick="selectCategory('${c.replace(/'/g, "\\'")}')">${c}</button>
-    `).join("");
-  }
-
-  function selectCategory(cat) {
-    activeCategory = cat;
-    renderCategories();
-    renderProducts();
-  }
-
-  function renderProducts() {
-    const kw = normalizeVi(document.getElementById("searchInput").value);
-    const filtered = products.filter(p => {
-      const matchCat = activeCategory === "Tất cả" || p.category === activeCategory;
-      const matchKw = !kw || normalizeVi(p.name + " " + p.specs + " " + p.category).includes(kw);
-      return matchCat && matchKw;
-    });
-
-    const grid = document.getElementById("productGrid");
-    if (!filtered.length) {
-      grid.innerHTML = `<p style="color:var(--text-muted);">Không tìm thấy mẫu giấy phù hợp.</p>`;
-      return;
     }
 
-    grid.innerHTML = filtered.map(p => {
-      const imgs = parseImageUrls(p.imageUrl);
-      const hasPack = p.packPrice > 0 && p.packSize > 1;
-      const hasUnit = p.unitPrice > 0;
-      const minNeeded = hasPack && !hasUnit ? p.packSize : 1;
-      const inStock = p.stock >= minNeeded;
-
-      const primaryPrice = hasPack
-        ? `${fmtPrice(p.packPrice)} / ${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})`
-        : `${fmtPrice(p.unitPrice)} / ${p.baseUnit}`;
-      const secondaryPrice = (hasPack && hasUnit) ? `Lẻ ${fmtPrice(p.unitPrice)}/${p.baseUnit}` : "";
-
-      const dotsHtml = imgs.length > 1
-        ? `<div class="photo-dots" onclick="event.stopPropagation()">
-            ${imgs.map((u, idx) => `
-              <button class="photo-dot ${idx === 0 ? "active" : ""}" title="${PHOTO_LABELS[idx] || ("Ảnh " + (idx+1))}"
-                onclick="switchCardPhoto('${p.id}', ${idx}, this)">
-                <img src="${u}" alt="" loading="lazy" />
-              </button>
-            `).join("")}
-          </div>`
-        : "";
-
-      return `
-        <article class="card">
-          <div class="card-img-wrap" onclick="openDetail('${p.id}')">
-            ${imgs.length
-              ? `<img id="card-img-${p.id}" src="${imgs[0]}" alt="${p.name}" loading="lazy" />`
-              : `<div class="img-placeholder">Giấy thủ công<br/>Tiệm giấy Thứ Ba</div>`
-            }
-            <span class="stock-tag ${inStock ? "" : "out"}">
-              ${inStock ? `Còn ${p.stock} ${p.baseUnit}` : "Tạm hết mẻ này"}
-            </span>
-            ${dotsHtml}
-            ${imgs.length > 1 ? `<span class="photo-count-badge" id="card-badge-${p.id}">1/${imgs.length} ảnh</span>` : ""}
-          </div>
-          <div class="card-body">
-            <div class="card-cat">${p.category || "Giấy thủ công"}</div>
-            <h2 class="card-title" onclick="openDetail('${p.id}')">${p.name}</h2>
-            <p class="card-specs">${p.specs || ""}</p>
-            <div class="card-price-row">
-              <span class="card-price">${primaryPrice}</span>
-              <span class="card-subprice">${secondaryPrice}</span>
-            </div>
-            <div class="card-actions">
-              <button class="btn-detail" onclick="openDetail('${p.id}')">Soi bề mặt</button>
-              <button class="btn-add" ${inStock ? "" : "disabled"} onclick="quickAdd('${p.id}')">
-                ${inStock ? "+ Thêm giỏ" : "Hết hàng"}
-              </button>
-            </div>
-          </div>
-        </article>
-      `;
-    }).join("");
-  }
-
-  function switchCardPhoto(prodId, idx, btnEl) {
-    const p = products.find(item => item.id === prodId);
-    if (!p) return;
-    const imgs = parseImageUrls(p.imageUrl);
-    if (!imgs[idx]) return;
-    const imgEl = document.getElementById("card-img-" + prodId);
-    const badgeEl = document.getElementById("card-badge-" + prodId);
-    if (imgEl) imgEl.src = imgs[idx];
-    if (badgeEl) badgeEl.textContent = `${idx + 1}/${imgs.length} ảnh`;
-    const parent = btnEl.parentElement;
-    if (parent) {
-      parent.querySelectorAll(".photo-dot").forEach(d => d.classList.remove("active"));
-      btnEl.classList.add("active");
-    }
-  }
-
-  function openDetail(prodId) {
-    const p = products.find(item => item.id === prodId);
-    if (!p) return;
-    currentDetailProduct = p;
-    currentGalleryImages = parseImageUrls(p.imageUrl);
-    currentGalleryIdx = 0;
-
-    document.getElementById("detailCat").textContent = p.category || "Giấy thủ công";
-    document.getElementById("detailName").textContent = p.name;
-    document.getElementById("detailStock").textContent = p.stock > 0
-      ? `Hiện sẵn trong kho: ${p.stock} ${p.baseUnit}`
-      : "Hiện tạm hết sẵn trong kho";
-    document.getElementById("detailSpecs").textContent = p.specs || "Giấy tái chế thủ công làm tay tại Huế.";
-
-    renderGalleryView();
-
-    const hasPack = p.packPrice > 0 && p.packSize > 1;
-    const hasUnit = p.unitPrice > 0;
-    currentDetailMode = hasPack ? "pack" : "unit";
-    currentDetailQty = 1;
-    renderDetailModes(hasPack, hasUnit);
-    document.getElementById("detailQty").textContent = "1";
-
-    const minNeeded = currentDetailMode === "pack" ? p.packSize : 1;
-    const addBtn = document.getElementById("detailAddBtn");
-    addBtn.disabled = p.stock < minNeeded;
-    addBtn.textContent = p.stock < minNeeded ? "Tạm hết hàng" : "Thêm vào giỏ giấy";
-
-    document.getElementById("detailOverlay").classList.add("open");
-  }
-
-  function renderGalleryView() {
-    const mainImg = document.getElementById("detailMainImg");
-    const prevBtn = document.getElementById("galleryPrevBtn");
-    const nextBtn = document.getElementById("galleryNextBtn");
-    const strip = document.getElementById("detailThumbStrip");
-
-    if (!currentGalleryImages.length) {
-      mainImg.style.display = "none";
-      prevBtn.style.display = "none";
-      nextBtn.style.display = "none";
-      strip.innerHTML = "";
-      return;
-    }
-
-    mainImg.style.display = "block";
-    mainImg.src = currentGalleryImages[currentGalleryIdx];
-    const showNav = currentGalleryImages.length > 1;
-    prevBtn.style.display = showNav ? "flex" : "none";
-    nextBtn.style.display = showNav ? "flex" : "none";
-
-    strip.innerHTML = currentGalleryImages.map((url, idx) => `
-      <button class="thumb-btn ${idx === currentGalleryIdx ? "active" : ""}" onclick="selectGalleryIdx(${idx})">
-        <img src="${url}" alt="${PHOTO_LABELS[idx] || ("Ảnh " + (idx+1))}" />
-        <span class="thumb-label">${PHOTO_LABELS[idx] || ("Ảnh " + (idx + 1))}</span>
-      </button>
-    `).join("");
-  }
-
-  function selectGalleryIdx(idx) {
-    currentGalleryIdx = idx;
-    renderGalleryView();
-  }
-
-  function stepGallery(delta) {
-    if (currentGalleryImages.length <= 1) return;
-    currentGalleryIdx = (currentGalleryIdx + delta + currentGalleryImages.length) % currentGalleryImages.length;
-    renderGalleryView();
-  }
-
-  function openLightbox() {
-    if (!currentGalleryImages.length) return;
-    document.getElementById("lightboxImg").src = currentGalleryImages[currentGalleryIdx];
-    const label = PHOTO_LABELS[currentGalleryIdx] || ("Ảnh " + (currentGalleryIdx + 1));
-    document.getElementById("lightboxCaption").textContent = `${currentDetailProduct.name} — ${label} (Bấm để đóng)`;
-    document.getElementById("lightbox").classList.add("open");
-  }
-
-  function closeLightbox() {
-    document.getElementById("lightbox").classList.remove("open");
-  }
-
-  function renderDetailModes(hasPack, hasUnit) {
-    const p = currentDetailProduct;
-    const wrap = document.getElementById("detailModes");
-    let html = "";
-    if (hasPack) {
-      html += `
-        <button class="mode-btn ${currentDetailMode === "pack" ? "active" : ""}" onclick="setDetailMode('pack')">
-          Theo ${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})<br/>
-          <strong>${fmtPrice(p.packPrice)}</strong>
-        </button>
-      `;
-    }
-    if (hasUnit) {
-      html += `
-        <button class="mode-btn ${currentDetailMode === "unit" ? "active" : ""}" onclick="setDetailMode('unit')">
-          Mua lẻ từng ${p.baseUnit}<br/>
-          <strong>${fmtPrice(p.unitPrice)}</strong>
-        </button>
-      `;
-    }
-    wrap.innerHTML = html;
-  }
-
-  function setDetailMode(mode) {
-    currentDetailMode = mode;
-    currentDetailQty = 1;
-    document.getElementById("detailQty").textContent = "1";
-    const p = currentDetailProduct;
-    renderDetailModes(p.packPrice > 0 && p.packSize > 1, p.unitPrice > 0);
-  }
-
-  function changeDetailQty(delta) {
-    const p = currentDetailProduct;
-    if (!p) return;
-    const perUnit = currentDetailMode === "pack" ? p.packSize : 1;
-    const maxQty = Math.max(1, Math.floor(p.stock / perUnit));
-    currentDetailQty = Math.min(maxQty, Math.max(1, currentDetailQty + delta));
-    document.getElementById("detailQty").textContent = String(currentDetailQty);
-  }
-
-  function confirmDetailAdd() {
-    if (!currentDetailProduct) return;
-    addToCart(currentDetailProduct.id, currentDetailMode, currentDetailQty);
-    closeDetail();
-    openCart();
-  }
-
-  function closeDetail() {
-    document.getElementById("detailOverlay").classList.remove("open");
-  }
-
-  function quickAdd(prodId) {
-    const p = products.find(item => item.id === prodId);
-    if (!p) return;
-    const hasPack = p.packPrice > 0 && p.packSize > 1;
-    const mode = hasPack ? "pack" : "unit";
-    addToCart(prodId, mode, 1);
-    openCart();
-  }
-
-  function addToCart(prodId, buyMode, qty) {
-    const p = products.find(item => item.id === prodId);
-    if (!p) return;
-    const isPack = buyMode === "pack" && p.packPrice > 0 && p.packSize > 1;
-    const actualMode = isPack ? "pack" : "unit";
-    const perUnit = isPack ? p.packSize : 1;
-    const unitPrice = isPack ? p.packPrice : p.unitPrice;
-    const unitLabel = isPack ? (p.packUnit || "gói") : p.baseUnit;
-    const maxQty = Math.floor(p.stock / perUnit);
-    if (maxQty <= 0) return;
-
-    const existing = cart.find(c => c.id === prodId && c.buyMode === actualMode);
-    if (existing) {
-      existing.qty = Math.min(maxQty, existing.qty + qty);
-      existing.baseUnits = existing.qty * perUnit;
-    } else {
-      cart.push({
-        id: p.id,
-        name: p.name,
-        buyMode: actualMode,
-        unitLabel,
-        qty: Math.min(maxQty, qty),
-        price: unitPrice,
-        baseUnits: Math.min(maxQty, qty) * perUnit
+    function scrollBottom() {
+      requestAnimationFrame(() => {
+        chatStream.scrollTop = chatStream.scrollHeight;
       });
     }
-    saveCart();
-    updateCartUI();
-  }
 
-  function updateCartQty(idx, delta) {
-    const item = cart[idx];
-    if (!item) return;
-    const p = products.find(pr => pr.id === item.id);
-    const perUnit = (item.buyMode === "pack" && p) ? p.packSize : 1;
-    const maxQty = p ? Math.floor(p.stock / perUnit) : 99;
-    const next = item.qty + delta;
-    if (next <= 0) {
-      cart.splice(idx, 1);
-    } else {
-      item.qty = Math.min(Math.max(1, maxQty), next);
-      item.baseUnits = item.qty * perUnit;
+    function hasPackOption(p) {
+      return Number(p.packPrice || 0) > 0 && Number(p.packSize || 1) > 1;
     }
-    saveCart();
-    updateCartUI();
-  }
 
-  function saveCart() {
-    localStorage.setItem("tgtb_cart_v1", JSON.stringify(cart));
-  }
+    function hasUnitOption(p) {
+      return Number(p.unitPrice || 0) > 0;
+    }
 
-  function updateCartUI() {
-    const totalCount = cart.reduce((s, i) => s + i.qty, 0);
-    document.getElementById("cartCount").textContent = String(totalCount);
+    function getStockDisplay(p) {
+      if (p.stock <= 0) return "Tạm hết sẵn";
+      if (hasPackOption(p)) {
+        const packs = Math.floor(p.stock / p.packSize);
+        return `Còn ${p.stock} ${p.baseUnit} (${packs} ${p.packUnit || "gói"})`;
+      }
+      return `Còn ${p.stock} ${p.baseUnit}`;
+    }
 
-    const listEl = document.getElementById("cartItemsList");
-    const formBox = document.getElementById("checkoutFormBox");
+    async function loadInventory() {
+      const dot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+      dot.className = "status-dot loading";
+      statusText.textContent = "Đang cập nhật kho giấy...";
 
-    if (!cart.length) {
-      listEl.innerHTML = `<p style="color:var(--text-muted);font-size:0.86rem;text-align:center;padding:18px 0;">Giỏ giấy đang trống. Bạn chọn vài tờ giấy hoặc xấp bao thư nhé!</p>`;
-      formBox.style.display = "none";
-    } else {
-      formBox.style.display = "flex";
-      listEl.innerHTML = cart.map((item, idx) => `
-        <div class="cart-item">
-          <div class="cart-item-info">
-            <div class="cart-item-name">${item.name}</div>
-            <div class="cart-item-meta">${fmtPrice(item.price)} / ${item.unitLabel}</div>
+      try {
+        const res = await fetch(SCRIPT_URL);
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || "Không tải được kho");
+
+        products = (json.products || []).map(p => ({
+          ...p,
+          stock: Number(p.stock || 0),
+          packSize: Math.max(1, Number(p.packSize || 1)),
+          packPrice: Number(p.packPrice || 0),
+          unitPrice: Number(p.unitPrice || 0)
+        }));
+
+        dot.className = "status-dot";
+        const availableCount = products.filter(p => p.stock > 0).length;
+        statusText.textContent = `Sẵn sàng • ${availableCount} mẫu đang có sẵn`;
+      } catch (err) {
+        dot.className = "status-dot error";
+        statusText.textContent = "Lỗi kết nối kho — chạm để thử lại";
+        statusText.style.cursor = "pointer";
+        statusText.onclick = loadInventory;
+        console.error(err);
+      }
+    }
+
+    function renderWelcome() {
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+      row.innerHTML = `
+        <div class="bubble">Dạ chào mình, tiệm là Tiệm giấy Thứ Ba ạ.
+Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng/giá tiền hoặc lên đơn trực tiếp ở đây mà không cần chờ tiệm rep nhé.</div>
+        <div class="quick-grid">
+          <button class="chip-btn" onclick="renderCatalogMessage()">📄 Xem các loại giấy đang có</button>
+          <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">💡 Tư vấn chọn giấy</button>
+          <button class="chip-btn" onclick="openCartModal()">🛒 Lên đơn nhanh</button>
+        </div>
+      `;
+      chatStream.appendChild(row);
+    }
+
+    function renderCatalogMessage(filterCat = "Tất cả") {
+      selectedCategory = filterCat;
+      const existing = document.getElementById("catalogCardRow");
+      if (existing) existing.remove();
+
+      const row = document.createElement("div");
+      row.id = "catalogCardRow";
+      row.className = "msg-row bot full-width";
+
+      if (!products.length) {
+        row.innerHTML = `<div class="bubble">Dạ kho giấy đang tải hoặc chưa có dữ liệu, mình đợi vài giây rồi bấm lại giúp tiệm nhé ạ.</div>`;
+        chatStream.appendChild(row);
+        scrollBottom();
+        return;
+      }
+
+      const categories = ["Tất cả", ...new Set(products.map(p => p.category).filter(Boolean))];
+      const filtered = filterCat === "Tất cả" ? products : products.filter(p => p.category === filterCat);
+
+      const tabsHtml = categories.map(c =>
+        `<button class="cat-tab ${c === filterCat ? 'active' : ''}" onclick="renderCatalogMessage('${c.replace(/'/g, "\\'")}')">${c}</button>`
+      ).join("");
+
+      const cardsHtml = filtered.map(p => {
+        const isOut = p.stock <= 0;
+        const canPack = hasPackOption(p) && p.stock >= p.packSize;
+        const canUnit = hasUnitOption(p) && p.stock >= 1;
+
+        let priceHtml = "";
+        if (hasPackOption(p) && hasUnitOption(p)) {
+          priceHtml = `
+            <div class="price-main">${formatShortK(p.packPrice)} / ${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})</div>
+            <div class="price-sub">Mua lẻ: ${formatShortK(p.unitPrice)} / ${p.baseUnit}</div>
+          `;
+        } else if (hasPackOption(p)) {
+          priceHtml = `
+            <div class="price-main">${formatShortK(p.packPrice)} / ${p.packUnit || "gói"}</div>
+            <div class="price-sub">Quy cách: ${p.packSize} ${p.baseUnit}/${p.packUnit || "gói"}</div>
+          `;
+        } else {
+          priceHtml = `
+            <div class="price-main">${formatShortK(p.unitPrice)} / ${p.baseUnit}</div>
+          `;
+        }
+
+        const thumbHtml = p.imageUrl
+          ? `<img src="${p.imageUrl}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+             <div class="paper-art" style="display:none;"><span>${p.name}</span></div>`
+          : `<div class="paper-art"><span>${p.name}</span></div>`;
+
+        let actionButtonsHtml = "";
+        if (isOut) {
+          actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${p.name.replace(/'/g, "\\'")}')">Đặt làm thêm</button>`;
+        } else if (canPack && canUnit) {
+          actionButtonsHtml = `
+            <div class="buy-btn-row">
+              <button class="btn-primary-sm" onclick="addToCart('${p.id}', 'pack', 1)">+ ${p.packUnit || "Gói"} (${formatShortK(p.packPrice)})</button>
+              <button class="btn-accent-sm" onclick="addToCart('${p.id}', 'unit', 1)">+ Lẻ (${formatShortK(p.unitPrice)})</button>
+            </div>
+          `;
+        } else if (canPack) {
+          actionButtonsHtml = `<button class="btn-primary-sm" onclick="addToCart('${p.id}', 'pack', 1)">+ Thêm ${p.packUnit || "gói"} (${formatShortK(p.packPrice)})</button>`;
+        } else if (canUnit) {
+          actionButtonsHtml = `<button class="btn-primary-sm" onclick="addToCart('${p.id}', 'unit', 1)">+ Thêm giỏ (${formatShortK(p.unitPrice)})</button>`;
+        } else {
+          actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${p.name.replace(/'/g, "\\'")}')">Không đủ gói — Đặt thêm</button>`;
+        }
+
+        return `
+          <div class="product-card">
+            <div class="product-thumb">
+              ${thumbHtml}
+              <span class="stock-pill ${isOut ? 'out' : ''}">${getStockDisplay(p)}</span>
+            </div>
+            <div class="product-body">
+              <div>
+                <div class="product-title">${p.name}</div>
+                <div class="price-block">${priceHtml}</div>
+              </div>
+              <div class="card-actions">
+                ${actionButtonsHtml}
+                <button class="btn-outline" onclick="openDetailModal('${p.id}')">Xem chi tiết</button>
+              </div>
+            </div>
           </div>
-          <div class="qty-box">
-            <button onclick="updateCartQty(${idx}, -1)">−</button>
-            <span>${item.qty}</span>
-            <button onclick="updateCartQty(${idx}, 1)">+</button>
+        `;
+      }).join("");
+
+      row.innerHTML = `
+        <div class="catalog-box">
+          <div class="cat-tabs">${tabsHtml}</div>
+          <div class="product-carousel">${cardsHtml}</div>
+        </div>
+      `;
+      chatStream.appendChild(row);
+      scrollBottom();
+    }
+
+    function askPreorder(productName) {
+      sendQuickText(`Mẫu "${productName}" đang tạm hết, mình muốn hỏi đặt làm thêm ạ`);
+    }
+
+    function openDetailModal(id) {
+      const p = products.find(item => item.id === id);
+      if (!p) return;
+      const isOut = p.stock <= 0;
+      const canPack = hasPackOption(p) && p.stock >= p.packSize;
+      const canUnit = hasUnitOption(p) && p.stock >= 1;
+
+      let priceRows = "";
+      if (hasPackOption(p)) {
+        priceRows += `<div class="summary-line"><span>Giá theo ${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit}):</span><strong>${formatVND(p.packPrice)}</strong></div>`;
+      }
+      if (hasUnitOption(p)) {
+        priceRows += `<div class="summary-line"><span>Giá lẻ từng ${p.baseUnit}:</span><strong>${formatVND(p.unitPrice)}</strong></div>`;
+      }
+
+      let modalButtons = "";
+      if (isOut) {
+        modalButtons = `<button class="submit-order-btn" onclick="hideModal('detailOverlay'); askPreorder('${p.name.replace(/'/g, "\\'")}')">Nhắn tiệm đặt làm thêm mẫu này</button>`;
+      } else {
+        modalButtons = `<div style="display:flex; gap:8px;">`;
+        if (canPack) {
+          modalButtons += `<button class="submit-order-btn" style="flex:1;" onclick="addToCart('${p.id}', 'pack', 1); hideModal('detailOverlay');">+ Thêm 1 ${p.packUnit || "gói"} (${formatShortK(p.packPrice)})</button>`;
+        }
+        if (canUnit) {
+          modalButtons += `<button class="submit-order-btn" style="flex:1; background:var(--accent);" onclick="addToCart('${p.id}', 'unit', 1); hideModal('detailOverlay');">+ Thêm 1 ${p.baseUnit} (${formatShortK(p.unitPrice)})</button>`;
+        }
+        modalButtons += `</div>`;
+      }
+
+      document.getElementById("detailTitle").textContent = p.name;
+      document.getElementById("detailBody").innerHTML = `
+        ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" style="width:100%; max-height:220px; object-fit:cover; border-radius:12px; border:1px solid var(--border);" />` : ""}
+        <div class="summary-card">
+          ${priceRows}
+          <div class="summary-line"><span>Tồn kho hiện tại:</span><strong>${getStockDisplay(p)}</strong></div>
+          <div class="summary-line"><span>Nhóm:</span><span>${p.category}</span></div>
+        </div>
+        <div class="summary-card">
+          <strong style="font-size:13px;">Đặc điểm chi tiết:</strong>
+          <p style="font-size:13.5px; color:var(--text-main);">${p.specs || "Giấy tái chế thủ công từ sợi tự nhiên tại Tiệm giấy Thứ Ba."}</p>
+        </div>
+        ${modalButtons}
+      `;
+      document.getElementById("detailOverlay").classList.add("open");
+    }
+
+    function hideModal(id) { document.getElementById(id).classList.remove("open"); }
+    function closeOverlay(e, id) { if (e.target.id === id) hideModal(id); }
+
+    function updateCartBadge() {
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("cartCount").textContent = totalQty;
+    }
+
+    function getUsedBaseUnitsForProduct(productId) {
+      return cart
+        .filter(c => c.id === productId)
+        .reduce((sum, c) => sum + c.qty * c.baseUnitsPerQty, 0);
+    }
+
+    function addToCart(id, buyMode = "pack", qty = 1) {
+      const p = products.find(item => item.id === id);
+      if (!p || p.stock <= 0) {
+        showToast("Mẫu này hiện tạm hết sẵn ạ");
+        return;
+      }
+
+      let mode = buyMode;
+      if (mode === "pack" && !hasPackOption(p)) mode = "unit";
+      if (mode === "unit" && !hasUnitOption(p) && hasPackOption(p)) mode = "pack";
+
+      const baseUnitsPerQty = mode === "pack" ? p.packSize : 1;
+      const price = mode === "pack" ? p.packPrice : p.unitPrice;
+      const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
+
+      if (price <= 0) {
+        showToast("Sản phẩm chưa có giá cho tùy chọn này ạ");
+        return;
+      }
+
+      const alreadyUsed = getUsedBaseUnitsForProduct(id);
+      const needed = qty * baseUnitsPerQty;
+      if (alreadyUsed + needed > p.stock) {
+        showToast(`Kho chỉ còn ${p.stock} ${p.baseUnit} ạ`);
+        return;
+      }
+
+      const key = `${id}_${mode}`;
+      const existing = cart.find(c => c.key === key);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        cart.push({
+          key,
+          id: p.id,
+          name: p.name,
+          buyMode: mode,
+          unitLabel,
+          baseUnitsPerQty,
+          price,
+          qty
+        });
+      }
+
+      updateCartBadge();
+      showToast(`Đã thêm ${qty} ${unitLabel} ${p.name}`);
+    }
+
+    function changeCartQty(key, delta) {
+      const idx = cart.findIndex(c => c.key === key);
+      if (idx === -1) return;
+      const item = cart[idx];
+      const p = products.find(prod => prod.id === item.id);
+      const nextQty = item.qty + delta;
+
+      if (nextQty <= 0) {
+        cart.splice(idx, 1);
+      } else {
+        if (p) {
+          const otherUsed = cart
+            .filter(c => c.id === item.id && c.key !== key)
+            .reduce((s, c) => s + c.qty * c.baseUnitsPerQty, 0);
+          if (otherUsed + nextQty * item.baseUnitsPerQty > p.stock) {
+            showToast(`Kho hiện chỉ còn tối đa ${p.stock} ${p.baseUnit} ạ`);
+            return;
+          }
+        }
+        item.qty = nextQty;
+      }
+      updateCartBadge();
+      renderCartModalContent();
+    }
+
+    function calcCartTotals() {
+      const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+      const hasKit = cart.some(i => i.name.toLowerCase().includes("kit"));
+      const totalPacks = cart.filter(i => i.buyMode === "pack").reduce((sum, i) => sum + i.qty, 0);
+      const totalBaseUnits = cart.reduce((sum, i) => sum + i.qty * i.baseUnitsPerQty, 0);
+      const shipFee = (subtotal === 0 || subtotal >= 200000 || hasKit) ? 0 : 15000;
+      return { subtotal, shipFee, total: subtotal + shipFee, totalPacks, totalBaseUnits };
+    }
+
+    function openCartModal() {
+      renderCartModalContent();
+      document.getElementById("cartOverlay").classList.add("open");
+    }
+
+    function renderCartModalContent() {
+      const body = document.getElementById("cartBody");
+      if (!cart.length) {
+        body.innerHTML = `
+          <div style="text-align:center; padding:24px 10px;">
+            <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px;">Giỏ giấy của mình đang trống ạ.</p>
+            <button class="submit-order-btn" onclick="hideModal('cartOverlay'); renderCatalogMessage();">Xem các loại giấy đang có</button>
+          </div>
+        `;
+        return;
+      }
+
+      const { subtotal, shipFee, total, totalPacks, totalBaseUnits } = calcCartTotals();
+      const itemsHtml = cart.map(item => `
+        <div class="cart-item-row">
+          <div>
+            <div style="font-size:13.5px; font-weight:600;">${item.name}</div>
+            <div style="font-size:12px; color:var(--text-muted);">${formatVND(item.price)} / ${item.unitLabel}</div>
+          </div>
+          <div class="qty-control">
+            <button type="button" class="qty-btn" onclick="changeCartQty('${item.key}', -1)">−</button>
+            <span style="font-size:13px; font-weight:600; min-width:18px; text-align:center;">${item.qty}</span>
+            <button type="button" class="qty-btn" onclick="changeCartQty('${item.key}', 1)">+</button>
           </div>
         </div>
       `).join("");
+
+      const wholesaleNotice = (totalPacks >= 10 || totalBaseUnits >= 100) ? `
+        <div style="background:var(--warn-bg); color:var(--warn-text); padding:10px 12px; border-radius:10px; font-size:12.5px;">
+          Đơn của mình có <strong>${totalBaseUnits} tờ/cái</strong> — đơn số lượng lớn tiệm có áp dụng chiết khấu riêng. Mình có thể nhắn trực tiếp cho tiệm trước để chốt giá ưu đãi nhé!
+        </div>
+      ` : "";
+
+      body.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${itemsHtml}
+        </div>
+        ${wholesaleNotice}
+        <div class="summary-card">
+          <div class="summary-line"><span>Tiền giấy:</span><span>${formatVND(subtotal)}</span></div>
+          <div class="summary-line"><span>Phí ship (Freeship đơn từ 200K & Bộ kit):</span><span>${shipFee === 0 ? "Miễn phí" : formatVND(shipFee)}</span></div>
+          <div class="summary-line summary-total"><span>Tổng thanh toán (COD):</span><span>${formatVND(total)}</span></div>
+        </div>
+
+        <form id="orderForm" onsubmit="submitOrder(event)" style="display:flex; flex-direction:column; gap:11px;">
+          <div class="form-group">
+            <label>1. Tên người nhận *</label>
+            <input id="custName" class="form-control" type="text" placeholder="Ví dụ: Minh Anh" required />
+          </div>
+
+          <div class="form-group">
+            <label>2. Số điện thoại nhận hàng *</label>
+            <input id="custPhone" class="form-control" type="tel" placeholder="Ví dụ: 0912345678" required />
+          </div>
+
+          <div class="form-group">
+            <label>3. Địa chỉ giao hàng *</label>
+            <textarea id="custAddress" class="form-control" rows="2" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>4. Ứng dụng bạn dùng để nhắn với tiệm *</label>
+            <div class="platform-pills">
+              <div class="plat-option ${selectedPlatform === 'Instagram' ? 'selected' : ''}" onclick="selectPlatform('Instagram', this)">Instagram</div>
+              <div class="plat-option ${selectedPlatform === 'Threads' ? 'selected' : ''}" onclick="selectPlatform('Threads', this)">Threads</div>
+              <div class="plat-option ${selectedPlatform === 'Facebook' ? 'selected' : ''}" onclick="selectPlatform('Facebook', this)">Facebook</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>5. Tên tài khoản (User / Nickname) trên ${selectedPlatform} *</label>
+            <small>Tiệm lưu lại để tìm đúng tài khoản của mình và nhắn xác nhận đơn ạ</small>
+            <input id="custSocial" class="form-control" type="text" placeholder="Ví dụ: @minhanh.paper hoặc tên Facebook của mình" required />
+          </div>
+
+          <div class="form-group">
+            <label>6. Ghi chú thêm (nếu có)</label>
+            <input id="custNote" class="form-control" type="text" placeholder="Ví dụ: Mix 5 tờ quế + 5 tờ vỏ quýt..." />
+          </div>
+
+          <button id="confirmOrderBtn" type="submit" class="submit-order-btn">Gửi đơn đặt hàng</button>
+        </form>
+      `;
     }
 
-    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const hasKit = cart.some(i => normalizeVi(i.name).includes("kit"));
-    const isFreeShip = subtotal >= FREESHIP_THRESHOLD || hasKit;
-    const shipFee = (subtotal === 0 || isFreeShip) ? 0 : BASE_SHIP_FEE;
-    const total = subtotal + shipFee;
-
-    // Thanh báo ngưỡng Freeship 150.000đ
-    const fsCard = document.getElementById("freeshipCard");
-    const fsText = document.getElementById("freeshipText");
-    const fsTrack = document.getElementById("freeshipTrack");
-    const fsFill = document.getElementById("freeshipFill");
-
-    if (subtotal === 0) {
-      fsCard.classList.remove("reached");
-      fsText.innerHTML = `Freeship toàn quốc cho đơn từ <strong>${fmtPrice(FREESHIP_THRESHOLD)}</strong> (hoặc khi có Bộ kit làm giấy)`;
-      fsTrack.style.display = "block";
-      fsFill.style.width = "0%";
-    } else if (hasKit) {
-      fsCard.classList.add("reached");
-      fsText.innerHTML = `Đơn có Bộ kit làm giấy — được <strong>Freeship toàn quốc</strong>!`;
-      fsTrack.style.display = "none";
-    } else if (subtotal < FREESHIP_THRESHOLD) {
-      const remain = FREESHIP_THRESHOLD - subtotal;
-      const pct = Math.min(100, Math.round((subtotal / FREESHIP_THRESHOLD) * 100));
-      fsCard.classList.remove("reached");
-      fsText.innerHTML = `Mua thêm <strong>${fmtPrice(remain)}</strong> để được Freeship toàn quốc`;
-      fsTrack.style.display = "block";
-      fsFill.style.width = pct + "%";
-    } else {
-      fsCard.classList.add("reached");
-      fsText.innerHTML = `Bạn đã đạt mức <strong>Freeship toàn quốc</strong> (đơn từ ${fmtPrice(FREESHIP_THRESHOLD)})!`;
-      fsTrack.style.display = "none";
+    function selectPlatform(plat, el) {
+      selectedPlatform = plat;
+      document.querySelectorAll(".plat-option").forEach(node => node.classList.remove("selected"));
+      el.classList.add("selected");
+      const label = el.closest(".form-group").nextElementSibling.querySelector("label");
+      if (label) label.textContent = `5. Tên tài khoản (User / Nickname) trên ${plat} *`;
     }
 
-    document.getElementById("cartSubtotal").textContent = fmtPrice(subtotal);
-    document.getElementById("cartShip").textContent = subtotal === 0 ? "0đ" : (shipFee === 0 ? "Miễn phí" : fmtPrice(shipFee));
-    document.getElementById("cartTotal").textContent = fmtPrice(total);
-  }
+    async function submitOrder(e) {
+      e.preventDefault();
+      const btn = document.getElementById("confirmOrderBtn");
+      const customerName = document.getElementById("custName").value.trim();
+      const phone = document.getElementById("custPhone").value.trim();
+      const address = document.getElementById("custAddress").value.trim();
+      const socialHandle = document.getElementById("custSocial").value.trim();
+      const note = document.getElementById("custNote").value.trim();
 
-  function openCart() {
-    prefillFromLocalProfile();
-    updateCartUI();
-    document.getElementById("cartBackdrop").classList.add("open");
-  }
-
-  function closeCart() {
-    document.getElementById("cartBackdrop").classList.remove("open");
-  }
-
-  function prefillFromLocalProfile() {
-    try {
-      const saved = JSON.parse(localStorage.getItem("tgtb_customer_profile") || "null");
-      if (!saved) return;
-      const phoneEl = document.getElementById("custPhone");
-      if (!phoneEl.value && saved.phone) {
-        phoneEl.value = saved.phone;
-        if (saved.customerName && !document.getElementById("custName").value) {
-          document.getElementById("custName").value = saved.customerName;
-        }
-        if (saved.address && !document.getElementById("custAddress").value) {
-          document.getElementById("custAddress").value = saved.address;
-        }
-        if (saved.platform) {
-          document.getElementById("custPlatform").value = saved.platform;
-        }
-        if (saved.socialHandle && !document.getElementById("custSocial").value) {
-          document.getElementById("custSocial").value = saved.socialHandle;
-        }
+      if (!customerName || !phone || !address || !socialHandle) {
+        showToast("Mình điền đủ thông tin giúp tiệm nhé ạ");
+        return;
       }
-    } catch (e) {}
-  }
 
-  function onPhoneInput() {
-    const digits = normalizePhone(document.getElementById("custPhone").value);
-    if (digits.length >= 10) {
-      clearTimeout(lookupTimer);
-      lookupTimer = setTimeout(() => lookupCustomerByPhone(), 350);
-    } else {
-      document.getElementById("returningBadge").classList.remove("show");
-    }
-  }
+      const { subtotal, shipFee, total } = calcCartTotals();
+      const orderPayload = {
+        customerName,
+        phone,
+        address,
+        platform: selectedPlatform,
+        socialHandle,
+        note,
+        items: cart.map(i => ({
+          id: i.id,
+          name: i.name,
+          buyMode: i.buyMode,
+          unitLabel: i.unitLabel,
+          qty: i.qty,
+          price: i.price,
+          baseUnits: i.qty * i.baseUnitsPerQty
+        })),
+        subtotal,
+        shipFee,
+        total
+      };
 
-  async function lookupCustomerByPhone() {
-    const digits = normalizePhone(document.getElementById("custPhone").value);
-    if (digits.length < 10 || digits === lastLookedUpPhone) return;
-    lastLookedUpPhone = digits;
+      btn.disabled = true;
+      btn.textContent = "Đang gửi đơn về tiệm...";
 
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "lookup_customer", phone: digits })
-      });
-      const data = await res.json();
-      const badge = document.getElementById("returningBadge");
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "create_order", order: orderPayload })
+        });
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || "Không gửi được đơn");
 
-      if (data.ok && data.found) {
-        const nameEl = document.getElementById("custName");
-        const addrEl = document.getElementById("custAddress");
-        const platEl = document.getElementById("custPlatform");
-        const socEl = document.getElementById("custSocial");
-
-        if (data.customerName && !nameEl.value.trim()) nameEl.value = data.customerName;
-        if (data.address && !addrEl.value.trim()) addrEl.value = data.address;
-        if (data.platform) platEl.value = data.platform;
-        if (data.socialHandle && !socEl.value.trim()) socEl.value = data.socialHandle;
-
-        const nextOrderNum = Number(data.orderCount || 1) + 1;
-        badge.innerHTML = `★ Chào mừng bạn quay lại Tiệm giấy Thứ Ba (đơn thứ ${nextOrderNum}) — tiệm đã tự điền sẵn thông tin từ lần đặt trước, bạn kiểm tra lại nếu có thay đổi địa chỉ nhé!`;
-        badge.classList.add("show");
-      } else {
-        badge.classList.remove("show");
-      }
-    } catch (e) {}
-  }
-
-  async function submitOrder() {
-    if (!cart.length) return;
-    const customerName = document.getElementById("custName").value.trim();
-    const phone = document.getElementById("custPhone").value.trim();
-    const address = document.getElementById("custAddress").value.trim();
-    const platform = document.getElementById("custPlatform").value;
-    const socialHandle = document.getElementById("custSocial").value.trim();
-    const note = document.getElementById("custNote").value.trim();
-
-    if (!customerName || !phone || !address || !socialHandle) {
-      alert("Bạn vui lòng điền đủ Tên, Số điện thoại, Địa chỉ và Tài khoản liên hệ để tiệm nhắn xác nhận đơn nhé!");
-      return;
-    }
-
-    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const hasKit = cart.some(i => normalizeVi(i.name).includes("kit"));
-    const shipFee = (subtotal >= FREESHIP_THRESHOLD || hasKit) ? 0 : BASE_SHIP_FEE;
-    const total = subtotal + shipFee;
-
-    const btn = document.getElementById("submitOrderBtn");
-    btn.disabled = true;
-    btn.textContent = "Đang gửi đơn...";
-
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({
-          action: "create_order",
-          order: {
-            customerName,
-            phone,
-            address,
-            platform,
-            socialHandle,
-            items: cart,
-            subtotal,
-            shipFee,
-            total,
-            note
-          }
-        })
-      });
-      const data = await res.json();
-      if (data.ok) {
-        localStorage.setItem("tgtb_customer_profile", JSON.stringify({
-          customerName, phone, address, platform, socialHandle
-        }));
+        const itemsSummary = cart.map(i => `• ${i.name}: ${i.qty} ${i.unitLabel} (${formatVND(i.price * i.qty)})`).join("\n");
         cart = [];
-        saveCart();
-        updateCartUI();
-        closeCart();
-        alert(`Tiệm đã nhận được đơn #${data.orderId} rồi ạ! Tiệm sẽ nhắn xác nhận lại qua ${platform} (${socialHandle}) trước khi gói hàng nhé.`);
-        loadProducts();
-      } else {
-        alert("Có lỗi khi gửi đơn: " + (data.error || "Vui lòng thử lại"));
+        updateCartBadge();
+        hideModal("cartOverlay");
+        await loadInventory();
+
+        appendBotMessage(`Dạ tiệm đã nhận được đơn của mình rồi ạ!\n\nNgười nhận: ${customerName} (${phone})\nĐịa chỉ: ${address}\nTài khoản liên hệ: ${socialHandle} (${selectedPlatform})\nĐơn giấy:\n${itemsSummary}\nTổng cộng: ${formatVND(total)} (gồm ship ${formatVND(shipFee)})\n\nMình vui lòng chờ tiệm kiểm tra và nhắn tin xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng nhé ạ.`);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Gửi đơn đặt hàng";
+        showToast("Có lỗi kết nối, mình thử bấm gửi lại giúp tiệm nhé");
+        console.error(err);
       }
-    } catch (e) {
-      alert("Không kết nối được máy chủ. Bạn thử lại giúp tiệm nhé!");
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Đặt đơn giấy";
     }
-  }
 
-  function toggleChat() {
-    document.getElementById("chatPanel").classList.toggle("open");
-  }
+    function appendUserMessage(text) {
+      const row = document.createElement("div");
+      row.className = "msg-row user";
+      row.innerHTML = `<div class="bubble"></div>`;
+      row.querySelector(".bubble").textContent = text;
+      chatStream.appendChild(row);
+      chatHistory.push({ role: "user", text });
+      scrollBottom();
+    }
 
-  async function sendChat() {
-    const input = document.getElementById("chatInput");
-    const text = input.value.trim();
-    if (!text) return;
-    input.value = "";
+    function appendTypingIndicator() {
+      const row = document.createElement("div");
+      row.id = "typingRow";
+      row.className = "msg-row bot";
+      row.innerHTML = `<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+      chatStream.appendChild(row);
+      scrollBottom();
+    }
 
-    const box = document.getElementById("chatMessages");
-    box.innerHTML += `<div class="msg user">${text}</div>`;
-    chatHistory.push({ role: "user", text });
-    box.scrollTop = box.scrollHeight;
+    function removeTypingIndicator() {
+      const el = document.getElementById("typingRow");
+      if (el) el.remove();
+    }
 
-    try {
-      const res = await fetch(SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify({ action: "chat", message: text, history: chatHistory })
-      });
-      const json = await res.json();
-      if (json.ok && json.data) {
-        const reply = json.data.reply || "";
-        chatHistory.push({ role: "model", text: reply });
-        let extra = "";
-        if (Array.isArray(json.data.suggestedItems) && json.data.suggestedItems.length) {
-          const s = json.data.suggestedItems[0];
-          extra = `<br/><button class="chat-suggest-btn" onclick="addToCart('${s.id}','${s.buyMode || "pack"}',${s.qty || 1}); openCart();">+ Thêm vào giỏ</button>`;
+    function appendBotMessage(replyText, extra = {}) {
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.textContent = replyText;
+      row.appendChild(bubble);
+
+      if (Array.isArray(extra.suggestedItems) && extra.suggestedItems.length > 0) {
+        const validSuggestions = extra.suggestedItems
+          .map(s => {
+            const prod = products.find(p => p.id === s.id || p.name === s.name);
+            if (!prod || prod.stock <= 0) return null;
+            let mode = s.buyMode === "unit" ? "unit" : "pack";
+            if (mode === "pack" && !hasPackOption(prod)) mode = "unit";
+            if (mode === "unit" && !hasUnitOption(prod) && hasPackOption(prod)) mode = "pack";
+
+            const perUnit = mode === "pack" ? prod.packSize : 1;
+            const unitPrice = mode === "pack" ? prod.packPrice : prod.unitPrice;
+            const label = mode === "pack" ? (prod.packUnit || "gói") : prod.baseUnit;
+            const maxQty = Math.floor(prod.stock / perUnit);
+            const qty = Math.min(Math.max(1, Number(s.qty || 1)), maxQty);
+            if (qty <= 0 || unitPrice <= 0) return null;
+
+            return { prod, mode, qty, unitPrice, label };
+          })
+          .filter(Boolean);
+
+        if (validSuggestions.length > 0) {
+          const box = document.createElement("div");
+          box.className = "suggest-box";
+          validSuggestions.forEach(item => {
+            const itemEl = document.createElement("div");
+            itemEl.className = "suggest-item";
+            itemEl.innerHTML = `
+              <span><strong>${item.prod.name}</strong> (${item.qty} ${item.label} • ${formatShortK(item.unitPrice * item.qty)})</span>
+              <button class="suggest-add">+ Thêm giỏ</button>
+            `;
+            itemEl.querySelector("button").onclick = () => addToCart(item.prod.id, item.mode, item.qty);
+            box.appendChild(itemEl);
+          });
+          row.appendChild(box);
         }
-        box.innerHTML += `<div class="msg bot">${reply}${extra}</div>`;
       }
-    } catch (e) {
-      box.innerHTML += `<div class="msg bot">Dạ đường truyền hơi chập chờn, bạn nhắn trực tiếp cho tiệm qua Facebook/Instagram nhé ạ.</div>`;
-    }
-    box.scrollTop = box.scrollHeight;
-  }
 
-  loadProducts();
-</script>
+      if (extra.showContactButtons) {
+        const prefill = extra.contactPrefill || replyText;
+        const contactCard = document.createElement("div");
+        contactCard.className = "contact-card";
+        contactCard.innerHTML = `
+          <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:var(--primary);">Nhắn trực tiếp cho tiệm qua ứng dụng bạn đang dùng:</div>
+          <div class="prefill-box">
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${prefill}</span>
+            <button type="button" class="copy-mini">Copy nội dung</button>
+          </div>
+          <div class="social-links">
+            <a class="social-btn social-fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a class="social-btn social-ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer">Threads</a>
+          </div>
+        `;
+        contactCard.querySelector(".copy-mini").onclick = () => copyText(prefill);
+        contactCard.querySelectorAll(".social-btn").forEach(a => {
+          a.addEventListener("click", () => copyText(prefill));
+        });
+        row.appendChild(contactCard);
+      }
+
+      chatStream.appendChild(row);
+      chatHistory.push({ role: "model", text: replyText });
+      scrollBottom();
+    }
+
+    function sendQuickText(text) {
+      if (isSending) return;
+      chatInput.value = text;
+      handleFormSubmit(new Event("submit"));
+    }
+
+    async function handleFormSubmit(e) {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text || isSending) return;
+
+      chatInput.value = "";
+      appendUserMessage(text);
+
+      if (/^(xem|danh sách|các loại giấy|menu|bảng giá)/i.test(text) && text.length < 38) {
+        appendBotMessage("Dạ dưới đây là các mẫu giấy hiện có của tiệm (kèm số lượng còn sẵn và quy cách từng loại), mình lướt ngang để xem nhé ạ:");
+        renderCatalogMessage("Tất cả");
+        return;
+      }
+
+      isSending = true;
+      sendBtn.disabled = true;
+      appendTypingIndicator();
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "chat",
+            message: text,
+            history: chatHistory.slice(-8)
+          })
+        });
+        const json = await res.json();
+        removeTypingIndicator();
+
+        if (!json.ok || !json.data) {
+          throw new Error(json.error || "Phản hồi AI không hợp lệ");
+        }
+
+        const ai = json.data;
+        appendBotMessage(ai.reply || "Dạ mình cần tiệm hỗ trợ thêm mẫu nào ạ?", {
+          intent: ai.intent,
+          showContactButtons: Boolean(ai.showContactButtons),
+          contactPrefill: ai.contactPrefill || text,
+          suggestedItems: ai.suggestedItems || []
+        });
+      } catch (err) {
+        removeTypingIndicator();
+        const fallbackMsg = IS_DEBUG
+          ? `[Lỗi kỹ thuật]: ${err.message}`
+          : "Dạ câu này mình nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho mình nhé ạ.";
+        appendBotMessage(fallbackMsg, {
+          showContactButtons: true,
+          contactPrefill: text
+        });
+        console.error(err);
+      } finally {
+        isSending = false;
+        sendBtn.disabled = false;
+      }
+    }
+
+    (async function init() {
+      renderWelcome();
+      await loadInventory();
+    })();
+  </script>
 </body>
 </html>
