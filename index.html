@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Tiệm giấy Thứ Ba — Tư vấn & Đặt giấy thủ công</title>
+  <title>tiệm giấy Thứ Ba — Tư vấn & Đặt giấy thủ công</title>
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="apple-touch-icon" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -779,10 +779,10 @@
 
     <div class="composer-wrap">
       <div class="hint-strip">
-        <button class="hint-pill" onclick="sendQuickText('Xem các loại giấy đang có sẵn')">📄 Giấy đang có sẵn</button>
-        <button class="hint-pill" onclick="sendQuickText('Giấy có viết được bút mực không?')">✒️ Viết bút mực</button>
-        <button class="hint-pill" onclick="sendQuickText('Phí ship như thế nào ạ?')">🚚 Phí ship</button>
-        <button class="hint-pill" onclick="openCartModal()">🛒 Lên đơn ngay</button>
+        <button class="hint-pill" onclick="sendQuickText('Xem các loại giấy đang có sẵn')">Giấy đang có sẵn</button>
+        <button class="hint-pill" onclick="sendQuickText('Giấy có viết được bút mực không?')">Viết bút mực</button>
+        <button class="hint-pill" onclick="sendQuickText('Phí ship như thế nào ạ?')">Phí ship</button>
+        <button class="hint-pill" onclick="openCartModal()">Lên đơn ngay</button>
       </div>
       <form class="input-row" onsubmit="handleFormSubmit(event)">
         <input id="chatInput" type="text" placeholder="Hỏi tiệm loại giấy, số lượng, giá tiền..." autocomplete="off" />
@@ -969,12 +969,12 @@
       const row = document.createElement("div");
       row.className = "msg-row bot";
       row.innerHTML = `
-        <div class="bubble">Dạ chào mình, tiệm là Tiệm giấy Thứ Ba ạ.
+        <div class="bubble">Tiệm giấy Thứ Ba chào bạn.
 Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng/giá tiền hoặc lên đơn trực tiếp ở đây mà không cần chờ tiệm rep nhé.</div>
         <div class="quick-grid">
-          <button class="chip-btn" onclick="renderCatalogMessage()">📄 Xem các loại giấy đang có</button>
-          <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">💡 Tư vấn chọn giấy</button>
-          <button class="chip-btn" onclick="openCartModal()">🛒 Lên đơn nhanh</button>
+          <button class="chip-btn" onclick="renderCatalogMessage()">Xem các loại giấy đang có</button>
+          <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">Tư vấn chọn giấy</button>
+          <button class="chip-btn" onclick="openCartModal()">Lên đơn nhanh</button>
         </div>
       `;
       chatStream.appendChild(row);
@@ -990,7 +990,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       row.className = "msg-row bot full-width";
 
       if (!products.length) {
-        row.innerHTML = `<div class="bubble">Dạ kho giấy đang tải hoặc chưa có dữ liệu, mình đợi vài giây rồi bấm lại giúp tiệm nhé ạ.</div>`;
+        row.innerHTML = `<div class="bubble">Dạ kho giấy đang tải hoặc chưa có dữ liệu, bạn đợi vài giây rồi bấm lại giúp tiệm nhé.</div>`;
         chatStream.appendChild(row);
         scrollBottom();
         return;
@@ -1192,7 +1192,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         </div>
         <div class="summary-card">
           <strong style="font-size:13px;">Đặc điểm chi tiết:</strong>
-          <p style="font-size:13.5px; color:var(--text-main);">${escapeHtml(p.specs || "Giấy tái chế thủ công từ sợi tự nhiên tại Tiệm giấy Thứ Ba.")}</p>
+          <p style="font-size:13.5px; color:var(--text-main);">${escapeHtml(p.specs || "Giấy tái chế thủ công từ tiệm giấy Thứ Ba.")}</p>
         </div>
         ${modalButtons}
       `;
@@ -1226,7 +1226,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
     function addToCart(id, buyMode = "pack", qty = 1) {
       const p = products.find(item => item.id === id);
       if (!p || p.stock <= 0) {
-        showToast("Mẫu này hiện tạm hết sẵn ạ");
+        showToast("Mẫu này hiện tạm hết hàng có sẵn ạ");
         return;
       }
 
@@ -1462,7 +1462,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         hideModal("cartOverlay");
         await loadInventory();
 
-        appendBotMessage(`Dạ tiệm đã nhận được đơn của mình rồi ạ!\n\nNgười nhận: ${customerName} (${phone})\nĐịa chỉ: ${address}\nTài khoản liên hệ: ${socialHandle} (${selectedPlatform})\nĐơn giấy:\n${itemsSummary}\nTổng cộng: ${formatVND(total)} (gồm ship ${formatVND(shipFee)})\n\nMình vui lòng chờ tiệm kiểm tra và nhắn tin xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng nhé ạ.`);
+        appendBotMessage(`Dạ tiệm đã nhận được đơn của mình rồi ạ!\n\nNgười nhận: ${customerName} (${phone})\nĐịa chỉ: ${address}\nTài khoản liên hệ: ${socialHandle} (${selectedPlatform})\nĐơn giấy:\n${itemsSummary}\nTổng cộng: ${formatVND(total)} (gồm ship ${formatVND(shipFee)})\n\nMình vui lòng chờ tiệm kiểm tra và nhắn tin xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng ạ.`);
       } catch (err) {
         btn.disabled = false;
         btn.textContent = "Gửi đơn đặt hàng";
@@ -1584,7 +1584,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       appendUserMessage(text);
 
       if (/^(xem|danh sách|các loại giấy|menu|bảng giá)/i.test(text) && text.length < 38) {
-        appendBotMessage("Dạ dưới đây là các mẫu giấy hiện có của tiệm (kèm số lượng còn sẵn và quy cách từng loại), mình lướt ngang để xem nhé ạ:");
+        appendBotMessage("Dạ dưới đây là các mẫu giấy hiện có của tiệm (kèm số lượng còn sẵn và quy cách từng loại), mình lướt ngang để xem ạ:");
         renderCatalogMessage("Tất cả");
         return;
       }
@@ -1621,7 +1621,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         removeTypingIndicator();
         const fallbackMsg = IS_DEBUG
           ? `[Lỗi kỹ thuật]: ${err.message}`
-          : "Dạ câu này mình nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho mình nhé ạ.";
+          : "Dạ mình nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho mình ạ.";
         appendBotMessage(fallbackMsg, {
           showContactButtons: true,
           contactPrefill: text
