@@ -347,6 +347,48 @@
     }
     .social-btn:hover { background: var(--primary); color: #fff; }
 
+    /* Proactive Order Confirm Box */
+    .order-confirm-box {
+      margin-top: 8px;
+      background: var(--accent-soft);
+      border: 1.5px solid #B7D3BA;
+      border-radius: 14px;
+      padding: 12px;
+      width: 100%;
+      box-shadow: var(--shadow-sm);
+    }
+    .order-confirm-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #2E5A36;
+      margin-bottom: 4px;
+    }
+    .order-confirm-desc {
+      font-size: 12px;
+      color: var(--text-main);
+      line-height: 1.45;
+      margin-bottom: 9px;
+    }
+    .order-confirm-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .order-confirm-cta:hover { opacity: 0.92; }
+
     /* Quick Prompts */
     .quick-prompts {
       padding: 8px 14px;
@@ -881,8 +923,63 @@
 
     .form-row-2 {
       display: grid;
-      grid-template-columns: 125px 1fr;
+      grid-template-columns: 138px 1fr;
       gap: 8px;
+    }
+
+    .social-hint-box {
+      margin-top: 4px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 11.8px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .social-hint-box.ok {
+      background: var(--accent-soft);
+      border-color: #C8DBC9;
+      color: #2E5A36;
+    }
+    .social-warn-text {
+      color: var(--warn-text);
+      font-weight: 500;
+      font-size: 11.5px;
+    }
+    .fb-profile-helper {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+      font-size: 11.5px;
+      width: fit-content;
+    }
+
+    .zalo-backup-box {
+      margin-top: 6px;
+      background: var(--bg-soft);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 9px 10px;
+    }
+    .zalo-backup-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 5px;
+    }
+    .zalo-backup-note {
+      font-size: 11.3px;
+      color: var(--text-muted);
+      margin-top: 5px;
+      line-height: 1.4;
     }
 
     .submit-order-btn {
@@ -1020,6 +1117,9 @@
       transition: opacity 0.2s;
       z-index: 80;
       white-space: nowrap;
+      max-width: 92vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .toast.show { opacity: 1; }
 
@@ -1122,9 +1222,9 @@
     <!-- View 2: Catalog -->
     <section class="view-panel" id="viewCatalog">
       <div class="catalog-wrap">
-        <div class="promo-banner">
+        <div class="promo-banner" id="promoBanner">
           <span></span>
-          <span>Ship toàn quốc <strong>15K</strong> — <strong>Freeship</strong> đơn từ <strong>200K</strong>.</span>
+          <span id="promoBannerText">Ship toàn quốc <strong>15K</strong> — <strong>Freeship</strong> đơn từ <strong>200K</strong>.</span>
         </div>
         <div class="cat-filter" id="catFilter"></div>
         <div id="mixPackSection"></div>
@@ -1177,7 +1277,7 @@
 
           <div class="form-group">
             <label for="custPhone">Số điện thoại nhận hàng *</label>
-            <input type="tel" id="custPhone" class="form-input" placeholder="VD: 0905xxxxxx" oninput="saveCustomerDraft()" required />
+            <input type="tel" id="custPhone" class="form-input" placeholder="VD: 0905xxxxxx" oninput="handlePhoneInputSync()" required />
           </div>
 
           <div class="form-group">
@@ -1186,14 +1286,36 @@
           </div>
 
           <div class="form-group">
-            <label for="custHandle">Tài khoản mạng xã hội (để tiệm nhắn xác nhận đơn) *</label>
+            <label for="custHandle">Kênh xác nhận đơn (để tiệm liên hệ đúng bạn) *</label>
             <div class="form-row-2">
-              <select id="custPlatform" aria-label="Nền tảng mạng xã hội" class="form-select" onchange="saveCustomerDraft()">
+              <select id="custPlatform" aria-label="Nền tảng liên hệ" class="form-select" onchange="handlePlatformChange()">
                 <option value="Instagram">Instagram</option>
                 <option value="Threads">Threads</option>
                 <option value="Facebook">Facebook</option>
+                <option value="Zalo">Zalo (SĐT trên)</option>
               </select>
-              <input type="text" id="custHandle" class="form-input" placeholder="Tên tài khoản hoặc @username" oninput="saveCustomerDraft()" required />
+              <input type="text" id="custHandle" class="form-input" placeholder="Nhập @username (VD: @tiemgiay.thuba)" oninput="handleSocialInput()" onblur="cleanSocialInputOnBlur()" required />
+            </div>
+            <div class="social-hint-box" id="socialHintBox">
+              <span id="socialHintText">Nhập chính xác <strong>@ID</strong> (không nhập tên hiển thị) để tiệm tìm đúng nick bạn nhé.</span>
+              <span class="social-warn-text" id="socialWarnText" style="display:none;"></span>
+              <a href="https://www.facebook.com/me" target="_blank" rel="noopener noreferrer" class="fb-profile-helper" id="fbProfileHelper" style="display:none;">Mở trang cá nhân Facebook để sao chép link ↗</a>
+            </div>
+
+            <!-- Kênh dự phòng chỉ hiện khi khách chọn Zalo -->
+            <div class="zalo-backup-box" id="zaloBackupGroup" style="display:none;">
+              <label for="custBackupHandle" class="zalo-backup-label">Tài khoản dự phòng (phòng khi Zalo chặn tin nhắn người lạ)</label>
+              <div class="form-row-2">
+                <select id="custBackupPlatform" aria-label="Nền tảng dự phòng" class="form-select" onchange="handleBackupPlatformChange()">
+                  <option value="Instagram">Instagram</option>
+                  <option value="Facebook">Facebook</option>
+                  <option value="Threads">Threads</option>
+                </select>
+                <input type="text" id="custBackupHandle" class="form-input" placeholder="Nhập @username (khuyến khích)" oninput="saveCustomerDraft()" onblur="cleanBackupSocialInputOnBlur()" />
+              </div>
+              <div class="zalo-backup-note">
+                Nếu Zalo bạn bật chặn tin nhắn từ người lạ, tiệm sẽ nhắn xác nhận đơn qua tài khoản dự phòng này nhé.
+              </div>
             </div>
           </div>
 
@@ -1286,7 +1408,14 @@
     let activeCategory = "Tất cả";
     let mixDraft = {};
     let bankConfig = { bankId: "", accountNo: "", accountName: "" };
+    let shipConfig = {
+      customerShipFee: 15000,
+      freeshipEnabled: true,
+      freeshipMinOrder: 200000,
+      freeshipKit: true
+    };
     let selectedCheckoutPayment = "COD";
+    let zaloManualEdited = false;
 
     const MIX_PACK_SIZE = 10;
     const MIX_PACK_PRICE = 65000;
@@ -1346,6 +1475,186 @@
       updateCartBadge();
     }
 
+    // -------------------------------------------------------------------------
+    // HƯỚNG DẪN NHẬP LIỆU THÔNG MINH THEO NỀN TẢNG (CHỐNG TRÙNG TÊN TÀI KHOẢN)
+    // -------------------------------------------------------------------------
+    function updateSocialPlatformUi(isInitialLoad = false) {
+      const platEl = document.getElementById("custPlatform");
+      const handleEl = document.getElementById("custHandle");
+      const phoneEl = document.getElementById("custPhone");
+      const boxEl = document.getElementById("socialHintBox");
+      const hintEl = document.getElementById("socialHintText");
+      const warnEl = document.getElementById("socialWarnText");
+      const fbHelperEl = document.getElementById("fbProfileHelper");
+      const zaloBackupEl = document.getElementById("zaloBackupGroup");
+      if (!platEl || !handleEl || !boxEl || !hintEl) return;
+
+      const plat = platEl.value;
+      const phoneVal = phoneEl ? phoneEl.value.trim() : "";
+      boxEl.classList.remove("ok");
+      if (fbHelperEl) fbHelperEl.style.display = "none";
+      if (warnEl) warnEl.style.display = "none";
+      if (zaloBackupEl) zaloBackupEl.style.display = plat === "Zalo" ? "block" : "none";
+
+      if (plat === "Instagram" || plat === "Threads") {
+        if (!isInitialLoad && phoneVal && handleEl.value.trim() === phoneVal) {
+          handleEl.value = "";
+        }
+        handleEl.placeholder = "Nhập @username (VD: @tiemgiay.thuba)";
+        hintEl.innerHTML = `Nhập chính xác <strong>@ID</strong> (không nhập tên hiển thị) để tiệm tìm đúng nick bạn nhé.`;
+        validateSocialHandleWarning();
+      } else if (plat === "Facebook") {
+        if (!isInitialLoad && phoneVal && handleEl.value.trim() === phoneVal) {
+          handleEl.value = "";
+        }
+        handleEl.placeholder = "Dán link Facebook hoặc Tên + mô tả avatar";
+        hintEl.innerHTML = `Nếu tên phổ biến, bạn dán <strong>link trang cá nhân</strong> hoặc ghi thêm <strong>đặc điểm ảnh đại diện</strong> (VD: Lan Anh - avatar ôm mèo).`;
+        if (fbHelperEl) fbHelperEl.style.display = "inline-flex";
+        validateSocialHandleWarning();
+      } else if (plat === "Zalo") {
+        handleEl.placeholder = "Số điện thoại Zalo (tự lấy SĐT ở trên)";
+        boxEl.classList.add("ok");
+        hintEl.innerHTML = `✓ Hệ thống tự dùng <strong>SĐT nhận hàng</strong> để tìm Zalo. Nếu Zalo bạn <strong>chặn tin nhắn người lạ</strong>, hãy điền thêm tài khoản dự phòng bên dưới nhé!`;
+        if (!isInitialLoad) {
+          if (!zaloManualEdited) {
+            handleEl.value = phoneVal;
+          }
+        } else if (!handleEl.value.trim() || handleEl.value.trim().startsWith("@") || /facebook\.com|instagram\.com|threads\./i.test(handleEl.value)) {
+          handleEl.value = phoneVal;
+        }
+      }
+    }
+
+    function handleBackupPlatformChange(skipSave = false) {
+      const bPlatEl = document.getElementById("custBackupPlatform");
+      const bHandleEl = document.getElementById("custBackupHandle");
+      if (!bPlatEl || !bHandleEl) return;
+
+      const bPlat = bPlatEl.value;
+      if (bPlat === "Facebook") {
+        bHandleEl.placeholder = "Link Facebook hoặc Tên + mô tả avatar";
+      } else {
+        bHandleEl.placeholder = "Nhập @username (khuyến khích)";
+      }
+      if (!skipSave) saveCustomerDraft();
+    }
+
+    function cleanBackupSocialInputOnBlur() {
+      const bPlatEl = document.getElementById("custBackupPlatform");
+      const bHandleEl = document.getElementById("custBackupHandle");
+      if (!bPlatEl || !bHandleEl) return;
+
+      const plat = bPlatEl.value;
+      let val = bHandleEl.value.trim();
+      if (!val) return;
+
+      if (plat === "Instagram") {
+        const m = val.match(/(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9._]+)/i);
+        if (m && m[1] && !["p", "reel", "stories", "explore", "direct"].includes(m[1].toLowerCase())) {
+          val = "@" + m[1];
+          bHandleEl.value = val;
+        } else if (!/^https?:\/\//i.test(val) && !/\s/.test(val) && !val.startsWith("@")) {
+          val = "@" + val;
+          bHandleEl.value = val;
+        }
+      } else if (plat === "Threads") {
+        const m = val.match(/(?:https?:\/\/)?(?:www\.)?threads\.(?:net|com)\/@?([a-zA-Z0-9._]+)/i);
+        if (m && m[1]) {
+          val = "@" + m[1];
+          bHandleEl.value = val;
+        } else if (!/^https?:\/\//i.test(val) && !/\s/.test(val) && !val.startsWith("@")) {
+          val = "@" + val;
+          bHandleEl.value = val;
+        }
+      }
+      saveCustomerDraft();
+    }
+
+    function validateSocialHandleWarning() {
+      const platEl = document.getElementById("custPlatform");
+      const handleEl = document.getElementById("custHandle");
+      const warnEl = document.getElementById("socialWarnText");
+      if (!platEl || !handleEl || !warnEl) return;
+
+      const plat = platEl.value;
+      const val = handleEl.value.trim();
+      warnEl.style.display = "none";
+      warnEl.textContent = "";
+
+      if (!val) return;
+
+      if (plat === "Instagram" || plat === "Threads") {
+        if (!/^https?:\/\//i.test(val) && /\s/.test(val)) {
+          warnEl.textContent = "Gợi ý: @ID không chứa dấu cách. Nếu bạn đang nhập tên hiển thị, hãy đổi sang @username nhé!";
+          warnEl.style.display = "block";
+        }
+      } else if (plat === "Facebook") {
+        const isUrl = /^https?:\/\//i.test(val) || /facebook\.com|fb\.com/i.test(val);
+        const words = val.split(/\s+/).filter(Boolean);
+        if (!isUrl && words.length <= 2 && val.length < 18) {
+          warnEl.textContent = "Gợi ý: Tên ngắn dễ bị trùng trên Facebook — bạn nên dán link trang cá nhân hoặc thêm mô tả avatar (VD: - áo trắng) nhé!";
+          warnEl.style.display = "block";
+        }
+      }
+    }
+
+    function cleanSocialInputOnBlur() {
+      const platEl = document.getElementById("custPlatform");
+      const handleEl = document.getElementById("custHandle");
+      if (!platEl || !handleEl) return;
+
+      const plat = platEl.value;
+      let val = handleEl.value.trim();
+      if (!val) return;
+
+      if (plat === "Instagram") {
+        const m = val.match(/(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-zA-Z0-9._]+)/i);
+        if (m && m[1] && !["p", "reel", "stories", "explore", "direct"].includes(m[1].toLowerCase())) {
+          val = "@" + m[1];
+          handleEl.value = val;
+        } else if (!/^https?:\/\//i.test(val) && !/\s/.test(val) && !val.startsWith("@")) {
+          val = "@" + val;
+          handleEl.value = val;
+        }
+      } else if (plat === "Threads") {
+        const m = val.match(/(?:https?:\/\/)?(?:www\.)?threads\.(?:net|com)\/@?([a-zA-Z0-9._]+)/i);
+        if (m && m[1]) {
+          val = "@" + m[1];
+          handleEl.value = val;
+        } else if (!/^https?:\/\//i.test(val) && !/\s/.test(val) && !val.startsWith("@")) {
+          val = "@" + val;
+          handleEl.value = val;
+        }
+      }
+      validateSocialHandleWarning();
+      saveCustomerDraft();
+    }
+
+    function handlePlatformChange() {
+      zaloManualEdited = false;
+      updateSocialPlatformUi(false);
+      saveCustomerDraft();
+    }
+
+    function handlePhoneInputSync() {
+      const platEl = document.getElementById("custPlatform");
+      const phoneEl = document.getElementById("custPhone");
+      const handleEl = document.getElementById("custHandle");
+      if (platEl && platEl.value === "Zalo" && phoneEl && handleEl && !zaloManualEdited) {
+        handleEl.value = phoneEl.value.trim();
+      }
+      saveCustomerDraft();
+    }
+
+    function handleSocialInput() {
+      const platEl = document.getElementById("custPlatform");
+      if (platEl && platEl.value === "Zalo") {
+        zaloManualEdited = true;
+      }
+      validateSocialHandleWarning();
+      saveCustomerDraft();
+    }
+
     function saveCustomerDraft() {
       try {
         const draft = {
@@ -1354,6 +1663,8 @@
           address: document.getElementById("custAddress")?.value || "",
           platform: document.getElementById("custPlatform")?.value || "Instagram",
           socialHandle: document.getElementById("custHandle")?.value || "",
+          backupPlatform: document.getElementById("custBackupPlatform")?.value || "Instagram",
+          backupHandle: document.getElementById("custBackupHandle")?.value || "",
           paymentMethod: selectedCheckoutPayment || "COD"
         };
         localStorage.setItem(CUSTOMER_STORAGE_KEY, JSON.stringify(draft));
@@ -1363,9 +1674,17 @@
     function loadCustomerDraft() {
       try {
         const raw = localStorage.getItem(CUSTOMER_STORAGE_KEY);
-        if (!raw) return;
+        if (!raw) {
+          updateSocialPlatformUi(true);
+          handleBackupPlatformChange(true);
+          return;
+        }
         const draft = JSON.parse(raw);
-        if (!draft || typeof draft !== "object") return;
+        if (!draft || typeof draft !== "object") {
+          updateSocialPlatformUi(true);
+          handleBackupPlatformChange(true);
+          return;
+        }
         if (draft.customerName && document.getElementById("custName")) {
           document.getElementById("custName").value = draft.customerName;
         }
@@ -1381,10 +1700,21 @@
         if (draft.socialHandle && document.getElementById("custHandle")) {
           document.getElementById("custHandle").value = draft.socialHandle;
         }
+        if (draft.backupPlatform && document.getElementById("custBackupPlatform")) {
+          document.getElementById("custBackupPlatform").value = draft.backupPlatform;
+        }
+        if (draft.backupHandle && document.getElementById("custBackupHandle")) {
+          document.getElementById("custBackupHandle").value = draft.backupHandle;
+        }
         if (draft.paymentMethod) {
           setCheckoutPaymentMethod(draft.paymentMethod, false);
         }
-      } catch (e) {}
+        handleBackupPlatformChange(true);
+        updateSocialPlatformUi(true);
+      } catch (e) {
+        updateSocialPlatformUi(true);
+        handleBackupPlatformChange(true);
+      }
     }
 
     function reconcileCartWithStock() {
@@ -1518,30 +1848,61 @@
       }, 2400);
     }
 
+    function openLightbox(src) {
+      if (!src) return;
+      const box = document.getElementById("imgLightbox");
+      const img = document.getElementById("lightboxImg");
+      if (!box || !img) return;
+      img.src = src;
+      box.classList.add("open");
+    }
+
+    function selectProdThumb(prodId, idx, url) {
+      const mainImg = document.getElementById("mainImg_" + prodId);
+      if (mainImg && url) mainImg.src = url;
+      const thumbs = Array.from(document.querySelectorAll("[data-thumb-prod]"))
+        .filter(el => el.getAttribute("data-thumb-prod") === String(prodId));
+      thumbs.forEach((el, i) => {
+        el.classList.toggle("active", i === idx);
+      });
+    }
+
     function formatSpecsHtml(specs) {
       const raw = String(specs || "").trim();
       if (!raw) return "";
-      const protectedText = raw.replace(/(\d)\.(\d)/g, "$1__DECIMAL__$2");
-      const lines = protectedText
+      const safe = raw.replace(/(\d)\.(\d)/g, "$1__DEC__$2");
+      const lines = safe
         .split(/[\r\n.]+/)
-        .map(s => s.replace(/__DECIMAL__/g, ".").trim())
+        .map(s => s.replace(/__DEC__/g, ".").trim())
         .filter(Boolean);
       if (!lines.length) return "";
-      return `<div class="prod-specs">${lines.map(line => `<div class="prod-spec-line">• ${escapeHtml(line)}.</div>`).join("")}</div>`;
+      return `<div class="prod-specs">${lines.map(line => `<div class="prod-spec-line">• ${escapeHtml(line)}</div>`).join("")}</div>`;
     }
 
-    function openLightbox(src) {
-      if (!src) return;
-      document.getElementById("lightboxImg").src = src;
-      document.getElementById("imgLightbox").classList.add("open");
-    }
+    function updatePromoBanner() {
+      const textEl = document.getElementById("promoBannerText");
+      if (!textEl) return;
+      const feeNum = Number(shipConfig.customerShipFee ?? 15000);
+      const feeText = feeNum === 0
+        ? "Miễn phí"
+        : (feeNum >= 1000 && feeNum % 1000 === 0 ? (feeNum / 1000) + "K" : formatVND(feeNum));
 
-    function selectProdThumb(prodId, idx, src) {
-      const mainImg = document.getElementById("mainImg_" + prodId);
-      if (mainImg) mainImg.src = src;
-      document.querySelectorAll(`[data-thumb-prod="${prodId}"]`).forEach((el, i) => {
-        el.classList.toggle("active", i === idx);
-      });
+      if (!shipConfig.freeshipEnabled) {
+        textEl.innerHTML = `Phí ship toàn quốc đồng giá <strong>${escapeHtml(feeText)}</strong>.`;
+        return;
+      }
+
+      const minNum = Number(shipConfig.freeshipMinOrder || 0);
+      const minText = minNum >= 1000 && minNum % 1000 === 0 ? (minNum / 1000) + "K" : formatVND(minNum);
+      const parts = [];
+      if (minNum > 0) parts.push(`đơn từ <strong>${escapeHtml(minText)}</strong>`);
+      if (shipConfig.freeshipKit) parts.push(`các <strong>Bộ kit</strong>`);
+
+      if (!parts.length) {
+        textEl.innerHTML = `Phí ship toàn quốc đồng giá <strong>${escapeHtml(feeText)}</strong>.`;
+      } else {
+        textEl.innerHTML = `Ship toàn quốc <strong>${escapeHtml(feeText)}</strong> — <strong>Freeship</strong> ${parts.join(" & ")}.`;
+      }
     }
 
     // -------------------------------------------------------------------------
@@ -1555,6 +1916,10 @@
           products = data.products;
           if (data.bankConfig) {
             bankConfig = data.bankConfig;
+          }
+          if (data.shipConfig) {
+            shipConfig = { ...shipConfig, ...data.shipConfig };
+            updatePromoBanner();
           }
           reconcileCartWithStock();
           renderCategories();
@@ -1872,7 +2237,7 @@
           return sum + (part ? Number(part.units || 0) * item.qty : 0);
         }
         if (item.id === prodId) {
-          return sum + (item.qty * item.baseUnitsPerQty);
+          return sum + Number(item.baseUnitsPerQty || 1) * item.qty;
         }
         return sum;
       }, 0);
@@ -1880,25 +2245,24 @@
 
     function addToCart(prodId, buyMode = "pack", qtyToAdd = 1) {
       const p = products.find(item => item.id === prodId);
-      if (!p || p.stock <= 0) return;
+      if (!p) return;
 
-      const isItem = p.productType === "item";
-      const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
-      const mode = (buyMode === "pack" && hasPack) ? "pack" : "unit";
+      const isPack = buyMode === "pack" && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
+      const mode = isPack ? "pack" : "unit";
       const baseUnitsPerQty = mode === "pack" ? Number(p.packSize) : 1;
-      const unitPrice = mode === "pack" ? Number(p.packPrice) : Number(p.unitPrice);
-      const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
-      const key = `${p.id}_${mode}`;
+      const unitLabel = mode === "pack" ? (p.packUnit || "gói") : p.baseUnit;
+      const price = mode === "pack" ? Number(p.packPrice) : Number(p.unitPrice);
+      const itemKey = `${p.id}__${mode}`;
 
-      const reservedElsewhere = getProductReservedBaseUnits(p.id, key);
-      const existing = cart.find(c => c.key === key);
+      const existing = cart.find(c => c.key === itemKey);
       const currentQty = existing ? existing.qty : 0;
-      const nextBaseUnits = reservedElsewhere + (currentQty + qtyToAdd) * baseUnitsPerQty;
+      const otherReservedUnits = getProductReservedBaseUnits(p.id, itemKey);
+      const totalNeededUnits = otherReservedUnits + (currentQty + qtyToAdd) * baseUnitsPerQty;
 
-      if (nextBaseUnits > p.stock) {
-        const remainUnits = Math.max(0, p.stock - reservedElsewhere);
-        const maxPossible = Math.floor(remainUnits / baseUnitsPerQty);
-        showToast(`Kho chỉ còn đủ tối đa ${maxPossible} ${unitLabel}`);
+      if (totalNeededUnits > p.stock) {
+        const remainUnits = Math.max(0, p.stock - otherReservedUnits);
+        const maxQty = Math.floor(remainUnits / baseUnitsPerQty);
+        showToast(`Kho chỉ còn đủ tối đa ${maxQty} ${unitLabel} ${p.name}`);
         return;
       }
 
@@ -1906,60 +2270,56 @@
         existing.qty += qtyToAdd;
       } else {
         cart.push({
-          key,
+          key: itemKey,
           id: p.id,
           name: p.name,
+          category: p.category,
           buyMode: mode,
-          unitLabel,
-          price: unitPrice,
-          baseUnitsPerQty,
+          unitLabel: unitLabel,
+          price: price,
+          baseUnitsPerQty: baseUnitsPerQty,
           qty: qtyToAdd
         });
       }
 
       saveCartToStorage();
       updateCartBadge();
-      showToast(`Đã thêm ${p.name} (${unitLabel})`);
+      showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name}`);
     }
 
-    function updateCartQty(key, delta) {
-      const item = cart.find(c => c.key === key);
-      if (!item) return;
+    function updateCartQty(itemKey, delta) {
+      const idx = cart.findIndex(c => c.key === itemKey);
+      if (idx === -1) return;
 
+      const item = cart[idx];
       const nextQty = item.qty + delta;
+
       if (nextQty <= 0) {
-        cart = cart.filter(c => c.key !== key);
+        cart.splice(idx, 1);
       } else if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
         for (let i = 0; i < item.mixBreakdown.length; i++) {
           const part = item.mixBreakdown[i];
           const p = products.find(prod => prod.id === part.id);
-          if (!p) continue;
-          const reservedElsewhere = getProductReservedBaseUnits(p.id, key);
-          if (reservedElsewhere + nextQty * Number(part.units || 0) > p.stock) {
-            showToast(`Mẫu ${p.name} trong gói Mix không đủ thêm số lượng`);
+          const otherReserved = getProductReservedBaseUnits(part.id, itemKey);
+          if (!p || otherReserved + nextQty * Number(part.units) > p.stock) {
+            showToast(`Kho không đủ giấy ${part.name} để tăng thêm gói Mix`);
             return;
           }
         }
         item.qty = nextQty;
       } else {
         const p = products.find(prod => prod.id === item.id);
-        const reservedElsewhere = getProductReservedBaseUnits(item.id, key);
-        if (p && (reservedElsewhere + nextQty * item.baseUnitsPerQty) > p.stock) {
+        const otherReserved = getProductReservedBaseUnits(item.id, itemKey);
+        if (p && otherReserved + nextQty * item.baseUnitsPerQty > p.stock) {
           showToast(`Kho chỉ còn sẵn ${p.stock} ${p.baseUnit}`);
           return;
         }
         item.qty = nextQty;
       }
+
       saveCartToStorage();
       updateCartBadge();
       renderCartDrawer();
-    }
-
-    function calculateTotals() {
-      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-      const hasKit = cart.some(item => item.name.toLowerCase().includes("kit"));
-      const shipFee = (subtotal === 0 || subtotal >= 200000 || hasKit) ? 0 : 15000;
-      return { subtotal, shipFee, total: subtotal + shipFee };
     }
 
     function updateCartBadge() {
@@ -1967,8 +2327,50 @@
       document.getElementById("cartBadge").textContent = totalItems;
     }
 
+    function calculateTotals() {
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const hasKit = cart.some(item => {
+        const text = (String(item.name || "") + " " + String(item.category || "")).toLowerCase();
+        return text.includes("kit");
+      });
+      const minOrder = Number(shipConfig.freeshipMinOrder || 0);
+      const qualifiesFree = Boolean(shipConfig.freeshipEnabled) && (
+        (minOrder > 0 && subtotal >= minOrder) ||
+        (Boolean(shipConfig.freeshipKit) && hasKit)
+      );
+      const shipFee = qualifiesFree ? 0 : Number(shipConfig.customerShipFee ?? 15000);
+      return { subtotal, shipFee, total: subtotal + shipFee };
+    }
+
+    function setCheckoutPaymentMethod(method, persist = true) {
+      selectedCheckoutPayment = method === "Chuyển khoản trước" ? "Chuyển khoản trước" : "COD";
+      const codBtn = document.getElementById("payChoiceCod");
+      const qrBtn = document.getElementById("payChoiceQr");
+      if (codBtn) codBtn.classList.toggle("active", selectedCheckoutPayment === "COD");
+      if (qrBtn) qrBtn.classList.toggle("active", selectedCheckoutPayment === "Chuyển khoản trước");
+      if (persist) saveCustomerDraft();
+    }
+
+    function buildVietQrUrl(amount, orderId) {
+      if (!bankConfig || !bankConfig.bankId || !bankConfig.accountNo) return "";
+      const bank = encodeURIComponent(bankConfig.bankId.trim());
+      const acc = encodeURIComponent(bankConfig.accountNo.trim());
+      const addInfo = encodeURIComponent(`Thanh toan ${orderId}`);
+      const accName = encodeURIComponent(bankConfig.accountName || "");
+      return `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${Math.round(amount)}&addInfo=${addInfo}&accountName=${accName}`;
+    }
+
+    function copyTextToClipboard(text, okMsg = "Đã sao chép!") {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast(okMsg)).catch(() => showToast(okMsg));
+      } else {
+        showToast(okMsg);
+      }
+    }
+
     function openCart() {
       renderCartDrawer();
+      updateSocialPlatformUi(true);
       document.getElementById("cartDrawer").classList.add("open");
     }
 
@@ -1982,7 +2384,7 @@
       const formEl = document.getElementById("checkoutForm");
 
       if (!cart.length) {
-        listEl.innerHTML = `<div style="text-align:center; padding:24px 12px; color:var(--text-muted); font-size:14px;">Giỏ hàng đang trống. Bạn có thể chọn giấy ở Danh mục hoặc nhờ trợ lý tư vấn nhé!</div>`;
+        listEl.innerHTML = `<div style="text-align:center; padding:26px 12px; color:var(--text-muted); font-size:13.5px;">Giỏ hàng đang trống.<br/>Bạn có thể hỏi trợ lý AI hoặc chọn mẫu ở tab <strong>Danh mục</strong> nhé!</div>`;
         sumBox.style.display = "none";
         formEl.style.display = "none";
         return;
@@ -1992,14 +2394,14 @@
         const safeKey = escapeAttrJs(item.key);
         return `
           <div class="cart-item">
-            <div>
+            <div style="flex:1; min-width:0;">
               <div style="font-weight:600; font-size:13.5px;">${escapeHtml(item.name)}</div>
               <div style="font-size:12px; color:var(--text-muted);">${formatVND(item.price)} / ${escapeHtml(item.unitLabel)}</div>
             </div>
             <div class="qty-box">
-              <button type="button" class="qty-btn" aria-label="Giảm số lượng ${escapeHtml(item.name)}" onclick="updateCartQty('${safeKey}', -1)">−</button>
-              <span style="min-width:18px; text-align:center; font-weight:600; font-size:13.5px;">${item.qty}</span>
-              <button type="button" class="qty-btn" aria-label="Tăng số lượng ${escapeHtml(item.name)}" onclick="updateCartQty('${safeKey}', 1)">+</button>
+              <button class="qty-btn" aria-label="Giảm số lượng ${escapeHtml(item.name)}" onclick="updateCartQty('${safeKey}', -1)">−</button>
+              <span style="min-width:20px; text-align:center; font-weight:600; font-size:13.5px;">${item.qty}</span>
+              <button class="qty-btn" aria-label="Tăng số lượng ${escapeHtml(item.name)}" onclick="updateCartQty('${safeKey}', 1)">+</button>
             </div>
           </div>
         `;
@@ -2007,59 +2409,61 @@
 
       const { subtotal, shipFee, total } = calculateTotals();
       document.getElementById("sumSubtotal").textContent = formatVND(subtotal);
-      document.getElementById("sumShip").textContent = shipFee === 0 ? "Miễn phí" : formatVND(shipFee);
+      document.getElementById("sumShip").textContent = shipFee === 0 ? "Miễn phí (0đ)" : formatVND(shipFee);
       document.getElementById("sumTotal").textContent = formatVND(total);
 
       sumBox.style.display = "flex";
       formEl.style.display = "flex";
     }
 
-    function setCheckoutPaymentMethod(method, persist = true) {
-      selectedCheckoutPayment = method;
-      document.getElementById("payChoiceCod").classList.toggle("active", method === "COD");
-      document.getElementById("payChoiceQr").classList.toggle("active", method !== "COD");
-      if (persist) saveCustomerDraft();
-    }
-
     async function submitOrder(e) {
       e.preventDefault();
       if (!cart.length) return;
+
+      cleanSocialInputOnBlur();
+      cleanBackupSocialInputOnBlur();
 
       const btn = document.getElementById("submitOrderBtn");
       btn.disabled = true;
       btn.textContent = "Đang gửi đơn hàng...";
 
       const { subtotal, shipFee, total } = calculateTotals();
-      const chosenPayMethod = selectedCheckoutPayment || "COD";
-      const transcriptPayload = chatHistory
-        .slice(-24)
-        .map(m => ({ role: m.role, text: String(m.text || "").slice(0, 600) }));
+      const chosenPlatform = document.getElementById("custPlatform").value;
+      const rawPhone = document.getElementById("custPhone").value.trim();
+      let finalSocialHandle = document.getElementById("custHandle").value.trim();
+      if (chosenPlatform === "Zalo" && !finalSocialHandle) {
+        finalSocialHandle = rawPhone;
+      }
+
+      const backupPlatform = chosenPlatform === "Zalo"
+        ? (document.getElementById("custBackupPlatform")?.value || "Instagram")
+        : "";
+      const backupHandle = chosenPlatform === "Zalo"
+        ? (document.getElementById("custBackupHandle")?.value.trim() || "")
+        : "";
 
       const orderPayload = {
         customerName: document.getElementById("custName").value.trim(),
-        phone: document.getElementById("custPhone").value.trim(),
+        phone: rawPhone,
         address: document.getElementById("custAddress").value.trim(),
-        platform: document.getElementById("custPlatform").value,
-        socialHandle: document.getElementById("custHandle").value.trim(),
+        platform: chosenPlatform,
+        socialHandle: finalSocialHandle,
+        backupPlatform: backupPlatform,
+        backupHandle: backupHandle,
+        paymentMethod: selectedCheckoutPayment,
         note: document.getElementById("custNote").value.trim(),
-        paymentMethod: chosenPayMethod,
         sessionId: chatSessionId,
-        chatTranscript: transcriptPayload,
-        items: cart.map(c => {
-          const baseObj = {
-            id: c.id,
-            name: c.name,
-            buyMode: c.buyMode,
-            unitLabel: c.unitLabel,
-            qty: c.qty,
-            price: c.price,
-            baseUnits: c.qty * c.baseUnitsPerQty
-          };
-          if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
-            baseObj.mixBreakdown = c.mixBreakdown;
-          }
-          return baseObj;
-        }),
+        chatTranscript: chatHistory.slice(-20),
+        items: cart.map(c => ({
+          id: c.id,
+          name: c.name,
+          buyMode: c.buyMode,
+          unitLabel: c.unitLabel,
+          qty: c.qty,
+          price: c.price,
+          baseUnits: c.qty * c.baseUnitsPerQty,
+          mixBreakdown: c.mixBreakdown || null
+        })),
         subtotal,
         shipFee,
         total
@@ -2068,274 +2472,283 @@
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ action: "create_order", order: orderPayload })
         });
         const data = await res.json();
 
-        if (!data.ok) throw new Error(data.error || "Gửi đơn thất bại");
+        if (data.ok) {
+          saveCustomerDraft();
+          cart = [];
+          saveCartToStorage();
+          updateCartBadge();
+          closeCart();
+          switchView("chat");
+          const savedSocialDisplay = data.socialHandle || finalSocialHandle;
+          const confirmMsg = selectedCheckoutPayment === "Chuyển khoản trước"
+            ? `Cảm ơn ${orderPayload.customerName}! Đơn hàng #${data.orderId} (${formatVND(total)}) đã được ghi nhận.\nBạn quét mã VietQR bên dưới để thanh toán, sau đó bấm xác nhận để tiệm gói hàng nhé!`
+            : `Cảm ơn ${orderPayload.customerName}! Đơn hàng #${data.orderId} (${formatVND(total)} - Thanh toán COD) đã được gửi về tiệm.\nTiệm sẽ nhắn xác nhận lại qua ${orderPayload.platform} (${savedSocialDisplay}) trước khi gói hàng nhé!`;
+          appendBotMessage(confirmMsg);
 
-        const createdOrderId = data.orderId || "";
-        cart = [];
-        saveCartToStorage();
-        updateCartBadge();
-        closeCart();
-        switchView("chat");
-
-        const isQrChosen = chosenPayMethod === "Chuyển khoản trước";
-        const confirmText = `Dạ tiệm đã nhận được đơn hàng #${createdOrderId} của ${orderPayload.customerName} rồi ạ!\n• Tổng đơn: ${formatVND(total)} (${shipFee === 0 ? "Freeship" : "gồm 15K ship"})\n• Thanh toán: ${isQrChosen ? "Chuyển khoản VietQR (Chờ xác nhận)" : "Thanh toán khi nhận hàng (COD)"}\n• Tiệm sẽ nhắn xác nhận qua ${orderPayload.platform} (${orderPayload.socialHandle}) trước khi gói gửi đi ạ.`;
-
-        appendBotMessage(confirmText, {
-          showContactButtons: false
-        });
-
-        if (isQrChosen) {
-          appendVietQrMessage(createdOrderId, total);
+          if (selectedCheckoutPayment === "Chuyển khoản trước") {
+            appendVietQrCard(data.orderId, total);
+          }
+          appendProactiveOrderConfirmCard(data.orderId, {
+            ...orderPayload,
+            socialHandle: savedSocialDisplay
+          });
+          loadProducts();
+        } else {
+          showToast("Lỗi gửi đơn: " + (data.error || "Thử lại nhé"));
         }
-
-        loadProducts();
       } catch (err) {
-        showToast("Có lỗi khi gửi đơn: " + err.message);
+        showToast("Không thể kết nối máy chủ. Bạn thử lại nhé!");
       } finally {
         btn.disabled = false;
         btn.textContent = "Gửi đơn đặt hàng";
       }
     }
 
-    async function confirmCustomerTransferSent(orderId, btn) {
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "✓ Đã ghi nhận bạn đã chuyển khoản";
-      }
-      showToast("Cảm ơn bạn! Tiệm sẽ kiểm tra và xác nhận đơn ngay ạ");
-      try {
-        await fetch(SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            action: "notify_transfer_sent",
-            orderId: orderId
-          })
-        });
-      } catch (err) {
-        console.error("Lỗi báo đã chuyển khoản:", err);
-      }
-    }
-
     // -------------------------------------------------------------------------
-    // VIETQR ĐỘNG & TRA CỨU ĐƠN HÀNG TRONG CHAT
+    // 3. CHATBOT & TRA CỨU ĐƠN HÀNG & VIETQR
     // -------------------------------------------------------------------------
-    function appendVietQrMessage(orderId, amount, customBank = null) {
-      const cfg = customBank || bankConfig || {};
+    function appendVietQrCard(orderId, totalAmount) {
       const container = document.getElementById("chatMessages");
       const row = document.createElement("div");
       row.className = "msg-row bot";
 
-      const transferNote = `${orderId}`;
-      const hasBank = Boolean(cfg.bankId && cfg.accountNo);
+      const qrUrl = buildVietQrUrl(totalAmount, orderId);
+      const transferContent = `Thanh toan ${orderId}`;
+      const safeOrderId = escapeAttrJs(orderId);
+      const safeAccNo = escapeAttrJs(bankConfig.accountNo || "");
+      const safeContent = escapeAttrJs(transferContent);
 
-      if (!hasBank) {
-        const box = document.createElement("div");
-        box.className = "vietqr-box";
-        box.innerHTML = `
-          <div style="font-weight:700; color:var(--primary); font-size:13.5px; margin-bottom:4px;">Thông tin chuyển khoản đơn #${escapeHtml(orderId)}</div>
-          <div style="font-size:12.5px; color:var(--text-muted);">
-            Tiệm chưa bật mã QR tự động trên web — bạn nhắn trực tiếp qua Facebook/Instagram/Threads giúp tiệm để nhận số tài khoản chuyển khoản nhanh ạ!
+      const card = document.createElement("div");
+      card.className = "vietqr-box";
+
+      if (qrUrl) {
+        card.innerHTML = `
+          <div style="font-weight:700; font-size:13.5px; color:var(--primary); text-align:center;">
+            Mã VietQR thanh toán đơn #${escapeHtml(orderId)}
           </div>
-          <div class="social-links" style="margin-top:8px;">
-            <a href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
-            <a href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
-            <a href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer" class="social-btn">Threads</a>
+          <img src="${escapeHtml(qrUrl)}" alt="Mã VietQR" class="vietqr-img" />
+          <div class="vietqr-info-row">
+            <span style="color:var(--text-muted);">Ngân hàng:</span>
+            <strong>${escapeHtml(bankConfig.bankId)}</strong>
+          </div>
+          <div class="vietqr-info-row">
+            <span style="color:var(--text-muted);">Số tài khoản:</span>
+            <span><strong>${escapeHtml(bankConfig.accountNo)}</strong> <button type="button" class="btn-add-mini" style="padding:2px 6px; font-size:11px;" onclick="copyTextToClipboard('${safeAccNo}', 'Đã copy STK')">Copy</button></span>
+          </div>
+          ${bankConfig.accountName ? `<div class="vietqr-info-row"><span style="color:var(--text-muted);">Chủ TK:</span><strong>${escapeHtml(bankConfig.accountName)}</strong></div>` : ""}
+          <div class="vietqr-info-row">
+            <span style="color:var(--text-muted);">Số tiền:</span>
+            <strong style="color:var(--primary);">${formatVND(totalAmount)}</strong>
+          </div>
+          <div class="vietqr-info-row">
+            <span style="color:var(--text-muted);">Nội dung CK:</span>
+            <span><strong>${escapeHtml(transferContent)}</strong> <button type="button" class="btn-add-mini" style="padding:2px 6px; font-size:11px;" onclick="copyTextToClipboard('${safeContent}', 'Đã copy nội dung CK')">Copy</button></span>
+          </div>
+          <button type="button" id="btnConfirmPaid_${escapeHtml(orderId)}" class="submit-order-btn" style="margin-top:9px; padding:9px; font-size:13px;" onclick="confirmCustomerTransferred('${safeOrderId}')">
+            ✓ Tôi đã chuyển khoản xong
+          </button>
+        `;
+      } else {
+        card.innerHTML = `
+          <div style="font-weight:700; font-size:13.5px; color:var(--primary);">
+            Chuyển khoản cho đơn #${escapeHtml(orderId)} (${formatVND(totalAmount)})
+          </div>
+          <div style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">
+            Tiệm chưa cài sẵn mã QR tự động trên web — bạn nhắn trực tiếp cho tiệm qua Facebook/Instagram/Threads bên dưới để nhận số tài khoản nhé!
           </div>
         `;
-        row.appendChild(box);
-        container.appendChild(row);
-        container.scrollTop = container.scrollHeight;
-        return;
       }
 
-      const qrUrl = `https://img.vietqr.io/image/${encodeURIComponent(cfg.bankId)}-${encodeURIComponent(cfg.accountNo)}-compact2.png?amount=${encodeURIComponent(amount)}&addInfo=${encodeURIComponent(transferNote)}&accountName=${encodeURIComponent(cfg.accountName || "")}`;
-
-      const box = document.createElement("div");
-      box.className = "vietqr-box";
-      box.innerHTML = `
-        <div style="font-weight:700; color:var(--primary); font-size:13.5px; text-align:center;">Quét mã VietQR để chuyển khoản</div>
-        <img src="${escapeHtml(qrUrl)}" alt="Mã VietQR đơn ${escapeHtml(orderId)}" class="vietqr-img" onclick="openLightbox(this.src)" />
-        <div class="vietqr-info-row">
-          <span style="color:var(--text-muted);">Ngân hàng:</span>
-          <strong>${escapeHtml(cfg.bankId)}</strong>
-        </div>
-        <div class="vietqr-info-row">
-          <span style="color:var(--text-muted);">Số tài khoản:</span>
-          <span>
-            <strong>${escapeHtml(cfg.accountNo)}</strong>
-            <button type="button" class="btn-add-mini" style="padding:2px 7px; font-size:11px; margin-left:4px;" onclick="copyQrField('${escapeAttrJs(cfg.accountNo)}', 'Đã copy số tài khoản')">Copy</button>
-          </span>
-        </div>
-        ${cfg.accountName ? `
-          <div class="vietqr-info-row">
-            <span style="color:var(--text-muted);">Chủ TK:</span>
-            <strong>${escapeHtml(cfg.accountName)}</strong>
-          </div>
-        ` : ""}
-        <div class="vietqr-info-row">
-          <span style="color:var(--text-muted);">Số tiền:</span>
-          <strong style="color:var(--primary);">${formatVND(amount)}</strong>
-        </div>
-        <div class="vietqr-info-row">
-          <span style="color:var(--text-muted);">Nội dung CK:</span>
-          <span>
-            <strong>${escapeHtml(transferNote)}</strong>
-            <button type="button" class="btn-add-mini" style="padding:2px 7px; font-size:11px; margin-left:4px;" onclick="copyQrField('${escapeAttrJs(transferNote)}', 'Đã copy nội dung chuyển khoản')">Copy</button>
-          </span>
-        </div>
-        <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
-          <button type="button" class="submit-order-btn" style="padding:9px; font-size:12.5px; background:var(--accent);" onclick="confirmCustomerTransferSent('${escapeAttrJs(orderId)}', this)">✓ Tôi đã chuyển khoản xong</button>
-        </div>
-      `;
-      row.appendChild(box);
+      row.appendChild(card);
       container.appendChild(row);
       container.scrollTop = container.scrollHeight;
     }
 
-    function copyQrField(val, msg) {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(val).then(() => showToast(msg));
+    function appendProactiveOrderConfirmCard(orderId, orderPayload) {
+      const container = document.getElementById("chatMessages");
+      if (!container) return;
+
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+
+      const plat = String(orderPayload.platform || "").trim();
+      const handle = String(orderPayload.socialHandle || "").trim();
+      const customerName = String(orderPayload.customerName || "").trim();
+      const backupPlatform = String(orderPayload.backupPlatform || "").trim();
+      const backupHandle = String(orderPayload.backupHandle || "").trim();
+      const confirmDraftText = `Chào tiệm, mình vừa đặt đơn #${orderId} (${customerName} - ${handle}) trên web, tiệm xác nhận giúp mình nhé!`;
+      const safeDraft = escapeAttrJs(confirmDraftText);
+
+      let directBtnHtml = "";
+      if (plat === "Instagram") {
+        directBtnHtml = `
+          <a class="order-confirm-cta" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer" onclick="copyTextToClipboard('${safeDraft}', 'Đã copy mã đơn — dán vào tin nhắn Instagram cho tiệm nhé!')">
+            Nhắn xác nhận ngay qua Instagram tiệm ↗
+          </a>
+        `;
+      } else if (plat === "Threads") {
+        directBtnHtml = `
+          <a class="order-confirm-cta" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer" onclick="copyTextToClipboard('${safeDraft}', 'Đã copy mã đơn — dán vào tin nhắn Threads cho tiệm nhé!')">
+            Nhắn xác nhận ngay qua Threads tiệm ↗
+          </a>
+        `;
+      } else if (plat === "Facebook") {
+        directBtnHtml = `
+          <a class="order-confirm-cta" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer" onclick="copyTextToClipboard('${safeDraft}', 'Đã copy mã đơn — dán vào tin nhắn Facebook cho tiệm nhé!')">
+            Nhắn xác nhận ngay qua Facebook tiệm ↗
+          </a>
+        `;
       } else {
-        showToast(msg);
+        const zaloBackupNote = backupHandle
+          ? `Tiệm đã lưu số Zalo của bạn kèm kênh dự phòng <strong>${escapeHtml(backupPlatform)} (${escapeHtml(backupHandle)})</strong>. Nếu Zalo bạn đang bật chặn tin nhắn người lạ, bạn cũng có thể bấm nhắn trước cho tiệm qua nút bên dưới nhé:`
+          : `Tiệm sẽ nhắn xác nhận qua <strong>Zalo (${escapeHtml(handle)})</strong>. Nếu Zalo bạn đang bật <strong>chặn tin nhắn từ người lạ</strong>, bạn bấm nhắn trước cho tiệm qua kênh bên dưới nhé:`;
+
+        directBtnHtml = `
+          <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:7px;">
+            ${zaloBackupNote}
+          </div>
+          <div class="social-links">
+            <a class="social-btn" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer" onclick="copyTextToClipboard('${safeDraft}', 'Đã copy mã đơn!')">Instagram</a>
+            <a class="social-btn" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer" onclick="copyTextToClipboard('${safeDraft}', 'Đã copy mã đơn!')">Threads</a>
+            <a class="social-btn" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer" onclick="copyTextToClipboard('${safeDraft}', 'Đã copy mã đơn!')">Facebook</a>
+          </div>
+        `;
       }
+
+      const card = document.createElement("div");
+      card.className = "order-confirm-box";
+      card.innerHTML = `
+        <div class="order-confirm-title">Muốn tiệm duyệt & gói đơn nhanh hơn?</div>
+        <div class="order-confirm-desc">
+          Hệ thống sẽ tự sao chép tin nhắn kèm mã đơn <strong>#${escapeHtml(orderId)}</strong> để bạn gửi cho tiệm chỉ với 1 chạm (tránh trường hợp tin nhắn từ tiệm rơi vào mục Tin nhắn chờ):
+        </div>
+        ${directBtnHtml}
+      `;
+
+      row.appendChild(card);
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    async function confirmCustomerTransferred(orderId) {
+      const btn = document.getElementById("btnConfirmPaid_" + orderId);
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Đang báo cho tiệm...";
+      }
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "notify_transfer_sent", orderId })
+        });
+      } catch (e) {}
+      if (btn) {
+        btn.textContent = "✓ Đã báo tiệm kiểm tra chuyển khoản";
+        btn.style.background = "var(--accent)";
+      }
+      appendBotMessage(`Tiệm đã ghi nhận bạn chuyển khoản cho đơn #${orderId} rồi ạ! Tiệm sẽ kiểm tra tài khoản và nhắn xác nhận gói hàng ngay nhé.`);
     }
 
     function openLookupOrderModal() {
-      document.getElementById("lookupQueryInput").value = "";
-      document.getElementById("lookupOrderModal").classList.add("open");
-      setTimeout(() => document.getElementById("lookupQueryInput").focus(), 100);
+      const modal = document.getElementById("lookupOrderModal");
+      if (!modal) return;
+      modal.classList.add("open");
+      setTimeout(() => {
+        const inp = document.getElementById("lookupQueryInput");
+        if (inp) inp.focus();
+      }, 80);
     }
 
     function closeLookupOrderModal() {
-      document.getElementById("lookupOrderModal").classList.remove("open");
-    }
-
-    function detectTrackingCarrier(rawCode) {
-      const code = String(rawCode || "").trim().toUpperCase().replace(/\s+/g, "");
-      if (!code) return { carrier: "vận đơn", url: "" };
-      if (/^(SPX|VN2\d)/.test(code)) {
-        return { carrier: "SPX", url: `https://spx.vn/track?${encodeURIComponent(code)}` };
-      }
-      if (/^(GHTK|S\d{5,})/.test(code)) {
-        return { carrier: "GHTK", url: `https://i.ghtk.vn/${encodeURIComponent(code)}` };
-      }
-      if (/^(GY|GA|G8)[A-Z0-9]{5,}$/.test(code)) {
-        return { carrier: "GHN", url: `https://donhang.ghn.vn/?order_code=${encodeURIComponent(code)}` };
-      }
-      if (/^(JT|84\d{8,10}|85\d{8,10}|86\d{8,10})/.test(code)) {
-        return { carrier: "J&T", url: `https://jtexpress.vn/vi/tracking?type=track&billcode=${encodeURIComponent(code)}` };
-      }
-      if (/^[A-Z]{2}\d{9}VN$/.test(code)) {
-        return { carrier: "VNPost", url: `https://vnpost.vn/vi-vn/dinh-vi/buu-pham?key=${encodeURIComponent(code)}` };
-      }
-      if (/^(NJV|NVVN)/.test(code)) {
-        return { carrier: "Ninja Van", url: `https://www.ninjavan.co/vi-vn/tracking?id=${encodeURIComponent(code)}` };
-      }
-      if (/^(BEST|50\d{10,}|51\d{10,})/.test(code)) {
-        return { carrier: "BEST", url: `https://www.best-inc.vn/track?bills=${encodeURIComponent(code)}` };
-      }
-      if (/^(VTP|\d{10,13})$/.test(code)) {
-        return { carrier: "Viettel Post", url: `https://viettelpost.com.vn/tra-cuu-hanh-trinh-don/` };
-      }
-      return { carrier: "vận đơn", url: `https://www.google.com/search?q=${encodeURIComponent("tra cuu van don " + code)}` };
+      const modal = document.getElementById("lookupOrderModal");
+      if (modal) modal.classList.remove("open");
     }
 
     async function submitOrderLookup(e) {
       e.preventDefault();
-      const query = document.getElementById("lookupQueryInput").value.trim();
-      if (!query) return;
-
+      const inp = document.getElementById("lookupQueryInput");
       const btn = document.getElementById("lookupSubmitBtn");
-      btn.disabled = true;
-      btn.textContent = "Đang tra cứu...";
+      const q = (inp ? inp.value : "").trim();
+      if (!q) return;
 
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Đang tìm đơn...";
+      }
       closeLookupOrderModal();
       switchView("chat");
-      appendUserMessage(`Kiểm tra đơn hàng: ${query}`);
-      const typingEl = appendTyping();
+      appendUserMessage(`Kiểm tra đơn hàng: ${q}`);
+      const typingEl = appendTypingIndicator();
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            action: "lookup_order",
-            query,
-            sessionId: chatSessionId
-          })
+          body: JSON.stringify({ action: "lookup_order", query: q, sessionId: chatSessionId })
         });
         const data = await res.json();
         typingEl.remove();
 
-        if (!data.ok) throw new Error(data.error || "Không tra cứu được");
-        if (data.bankConfig) bankConfig = data.bankConfig;
-
-        const orders = data.orders || [];
-        if (!orders.length) {
+        if (!data.ok || !Array.isArray(data.orders) || !data.orders.length) {
           appendBotMessage(
-            `Dạ tiệm chưa tìm thấy đơn hàng nào khớp với "${query}" ạ. Bạn kiểm tra lại đúng số điện thoại lúc đặt hàng hoặc nhắn trực tiếp cho tiệm hỗ trợ nhé!`,
-            { showContactButtons: true, contactPrefill: `Mình cần kiểm tra đơn hàng (${query})` }
+            `Tiệm chưa tìm thấy đơn hàng nào khớp với "${q}" ạ. Bạn kiểm tra lại SĐT/mã đơn hoặc nhắn trực tiếp cho tiệm nhé!`,
+            { showContactButtons: true, contactPrefill: `Mình cần kiểm tra đơn hàng (${q})` }
           );
           return;
         }
 
-        appendBotMessage(`Dạ tiệm tìm thấy ${orders.length} đơn hàng gần nhất của bạn đây ạ:`, {
-          showContactButtons: false
-        });
+        if (data.bankConfig) bankConfig = data.bankConfig;
 
-        const container = document.getElementById("chatMessages");
-        orders.forEach(o => {
+        appendBotMessage(`Tiệm tìm thấy ${data.orders.length} đơn hàng của bạn đây ạ:`);
+        data.orders.forEach(o => {
+          const container = document.getElementById("chatMessages");
           const row = document.createElement("div");
           row.className = "msg-row bot";
-          const isPaid = o.paymentMethod === "Đã thanh toán CK";
-          const isPreTransfer = o.paymentMethod === "Chuyển khoản trước" || o.paymentMethod === "Khách báo đã CK";
-          const statusIsDone = o.status === "Hoàn thành" || o.status === "Đang giao" || o.status === "Đã xác nhận";
-          const trackInfo = o.trackingCode ? detectTrackingCarrier(o.trackingCode) : null;
+
+          const isCancelled = o.status === "Đã hủy";
+          const trackingHtml = o.trackingCode
+            ? `<div style="margin-top:6px; padding:6px 8px; background:var(--accent-soft); border-radius:8px; color:#2E5A36;">
+                Mã vận đơn: <strong>${escapeHtml(o.trackingCode)}</strong>
+                <button type="button" class="btn-add-mini" style="margin-left:6px; padding:2px 6px; font-size:11px;" onclick="copyTextToClipboard('${escapeAttrJs(o.trackingCode)}', 'Đã copy mã vận đơn')">Copy</button>
+              </div>`
+            : `<div style="margin-top:4px; font-size:12px; color:var(--text-muted);">Mã vận đơn: <em>Đang cập nhật khi gửi bưu cục</em></div>`;
 
           const card = document.createElement("div");
           card.className = "lookup-card";
           card.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; border-bottom:1px solid var(--border); padding-bottom:6px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; margin-bottom:5px;">
               <strong style="color:var(--primary);">#${escapeHtml(o.orderId)}</strong>
-              <span class="lookup-status-pill ${statusIsDone ? '' : 'warn'}">${escapeHtml(o.status)}</span>
+              <span class="lookup-status-pill ${isCancelled ? 'warn' : ''}">${escapeHtml(o.status)}</span>
             </div>
-            <div style="margin-bottom:3px;"><strong>Người nhận:</strong> ${escapeHtml(o.customerName)} (${escapeHtml(o.phoneMasked)})</div>
-            <div style="margin-bottom:3px;"><strong>Ngày đặt:</strong> ${escapeHtml(o.createdAt)}</div>
-            <div style="margin-bottom:4px;"><strong>Sản phẩm:</strong> ${escapeHtml(o.itemsSummary)}</div>
-            <div style="margin-bottom:4px;"><strong>Tổng đơn:</strong> ${formatVND(o.total)} — <span style="color:var(--primary); font-weight:600;">${isPaid ? "Đã thanh toán CK (0đ COD)" : (isPreTransfer ? "Chuyển khoản VietQR" : "Thu hộ COD: " + formatVND(o.total))}</span></div>
-            ${o.trackingCode ? `
-              <div style="background:var(--accent-soft); color:#2E5A36; padding:6px 9px; border-radius:8px; font-weight:600; margin-top:6px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <span>Mã vận đơn: ${escapeHtml(o.trackingCode)}</span>
-                <a href="${escapeHtml(trackInfo.url)}" target="_blank" rel="noopener noreferrer" onclick="copyQrField('${escapeAttrJs(o.trackingCode)}', 'Đã copy mã vận đơn')" style="background:#2E5A36; color:#fff; text-decoration:none; padding:4px 9px; border-radius:6px; font-size:11.5px; white-space:nowrap;">Tra ${escapeHtml(trackInfo.carrier)} ↗</a>
-              </div>
-            ` : ""}
-            ${(!isPaid && isPreTransfer && o.status !== "Đã hủy") ? `<button type="button" class="btn-order" style="width:100%; margin-top:8px;" onclick="appendVietQrMessage('${escapeAttrJs(o.orderId)}', ${Number(o.total || 0)})">📲 Hiện lại mã QR chuyển khoản</button>` : ""}
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Ngày đặt: ${escapeHtml(o.createdAt)} • SĐT: ${escapeHtml(o.phoneMasked)}</div>
+            <div><strong>Sản phẩm:</strong> ${escapeHtml(o.itemsSummary)}</div>
+            <div style="margin-top:4px;"><strong>Tổng đơn:</strong> ${formatVND(o.total)} (${escapeHtml(o.paymentMethod)})</div>
+            ${trackingHtml}
           `;
           row.appendChild(card);
           container.appendChild(row);
+          container.scrollTop = container.scrollHeight;
         });
-        container.scrollTop = container.scrollHeight;
       } catch (err) {
         typingEl.remove();
-        appendBotMessage("Dạ hệ thống đang bận một chút, bạn nhắn trực tiếp qua Facebook/Instagram/Threads giúp tiệm kiểm tra đơn ạ!", {
-          showContactButtons: true,
-          contactPrefill: `Mình cần kiểm tra đơn hàng (${query})`
-        });
+        appendBotMessage("Kết nối hơi chập chờn, bạn thử tra cứu lại giúp tiệm nhé!");
       } finally {
-        btn.disabled = false;
-        btn.textContent = "Tra cứu đơn ngay";
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Tra cứu đơn ngay";
+        }
+        if (inp) inp.value = "";
       }
     }
 
-    // -------------------------------------------------------------------------
-    // 3. CHATBOT TƯ VẤN & TẠO THẺ GỢI Ý SẢN PHẨM
-    // -------------------------------------------------------------------------
+    function sendQuickPrompt(text) {
+      document.getElementById("chatInput").value = text;
+      handleChatSubmit(new Event("submit"));
+    }
+
     function appendUserMessage(text) {
       const container = document.getElementById("chatMessages");
       const row = document.createElement("div");
@@ -2343,16 +2756,6 @@
       row.innerHTML = `<div class="msg-bubble">${escapeHtml(text)}</div>`;
       container.appendChild(row);
       container.scrollTop = container.scrollHeight;
-    }
-
-    function appendTyping() {
-      const container = document.getElementById("chatMessages");
-      const row = document.createElement("div");
-      row.className = "msg-row bot";
-      row.innerHTML = `<div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-      container.appendChild(row);
-      container.scrollTop = container.scrollHeight;
-      return row;
     }
 
     function appendBotMessage(text, options = {}) {
@@ -2365,50 +2768,51 @@
       bubble.textContent = text;
       row.appendChild(bubble);
 
-      if (Array.isArray(options.suggestedItems) && options.suggestedItems.length > 0) {
-        const listDiv = document.createElement("div");
-        listDiv.className = "chat-suggestions";
+      if (Array.isArray(options.suggestedItems) && options.suggestedItems.length) {
+        const sugBox = document.createElement("div");
+        sugBox.className = "chat-suggestions";
 
         options.suggestedItems.forEach(sug => {
           const p = products.find(item => item.id === sug.id);
-          if (!p || p.stock <= 0) return;
+          if (!p) return;
 
           const isItem = p.productType === "item";
-          const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
-          const mode = (sug.buyMode === "pack" && hasPack) ? "pack" : (Number(p.unitPrice) > 0 ? "unit" : (hasPack ? "pack" : "unit"));
+          const isPack = !isItem && sug.buyMode === "pack" && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
+          const mode = isPack ? "pack" : "unit";
+          const label = mode === "pack" ? (p.packUnit || "gói") : p.baseUnit;
+          const price = mode === "pack" ? p.packPrice : p.unitPrice;
           const qty = Math.max(1, Number(sug.qty || 1));
-          const price = mode === "pack" ? Number(p.packPrice) : Number(p.unitPrice);
-          const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
 
           const card = document.createElement("div");
           card.className = "mini-prod-card";
           card.innerHTML = `
             <div class="mini-prod-info">
               <div class="mini-prod-name">${escapeHtml(p.name)}</div>
-              <div class="mini-prod-meta">${formatVND(price)} / ${escapeHtml(unitLabel)} • Sẵn ${p.stock} ${escapeHtml(p.baseUnit)}</div>
+              <div class="mini-prod-meta">${formatVND(price)}/${escapeHtml(label)} • Kho sẵn ${p.stock} ${escapeHtml(p.baseUnit)}</div>
             </div>
-            <button class="btn-add-mini" onclick="addToCart('${escapeAttrJs(p.id)}', '${escapeAttrJs(mode)}', ${qty})">+ Thêm giỏ</button>
+            <button type="button" class="btn-add-mini" onclick="addToCart('${escapeAttrJs(p.id)}', '${mode}', ${qty})">
+              + Thêm ${qty} ${escapeHtml(label)}
+            </button>
           `;
-          listDiv.appendChild(card);
+          sugBox.appendChild(card);
         });
 
-        if (listDiv.children.length > 0) {
-          row.appendChild(listDiv);
-        }
+        if (sugBox.children.length) row.appendChild(sugBox);
       }
 
       if (options.showContactButtons) {
-        const socialDiv = document.createElement("div");
-        socialDiv.className = "social-box";
-        socialDiv.innerHTML = `
-          <div class="social-box-title">Nhắn trực tiếp cho Tiệm giấy Thứ Ba qua:</div>
+        const prefill = options.contactPrefill || text;
+        const socBox = document.createElement("div");
+        socBox.className = "social-box";
+        socBox.innerHTML = `
+          <div class="social-box-title">Nhắn trực tiếp cho Tiệm giấy Thứ Ba (tự động sao chép nội dung để bạn dán):</div>
           <div class="social-links">
-            <a href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer" class="social-btn" onclick="copyPrefill('${escapeAttrJs(options.contactPrefill || "")}')">Facebook</a>
-            <a href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer" class="social-btn" onclick="copyPrefill('${escapeAttrJs(options.contactPrefill || "")}')">Instagram</a>
-            <a href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer" class="social-btn" onclick="copyPrefill('${escapeAttrJs(options.contactPrefill || "")}')">Threads</a>
+            <a class="social-btn" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer" onclick="copyPrefill('${escapeAttrJs(prefill)}')">Facebook</a>
+            <a class="social-btn" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer" onclick="copyPrefill('${escapeAttrJs(prefill)}')">Instagram</a>
+            <a class="social-btn" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer" onclick="copyPrefill('${escapeAttrJs(prefill)}')">Threads</a>
           </div>
         `;
-        row.appendChild(socialDiv);
+        row.appendChild(socBox);
       }
 
       container.appendChild(row);
@@ -2416,119 +2820,89 @@
     }
 
     function copyPrefill(text) {
-      if (!text) return;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(() => {
-          showToast("Đã copy nội dung để bạn dán vào tin nhắn");
-        });
+          showToast("Đã sao chép nội dung — bạn dán vào tin nhắn nhé!");
+        }).catch(() => {});
       }
     }
 
-    function sendQuickPrompt(text) {
-      document.getElementById("chatInput").value = text;
-      handleChatSubmit(new Event("submit"));
+    function appendTypingIndicator() {
+      const container = document.getElementById("chatMessages");
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+      row.innerHTML = `<div class="msg-bubble typing-dots"><span></span><span></span><span></span></div>`;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+      return row;
     }
 
     async function handleChatSubmit(e) {
       e.preventDefault();
       const input = document.getElementById("chatInput");
       const sendBtn = document.getElementById("sendBtn");
-      const msg = input.value.trim();
-      if (!msg) return;
+      const text = input.value.trim();
+      if (!text) return;
 
       input.value = "";
       sendBtn.disabled = true;
 
-      appendUserMessage(msg);
-      chatHistory.push({ role: "user", text: msg });
+      appendUserMessage(text);
+      chatHistory.push({ role: "user", text });
 
-      const typingEl = appendTyping();
+      const typingEl = appendTypingIndicator();
+
+      const currentCustInfo = {
+        customerName: document.getElementById("custName")?.value.trim() || "",
+        phone: document.getElementById("custPhone")?.value.trim() || "",
+        platform: document.getElementById("custPlatform")?.value || "",
+        socialHandle: document.getElementById("custHandle")?.value.trim() || ""
+      };
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({
             action: "chat",
-            message: msg,
+            message: text,
             history: chatHistory.slice(-8),
-            sessionId: chatSessionId
+            sessionId: chatSessionId,
+            customerInfo: currentCustInfo
           })
         });
         const result = await res.json();
         typingEl.remove();
 
-        if (!result.ok || !result.data) {
-          throw new Error(result.error || "Không nhận được phản hồi");
+        if (result.ok && result.data) {
+          const ai = result.data;
+          appendBotMessage(ai.reply, {
+            suggestedItems: ai.suggestedItems || [],
+            showContactButtons: Boolean(ai.showContactButtons),
+            contactPrefill: ai.contactPrefill || text
+          });
+          chatHistory.push({ role: "model", text: ai.reply });
+        } else {
+          appendBotMessage("Xin lỗi bạn, kết nối hơi chập chờn. Bạn thử nhắn lại hoặc bấm liên hệ trực tiếp với tiệm nhé!", {
+            showContactButtons: true,
+            contactPrefill: text
+          });
         }
-
-        const aiData = result.data;
-        chatHistory.push({ role: "model", text: aiData.reply });
-
-        appendBotMessage(aiData.reply, {
-          suggestedItems: aiData.suggestedItems || [],
-          showContactButtons: Boolean(aiData.showContactButtons),
-          contactPrefill: aiData.contactPrefill || msg
-        });
       } catch (err) {
         typingEl.remove();
-        appendBotMessage(
-          "Dạ kết nối tới trợ lý đang hơi chập chờn một chút. Bạn có thể xem trực tiếp ở tab Danh mục giấy hoặc nhắn cho tiệm qua các kênh bên dưới nhé!",
-          { showContactButtons: true, contactPrefill: msg }
-        );
+        appendBotMessage("Hiện tại trợ lý AI đang tạm gián đoạn kết nối. Bạn có thể chọn giấy ở tab Danh mục hoặc nhắn trực tiếp cho tiệm qua các kênh dưới đây nhé!", {
+          showContactButtons: true,
+          contactPrefill: text
+        });
       } finally {
         sendBtn.disabled = false;
         input.focus();
       }
     }
 
-    // -------------------------------------------------------------------------
-    // KHỞI ĐỘNG ỨNG DỤNG & CỐ ĐỊNH KHUNG HIỂN THỊ TRÊN ĐIỆN THOẠI
-    // -------------------------------------------------------------------------
-    function syncMobileViewport() {
-      const shell = document.querySelector(".app-shell");
-      if (!shell) return;
-
-      if (window.scrollY !== 0 || window.scrollX !== 0) {
-        window.scrollTo(0, 0);
-      }
-
-      const vv = window.visualViewport;
-      if (vv) {
-        shell.style.height = vv.height + "px";
-        shell.style.transform = vv.offsetTop > 0 ? `translateY(${vv.offsetTop}px)` : "";
-      }
-
-      const chatList = document.getElementById("chatMessages");
-      if (chatList && document.activeElement && document.activeElement.id === "chatInput") {
-        chatList.scrollTop = chatList.scrollHeight;
-      }
-    }
-
     window.addEventListener("DOMContentLoaded", () => {
-      syncMobileViewport();
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", syncMobileViewport);
-        window.visualViewport.addEventListener("scroll", syncMobileViewport);
-      }
-      window.addEventListener("resize", syncMobileViewport);
-      window.addEventListener("scroll", syncMobileViewport, { passive: true });
-
-      const chatInput = document.getElementById("chatInput");
-      if (chatInput) {
-        chatInput.addEventListener("focus", () => {
-          syncMobileViewport();
-          setTimeout(syncMobileViewport, 120);
-          setTimeout(syncMobileViewport, 320);
-        });
-        chatInput.addEventListener("blur", () => {
-          setTimeout(syncMobileViewport, 150);
-        });
-      }
-
       loadCartFromStorage();
       loadCustomerDraft();
-      chatHistory.push({ role: "model", text: WELCOME_MESSAGE });
+      chatHistory = [{ role: "model", text: WELCOME_MESSAGE }];
       appendBotMessage(WELCOME_MESSAGE);
       loadProducts();
     });
