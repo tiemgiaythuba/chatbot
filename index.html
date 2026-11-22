@@ -943,16 +943,30 @@
 
     const CART_STORAGE_KEY = "TGTB_CART_V1";
     const CUSTOMER_STORAGE_KEY = "TGTB_CUSTOMER_INFO_V1";
+    const SESSION_STORAGE_KEY = "TGTB_CHAT_SESSION_V1";
     const IS_DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
 
     function createChatSessionId() {
       return "S" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
     }
 
+    function getOrCreateChatSessionId() {
+      try {
+        const saved = localStorage.getItem(SESSION_STORAGE_KEY);
+        if (saved && saved.length >= 6) return saved;
+        const fresh = createChatSessionId();
+        localStorage.setItem(SESSION_STORAGE_KEY, fresh);
+        return fresh;
+      } catch (e) {
+        return createChatSessionId();
+      }
+    }
+
     let products = [];
     let cart = [];
     let chatHistory = [];
-    let chatSessionId = createChatSessionId();
+    let chatSessionId = getOrCreateChatSessionId();
+    let lastPlacedOrderId = "";
     let selectedCategory = "Tất cả";
     let selectedPlatform = "Instagram";
     let isSending = false;
@@ -1144,7 +1158,6 @@
       return Number(p.unitPrice || 0) > 0;
     }
 
-    // Nhãn tồn kho gọn trên góc ảnh thumbnail (tránh tràn mép thẻ)
     function getCompactStockBadge(p) {
       if (p.stock > 0) {
         return `Còn ${p.stock} ${p.baseUnit}`;
@@ -1168,7 +1181,6 @@
 
     function formatSpecsBullets(specsText) {
       const raw = String(specsText || "").trim() || "Giấy tái chế thủ công từ tiệm giấy Thứ Ba.";
-      // Bảo toàn số thập phân (VD: 14.8 x 21cm) trước khi tách theo dấu chấm câu hoặc xuống dòng
       const safe = raw.replace(/(\d)\.(\d)/g, "$1__DECIMAL__$2");
       const parts = safe
         .split(/[\r\n.]+/)
@@ -1196,7 +1208,6 @@
       }
     }
 
-    // Tự động chuyển ảnh cho các thẻ sản phẩm có từ 2 ảnh trở lên
     setInterval(() => {
       document.querySelectorAll(".product-thumb[data-multi='1']").forEach(thumb => {
         const imgs = thumb.querySelectorAll("img.slide-img");
@@ -1248,7 +1259,11 @@
     function resetChatSession() {
       if (isSending) return;
       chatHistory = [];
+      lastPlacedOrderId = "";
       chatSessionId = createChatSessionId();
+      try {
+        localStorage.setItem(SESSION_STORAGE_KEY, chatSessionId);
+      } catch (e) {}
       chatStream.innerHTML = "";
       renderWelcome();
       showToast("Đã làm mới cuộc trò chuyện");
@@ -1262,6 +1277,7 @@
 Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng/giá tiền hoặc lên đơn trực tiếp ở đây mà không cần chờ tiệm rep nhé.</div>
         <div class="quick-grid">
           <button class="chip-btn" onclick="renderCatalogMessage()">Xem các loại giấy đang có</button>
+          <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">Tư vấn chọn giấy</button>
           <button class="chip-btn" onclick="openCartModal()">Lên đơn nhanh</button>
         </div>
       `;
@@ -1735,6 +1751,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
 
       const { subtotal, shipFee, total } = calcCartTotals();
       const orderPayload = {
+        sessionId: chatSessionId,
         customerName,
         phone,
         address,
@@ -1771,6 +1788,8 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         });
         const json = await res.json();
         if (!json.ok) throw new Error(json.error || "Không gửi được đơn");
+
+        lastPlacedOrderId = json.orderId || "";
 
         if (shouldSaveInfo) {
           saveCustomerInfoToStorage({
@@ -2018,6 +2037,15 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       sendBtn.disabled = true;
       appendTypingIndicator();
 
+      const savedCust = loadSavedCustomerInfo();
+      const customerInfoPayload = (lastPlacedOrderId || savedCust) ? {
+        orderId: lastPlacedOrderId || "",
+        customerName: savedCust ? (savedCust.customerName || "") : "",
+        phone: savedCust ? (savedCust.phone || "") : "",
+        platform: savedCust ? (savedCust.platform || "") : "",
+        socialHandle: savedCust ? (savedCust.socialHandle || "") : ""
+      } : null;
+
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
@@ -2025,6 +2053,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           body: JSON.stringify({
             action: "chat",
             sessionId: chatSessionId,
+            customerInfo: customerInfoPayload,
             message: text,
             history: chatHistory.slice(-8)
           })
