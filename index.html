@@ -1304,7 +1304,7 @@
 
             <!-- Kênh dự phòng chỉ hiện khi khách chọn Zalo -->
             <div class="zalo-backup-box" id="zaloBackupGroup" style="display:none;">
-              <label for="custBackupHandle" class="zalo-backup-label">Tài khoản dự phòng (phòng khi Zalo chặn tin nhắn người lạ)</label>
+              <label for="custBackupHandle" class="zalo-backup-label">Tài khoản liên lạc dự phòng</label>
               <div class="form-row-2">
                 <select id="custBackupPlatform" aria-label="Nền tảng dự phòng" class="form-select" onchange="handleBackupPlatformChange()">
                   <option value="Instagram">Instagram</option>
@@ -1507,14 +1507,14 @@
         if (!isInitialLoad && phoneVal && handleEl.value.trim() === phoneVal) {
           handleEl.value = "";
         }
-        handleEl.placeholder = "Dán link Facebook hoặc Tên + mô tả avatar";
-        hintEl.innerHTML = `Nếu tên phổ biến, bạn dán <strong>link trang cá nhân</strong> hoặc ghi thêm <strong>đặc điểm ảnh đại diện</strong> (VD: Lan Anh - avatar ôm mèo).`;
+        handleEl.placeholder = "Dán link Facebook";
+        hintEl.innerHTML = `Bạn dán <strong>link trang cá nhân</strong> ở đây.`;
         if (fbHelperEl) fbHelperEl.style.display = "inline-flex";
         validateSocialHandleWarning();
       } else if (plat === "Zalo") {
-        handleEl.placeholder = "Số điện thoại Zalo (tự lấy SĐT ở trên)";
+        handleEl.placeholder = "Số điện thoại Zalo (SĐT đã nhập)";
         boxEl.classList.add("ok");
-        hintEl.innerHTML = `✓ Hệ thống tự dùng <strong>SĐT nhận hàng</strong> để tìm Zalo. Nếu Zalo bạn <strong>chặn tin nhắn người lạ</strong>, hãy điền thêm tài khoản dự phòng bên dưới nhé!`;
+        hintEl.innerHTML = `✓ Hệ thống tự dùng <strong>SĐT nhận hàng</strong> để tìm Zalo.`;
         if (!isInitialLoad) {
           if (!zaloManualEdited) {
             handleEl.value = phoneVal;
@@ -1532,9 +1532,9 @@
 
       const bPlat = bPlatEl.value;
       if (bPlat === "Facebook") {
-        bHandleEl.placeholder = "Link Facebook hoặc Tên + mô tả avatar";
+        bHandleEl.placeholder = "Link Facebook";
       } else {
-        bHandleEl.placeholder = "Nhập @username (khuyến khích)";
+        bHandleEl.placeholder = "Nhập @username";
       }
       if (!skipSave) saveCustomerDraft();
     }
@@ -1592,7 +1592,7 @@
         const isUrl = /^https?:\/\//i.test(val) || /facebook\.com|fb\.com/i.test(val);
         const words = val.split(/\s+/).filter(Boolean);
         if (!isUrl && words.length <= 2 && val.length < 18) {
-          warnEl.textContent = "Gợi ý: Tên ngắn dễ bị trùng trên Facebook — bạn nên dán link trang cá nhân hoặc thêm mô tả avatar (VD: - áo trắng) nhé!";
+          warnEl.textContent = "Bạn dán link trang cá nhân Facebook nhé!";
           warnEl.style.display = "block";
         }
       }
@@ -2604,8 +2604,8 @@
         `;
       } else {
         const zaloBackupNote = backupHandle
-          ? `Tiệm đã lưu số Zalo của bạn kèm kênh dự phòng <strong>${escapeHtml(backupPlatform)} (${escapeHtml(backupHandle)})</strong>. Nếu Zalo bạn đang bật chặn tin nhắn người lạ, bạn cũng có thể bấm nhắn trước cho tiệm qua nút bên dưới nhé:`
-          : `Tiệm sẽ nhắn xác nhận qua <strong>Zalo (${escapeHtml(handle)})</strong>. Nếu Zalo bạn đang bật <strong>chặn tin nhắn từ người lạ</strong>, bạn bấm nhắn trước cho tiệm qua kênh bên dưới nhé:`;
+          ? `Tiệm đã lưu số Zalo của bạn kèm kênh dự phòng <strong>${escapeHtml(backupPlatform)} (${escapeHtml(backupHandle)})</strong>. Bạn cũng có thể bấm nhắn trước cho tiệm qua nút bên dưới để tiệm xử lý đơn nhanh hơn nhé:`
+          : `Tiệm sẽ nhắn xác nhận qua <strong>Zalo (${escapeHtml(handle)})</strong>. Bạn cũng có thể bấm nhắn trước cho tiệm qua nút bên dưới để tiệm xử lý đơn nhanh hơn nhé:`;
 
         directBtnHtml = `
           <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:7px;">
@@ -2624,7 +2624,7 @@
       card.innerHTML = `
         <div class="order-confirm-title">Muốn tiệm duyệt & gói đơn nhanh hơn?</div>
         <div class="order-confirm-desc">
-          Hệ thống sẽ tự sao chép tin nhắn kèm mã đơn <strong>#${escapeHtml(orderId)}</strong> để bạn gửi cho tiệm chỉ với 1 chạm (tránh trường hợp tin nhắn từ tiệm rơi vào mục Tin nhắn chờ):
+          Hệ thống sẽ tự sao chép tin nhắn kèm mã đơn <strong>#${escapeHtml(orderId)}</strong> để bạn gửi cho tiệm chỉ với 1 chạm:
         </div>
         ${directBtnHtml}
       `;
