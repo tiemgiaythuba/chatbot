@@ -1054,6 +1054,14 @@
     .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
     @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.45; } 40% { transform: scale(1); opacity: 1; } }
+
+    .debug-source-tag {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      padding-left: 4px;
+      font-family: monospace;
+    }
   </style>
 </head>
 <body>
@@ -2297,6 +2305,31 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           </div>
 
           <div class="form-group">
+            <label>2. Số điện thoại nhận hàng *</label>
+            <input id="custPhone" class="form-control" type="tel" placeholder="Ví dụ: 0912345678" value="${escapeHtml(savedCust ? savedCust.phone : "")}" required />
+          </div>
+
+          <div class="form-group">
+            <label>3. Địa chỉ giao hàng chi tiết *</label>
+            <textarea id="custAddress" class="form-control" rows="2" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố..." required>${escapeHtml(savedCust ? savedCust.address : "")}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label>4. Bạn nhắn tiệm qua ứng dụng nào? *</label>
+            <div class="platform-pills">
+              <div class="plat-option ${selectedPlatform === 'Instagram' ? 'selected' : ''}" onclick="selectPlatform('Instagram', this)">Instagram</div>
+              <div class="plat-option ${selectedPlatform === 'Threads' ? 'selected' : ''}" onclick="selectPlatform('Threads', this)">Threads</div>
+              <div class="plat-option ${selectedPlatform === 'Facebook' ? 'selected' : ''}" onclick="selectPlatform('Facebook', this)">Facebook</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>5. Tên tài khoản (User / Nickname) trên ${escapeHtml(selectedPlatform)} *</label>
+            <input id="custSocial" class="form-control" type="text" placeholder="Ví dụ: @minhanh.paper hoặc tên Facebook của bạn" value="${escapeHtml(savedCust ? savedCust.socialHandle : "")}" required />
+            <small>Để tiệm nhắn tin xác nhận đơn và gửi ảnh gói hàng cho bạn ạ</small>
+          </div>
+
+          <div class="form-group">
             <label>6. Hình thức thanh toán *</label>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
               <div class="plat-option ${selectedPaymentMethod === 'COD' ? 'selected' : ''}" onclick="selectPaymentMethod('COD', this)">💵 COD khi nhận hàng</div>
@@ -2386,335 +2419,306 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       const address = document.getElementById("custAddress").value.trim();
       const socialHandle = document.getElementById("custSocial").value.trim();
       const note = document.getElementById("custNote").value.trim();
-      const shouldSaveInfo = document.getElementById("saveCustInfoChk")?.checked !== false;
+      const shouldSaveCust = document.getElementById("saveCustInfoChk")?.checked;
 
       if (!customerName || !phone || !address || !socialHandle) {
-        showToast("Mình điền đủ thông tin giúp tiệm ạ");
+        showToast("Bạn điền đủ thông tin bắt buộc nhé");
         return;
       }
 
-      const { subtotal, shipFee, total } = calcCartTotals();
-      const orderPayload = {
-        sessionId: chatSessionId,
-        chatTranscript: chatHistory.slice(-20),
-        items: cart.map(i => {
-          const baseObj = {
-            id: i.id,
-            name: i.name,
-            buyMode: i.buyMode,
-            unitLabel: i.unitLabel,
-            qty: i.qty,
-            price: i.price,
-            baseUnits: i.qty * i.baseUnitsPerQty
-          };
-          if (i.buyMode === "mix" && Array.isArray(i.mixBreakdown)) {
-            baseObj.mixBreakdown = i.mixBreakdown;
-          }
-          return baseObj;
-        }),
-        subtotal,
-        discountType: "amount",
-        discountValue: 0,
-        discountAmount: 0,
-        shipFee,
-        total,
-        paymentMethod: selectedPaymentMethod,
-        trackingCode: ""
-      };
+      if (shouldSaveCust) {
+        saveCustomerInfoToStorage({
+          customerName,
+          phone,
+          address,
+          platform: selectedPlatform,
+          socialHandle
+        });
+      }
 
+      const { subtotal, shipFee, total } = calcCartTotals();
       btn.disabled = true;
-      btn.textContent = "Đang gửi đơn về tiệm...";
+      btn.textContent = "Đang gửi đơn...";
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "create_order", order: orderPayload })
+          body: JSON.stringify({
+            action: "create_order",
+            order: {
+              customerName,
+              phone,
+              address,
+              platform: selectedPlatform,
+              socialHandle,
+              paymentMethod: selectedPaymentMethod,
+              note,
+              sessionId: chatSessionId,
+              chatTranscript: chatHistory.slice(-24),
+              items: cart.map(i => {
+                const baseItem = {
+                  id: i.id,
+                  name: i.name,
+                  buyMode: i.buyMode,
+                  unitLabel: i.unitLabel,
+                  qty: i.qty,
+                  price: i.price,
+                  baseUnits: i.qty * i.baseUnitsPerQty
+                };
+                if (i.buyMode === "mix" && Array.isArray(i.mixBreakdown)) {
+                  baseItem.mixBreakdown = i.mixBreakdown;
+                }
+                return baseItem;
+              }),
+              subtotal,
+              shipFee,
+              total
+            }
+          })
         });
+
         const json = await res.json();
         if (!json.ok) throw new Error(json.error || "Không gửi được đơn");
 
-        lastPlacedOrderId = json.orderId || "";
-        try { localStorage.setItem(LAST_ORDER_STORAGE_KEY, lastPlacedOrderId); } catch (err) {}
-
-        if (shouldSaveInfo) {
-          saveCustomerInfoToStorage({
-            customerName,
-            phone,
-            address,
-            platform: selectedPlatform,
-            socialHandle
-          });
-        } else {
-          try { localStorage.removeItem(CUSTOMER_STORAGE_KEY); } catch (err) {}
-        }
-
-        const itemsSummary = cart.map(i => `• ${i.name}: ${i.qty} ${i.unitLabel} (${formatVND(i.price * i.qty)})`).join("\n");
+        const itemsText = cart.map(i => `• ${i.name} (${i.qty} ${i.unitLabel})`).join("\n");
+        const chosenPayMethod = selectedPaymentMethod;
         cart = [];
         saveCartToStorage();
         updateCartBadge();
         hideModal("cartOverlay");
-        await loadInventory();
 
-        const shipDisplay = shipFee === 0 ? "(miễn phí ship)" : `(gồm ship ${formatVND(shipFee)})`;
-        const payDisplay = selectedPaymentMethod === "Chuyển khoản trước" ? "Chuyển khoản trước (VietQR)" : "Thu hộ COD khi nhận hàng";
-        const orderCodeLine = lastPlacedOrderId ? `Mã đơn: #${lastPlacedOrderId}\n` : "";
-        appendBotMessage(`Dạ tiệm đã nhận được đơn của mình rồi ạ!\n\n${orderCodeLine}Người nhận: ${customerName} (${phone})\nĐịa chỉ: ${address}\nTài khoản liên hệ: ${socialHandle} (${selectedPlatform})\nThanh toán: ${payDisplay}\nĐơn giấy:\n${itemsSummary}\nTổng cộng: ${formatVND(total)} ${shipDisplay}\n\nMình vui lòng chờ tiệm kiểm tra và nhắn tin xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng ạ.`);
+        lastPlacedOrderId = json.orderId;
+        try { localStorage.setItem(LAST_ORDER_STORAGE_KEY, json.orderId); } catch (e) {}
 
-        if (selectedPaymentMethod === "Chuyển khoản trước" && lastPlacedOrderId) {
-          appendVietQrMessage(lastPlacedOrderId, total);
+        const confirmText = `Tiệm đã nhận được đơn #${json.orderId} của ${customerName} rồi ạ!\n\nSản phẩm đặt:\n${itemsText}\n\nTổng đơn: ${formatVND(total)} (${chosenPayMethod === "Chuyển khoản trước" ? "Chuyển khoản VietQR" : (shipFee === 0 ? "Freeship • COD" : "Đã gồm 15K ship • COD")})\nGiao tới: ${address}\n\nTiệm sẽ nhắn xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng nhé!`;
+        appendBotMessage(confirmText);
+
+        if (chosenPayMethod === "Chuyển khoản trước") {
+          appendVietQrMessage(json.orderId, total);
         }
+
+        await loadInventory();
+        refreshCatalogCardIfOpen();
       } catch (err) {
+        alert("Lỗi gửi đơn: " + err.message);
         btn.disabled = false;
         btn.textContent = "Gửi đơn đặt hàng";
-        showToast("Có lỗi kết nối, mình thử bấm gửi lại giúp tiệm nhé");
-        console.error(err);
       }
     }
 
-    function appendUserMessage(text, skipPersist = false) {
+    function sendQuickText(text) {
+      chatInput.value = text;
+      handleFormSubmit(new Event("submit"));
+    }
+
+    function appendUserMessage(text, skipSave = false) {
       const row = document.createElement("div");
       row.className = "msg-row user";
-      row.innerHTML = `<div class="bubble"></div>`;
-      row.querySelector(".bubble").textContent = text;
+      row.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
       chatStream.appendChild(row);
-      chatHistory.push({ role: "user", text });
-
-      if (!skipPersist) {
+      if (!skipSave) {
+        chatHistory.push({ role: "user", text });
         persistedChatFeed.push({ role: "user", text });
         saveChatMessagesToStorage();
       }
       scrollBottom();
     }
 
-    const TYPING_OPENERS = [
-      "Tiệm đang xem câu hỏi của bạn...",
-      "Tiệm đang kiểm tra thông tin cho bạn..."
-    ];
+    function appendBotMessage(text, options = {}, skipSave = false) {
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
 
-    const RECYCLED_PAPER_FUN_FACTS = [
-      "💡 Fun fact: Mỗi tờ giấy xeo tay đều có vân và mép xơ độc bản, không tờ nào giống hệt tờ nào ạ.",
-      "💡 Bạn có biết: Giấy tái chế thủ công có sợi giấy ngắn nên giữ hương thảo mộc rất dịu ạ.",
-      "💡 Góc nhỏ: Vỏ quýt, quế, sả hay bã cà phê đều dùng để tạo màu và mùi thơm tự nhiên cho giấy ạ.",
-      "💡 Mẹo nhỏ: Viền xơ tự nhiên của giấy thủ công rất hợp để làm thiệp quà tặng và viết thư tay ạ.",
-      "💡 Góc nhỏ: Từng tờ giấy sau khi xeo đều được phơi khô tự nhiên và gia keo nhẹ để hạn chế lem mực ạ."
-    ];
+      let extraHtml = "";
 
-    let lastFunFactIdx = -1;
+      if (Array.isArray(options.suggestedItems) && options.suggestedItems.length > 0) {
+        const validItems = options.suggestedItems.map(s => {
+          const p = products.find(item => item.id === s.id);
+          if (!p || p.stock <= 0) return null;
+          const mode = s.buyMode === "unit" && hasUnitOption(p) ? "unit" : (hasPackOption(p) ? "pack" : "unit");
+          const unitPrice = mode === "pack" ? p.packPrice : p.unitPrice;
+          const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
+          const qty = Math.max(1, Number(s.qty || 1));
+          return { p, mode, unitPrice, unitLabel, qty };
+        }).filter(Boolean);
 
-    function buildWaitingSteps() {
-      const opener = TYPING_OPENERS[Math.floor(Math.random() * TYPING_OPENERS.length)];
-      let factIdx = Math.floor(Math.random() * RECYCLED_PAPER_FUN_FACTS.length);
-      if (RECYCLED_PAPER_FUN_FACTS.length > 1 && factIdx === lastFunFactIdx) {
-        factIdx = (factIdx + 1) % RECYCLED_PAPER_FUN_FACTS.length;
+        if (validItems.length > 0) {
+          extraHtml += `<div class="suggest-box">` + validItems.map(({ p, mode, unitPrice, unitLabel, qty }) => `
+            <div class="suggest-item">
+              <span><strong>${escapeHtml(p.name)}</strong> — ${qty} ${escapeHtml(unitLabel)} (${formatShortK(unitPrice * qty)})</span>
+              <button class="suggest-add" onclick="addToCart('${escapeAttrJs(p.id)}', '${mode}', ${qty})">+ Thêm giỏ</button>
+            </div>
+          `).join("") + `</div>`;
+        }
       }
-      lastFunFactIdx = factIdx;
+
+      if (options.showContactButtons) {
+        const prefill = options.contactPrefill || "";
+        const safePrefillAttr = escapeAttrJs(prefill);
+        extraHtml += `
+          <div class="contact-card">
+            ${prefill ? `
+              <div class="prefill-box">
+                <span style="overflow:hidden; text-overflow:ellipsis;">"${escapeHtml(prefill)}"</span>
+                <button class="copy-mini" onclick="copyText('${safePrefillAttr}')">Copy nội dung</button>
+              </div>
+            ` : ""}
+            <div class="social-links">
+              <a class="social-btn social-fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener">Facebook</a>
+              <a class="social-btn social-ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener">Instagram</a>
+              <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener">Threads</a>
+            </div>
+          </div>
+        `;
+      }
+
+      const debugHtml = (IS_DEBUG && options.source)
+        ? `<div class="debug-source-tag">[Nguồn: ${escapeHtml(options.source)}${options.aiError ? " | " + escapeHtml(options.aiError) : ""}]</div>`
+        : "";
+
+      row.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>${extraHtml}${debugHtml}`;
+      chatStream.appendChild(row);
+      if (!skipSave) {
+        chatHistory.push({ role: "model", text });
+        persistedChatFeed.push({ role: "model", text, options });
+        saveChatMessagesToStorage();
+      }
+      scrollBottom();
+    }
+
+    function restorePersistedChatFeed() {
+      const savedFeed = loadChatMessagesFromStorage();
+      if (!savedFeed.length) return false;
+      persistedChatFeed = savedFeed;
+      savedFeed.forEach(item => {
+        if (!item || !item.text) return;
+        if (item.role === "user") {
+          appendUserMessage(item.text, true);
+          chatHistory.push({ role: "user", text: item.text });
+        } else if (item.role === "model") {
+          appendBotMessage(item.text, item.options || {}, true);
+          chatHistory.push({ role: "model", text: item.text });
+        }
+      });
+      return true;
+    }
+
+    function buildWaitingSteps(userText) {
+      const lower = String(userText || "").toLowerCase();
+      const matchedProd = products.find(p => p && p.name && lower.includes(p.name.toLowerCase()));
+      const isPriceOrStock = /(giá|bao nhiêu|còn|hết|mua|đặt|gói|tờ|lẻ|ship|giao|mix)/i.test(lower);
+      const isCareOrSpec = /(bút|mực|màu|vẽ|in|kích thước|size|định lượng|gsm|keo|kit|bột)/i.test(lower);
+
+      const step1 = matchedProd
+        ? `Đang kiểm tra thông tin mẫu ${matchedProd.name}...`
+        : (isPriceOrStock
+          ? "Đang tra cứu tồn kho & bảng giá hiện tại của tiệm..."
+          : (isCareOrSpec
+            ? "Đang đối chiếu đặc tính giấy & sổ tay hỏi đáp của tiệm..."
+            : "Tiệm đang đọc câu hỏi của bạn..."));
 
       return [
-        opener,
-        RECYCLED_PAPER_FUN_FACTS[factIdx],
-        "Tiệm sắp trả lời xong rồi, bạn chờ thêm xíu nhé..."
+        { delay: 0, text: step1, status: "Đang xử lý câu hỏi..." },
+        { delay: 2200, text: "Đang nhờ trợ lý AI tổng hợp câu trả lời chính xác nhất...", status: "Trợ lý AI đang phân tích..." },
+        { delay: 6500, text: "AI đang kiểm tra kỹ số liệu trong kho giấy, bạn đợi thêm vài giây nhé...", status: "Đang tổng hợp phản hồi..." },
+        { delay: 12000, text: "Kết nối mạng hơi chậm một chút, tiệm đang hoàn tất câu trả lời...", status: "Đang hoàn tất phản hồi..." }
       ];
     }
 
-    function appendTypingIndicator() {
+    function showTypingIndicator(userText) {
       removeTypingIndicator();
-
-      const dot = document.getElementById("statusDot");
-      const statusText = document.getElementById("statusText");
-      if (dot && statusText && lastReadyStatusText) {
-        dot.className = "status-dot loading";
-        statusText.textContent = "Tiệm đang nhập...";
-      }
-
-      const steps = buildWaitingSteps();
-
       const row = document.createElement("div");
       row.id = "typingRow";
       row.className = "msg-row bot";
       row.innerHTML = `
         <div class="bubble typing-bubble">
           <div class="typing-dots"><span></span><span></span><span></span></div>
-          <span id="typingStepLabel" class="typing-label">${escapeHtml(steps[0])}</span>
+          <span id="typingStepLabel" class="typing-label"></span>
         </div>
       `;
       chatStream.appendChild(row);
       scrollBottom();
 
-      // Hiển thị Fun fact sau 1.1s và GIỮ NGUYÊN suốt 5.2s để khách đọc trọn vẹn
-      const switchText = (nextStr) => {
-        const labelEl = document.getElementById("typingStepLabel");
-        if (!labelEl) return;
-        labelEl.style.opacity = "0.25";
-        setTimeout(() => {
-          const freshEl = document.getElementById("typingStepLabel");
-          if (freshEl) {
-            freshEl.textContent = nextStr;
-            freshEl.style.opacity = "1";
-            scrollBottom();
-          }
-        }, 160);
+      const steps = buildWaitingSteps(userText);
+      const labelEl = document.getElementById("typingStepLabel");
+      const statusText = document.getElementById("statusText");
+      let stepIdx = 0;
+
+      const applyStep = (step) => {
+        if (labelEl) {
+          labelEl.style.opacity = "0.35";
+          setTimeout(() => {
+            if (labelEl) {
+              labelEl.textContent = step.text;
+              labelEl.style.opacity = "1";
+            }
+          }, 120);
+        }
+        if (statusText && step.status) {
+          statusText.textContent = step.status;
+        }
       };
 
-      const t1 = setTimeout(() => switchText(steps[1]), 1100);
-      const t2 = setTimeout(() => switchText(steps[2]), 6400);
-      typingStepTimer = [t1, t2];
+      applyStep(steps[0]);
+
+      typingStepTimer = setInterval(() => {
+        if (stepIdx + 1 < steps.length) {
+          stepIdx++;
+          applyStep(steps[stepIdx]);
+        }
+      }, 3600);
     }
 
     function removeTypingIndicator() {
-      if (Array.isArray(typingStepTimer)) {
-        typingStepTimer.forEach(id => clearTimeout(id));
-        typingStepTimer = null;
-      } else if (typingStepTimer) {
-        clearTimeout(typingStepTimer);
+      if (typingStepTimer) {
+        clearInterval(typingStepTimer);
         typingStepTimer = null;
       }
-      const dot = document.getElementById("statusDot");
       const statusText = document.getElementById("statusText");
-      if (dot && statusText && lastReadyStatusText) {
-        dot.className = "status-dot";
+      if (statusText && lastReadyStatusText) {
         statusText.textContent = lastReadyStatusText;
       }
       const el = document.getElementById("typingRow");
       if (el) el.remove();
     }
 
-    function appendBotMessage(replyText, extra = {}) {
-      const row = document.createElement("div");
-      row.className = "msg-row bot";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      row.appendChild(bubble);
-
-      const renderAttachments = () => {
-        if (Array.isArray(extra.suggestedItems) && extra.suggestedItems.length > 0) {
-          const validSuggestions = extra.suggestedItems
-            .map(s => {
-              const prod = products.find(p => p.id === s.id || p.name === s.name);
-              if (!prod || prod.stock <= 0) return null;
-              let mode = s.buyMode === "unit" ? "unit" : "pack";
-              if (mode === "pack" && !hasPackOption(prod)) mode = "unit";
-              if (mode === "unit" && !hasUnitOption(prod) && hasPackOption(prod)) mode = "pack";
-
-              const perUnit = mode === "pack" ? prod.packSize : 1;
-              const unitPrice = mode === "pack" ? prod.packPrice : prod.unitPrice;
-              const label = mode === "pack" ? (prod.packUnit || "gói") : prod.baseUnit;
-              const maxQty = Math.floor(prod.stock / perUnit);
-              const qty = Math.min(Math.max(1, Number(s.qty || 1)), maxQty);
-              if (qty <= 0 || unitPrice <= 0) return null;
-
-              return { prod, mode, qty, unitPrice, label };
-            })
-            .filter(Boolean);
-
-          if (validSuggestions.length > 0) {
-            const box = document.createElement("div");
-            box.className = "suggest-box";
-            validSuggestions.forEach(item => {
-              const itemEl = document.createElement("div");
-              itemEl.className = "suggest-item";
-              itemEl.innerHTML = `
-                <span><strong>${escapeHtml(item.prod.name)}</strong> (${item.qty} ${escapeHtml(item.label)} • ${formatShortK(item.unitPrice * item.qty)})</span>
-                <button class="suggest-add">+ Thêm giỏ</button>
-              `;
-              itemEl.querySelector("button").onclick = () => addToCart(item.prod.id, item.mode, item.qty);
-              box.appendChild(itemEl);
-            });
-            row.appendChild(box);
-          }
-        }
-
-        if (extra.showContactButtons) {
-          const prefill = extra.contactPrefill || replyText;
-          const contactCard = document.createElement("div");
-          contactCard.className = "contact-card";
-          contactCard.innerHTML = `
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:var(--primary);">Nhắn trực tiếp cho tiệm qua ứng dụng bạn đang dùng:</div>
-            <div class="prefill-box">
-              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(prefill)}</span>
-              <button type="button" class="copy-mini">Copy nội dung</button>
-            </div>
-            <div class="social-links">
-              <a class="social-btn social-fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer">Facebook</a>
-              <a class="social-btn social-ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer">Threads</a>
-            </div>
-          `;
-          contactCard.querySelector(".copy-mini").onclick = () => copyText(prefill, "Đã copy nội dung để bạn dán tin nhắn");
-          contactCard.querySelectorAll(".social-btn").forEach(a => {
-            a.addEventListener("click", () => copyText(prefill, "Đã copy nội dung để bạn dán tin nhắn"));
-          });
-          row.appendChild(contactCard);
-        }
-        scrollBottom();
-      };
-
-      chatStream.appendChild(row);
-      chatHistory.push({ role: "model", text: replyText });
-
-      if (!extra.skipPersist) {
-        persistedChatFeed.push({
-          role: "model",
-          text: replyText,
-          extra: {
-            suggestedItems: extra.suggestedItems || [],
-            showContactButtons: Boolean(extra.showContactButtons),
-            contactPrefill: extra.contactPrefill || ""
-          }
-        });
-        saveChatMessagesToStorage();
-      }
-
-      if (extra.animateReveal && replyText.length > 0) {
-        const chunkSize = Math.max(3, Math.ceil(replyText.length / 24));
-        let cursor = 0;
-        const revealTimer = setInterval(() => {
-          cursor = Math.min(replyText.length, cursor + chunkSize);
-          bubble.textContent = replyText.slice(0, cursor);
-          scrollBottom();
-          if (cursor >= replyText.length) {
-            clearInterval(revealTimer);
-            renderAttachments();
-          }
-        }, 16);
-      } else {
-        bubble.textContent = replyText;
-        renderAttachments();
-      }
-    }
-
-    function sendQuickText(text) {
-      if (isSending) return;
-      chatInput.value = text;
-      handleFormSubmit(new Event("submit"));
-    }
-
     async function handleFormSubmit(e) {
       e.preventDefault();
+      if (isSending) return;
+
       const text = chatInput.value.trim();
-      if (!text || isSending) return;
+      if (!text) return;
 
       chatInput.value = "";
       appendUserMessage(text);
 
-      if (/^(xem|danh sách|các loại giấy|menu|bảng giá)/i.test(text) && text.length < 38) {
-        appendBotMessage("Dạ dưới đây là các mẫu giấy hiện có của tiệm (kèm số lượng còn sẵn và quy cách từng loại), mình lướt ngang để xem ạ:");
-        renderCatalogMessage("Tất cả");
+      const lower = text.toLowerCase();
+      if (lower.includes("xem các loại giấy") || lower === "menu" || lower === "danh sách giấy") {
+        renderCatalogMessage();
         return;
       }
 
-      if (/^(tra cứu|kiểm tra đơn|tình trạng đơn|đơn hàng của mình)/i.test(text) && text.length < 40) {
+      if (lower === "tra cứu đơn" || lower === "tra cứu đơn hàng" || lower === "kiểm tra đơn") {
         openOrderLookupCard();
         return;
       }
 
       isSending = true;
       sendBtn.disabled = true;
-      appendTypingIndicator();
+      showTypingIndicator(text);
+
+      const savedCust = loadSavedCustomerInfo();
+      const customerInfo = savedCust ? {
+        customerName: savedCust.customerName || "",
+        phone: savedCust.phone || "",
+        platform: savedCust.platform || "",
+        socialHandle: savedCust.socialHandle || "",
+        orderId: lastPlacedOrderId || ""
+      } : (lastPlacedOrderId ? { orderId: lastPlacedOrderId } : null);
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8500);
+      // Tăng thời gian chờ lên 25 giây để đủ cho Apps Script + Gemini AI phản hồi hoàn chỉnh
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
 
       try {
         const res = await fetch(SCRIPT_URL, {
@@ -2723,13 +2727,14 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           signal: controller.signal,
           body: JSON.stringify({
             action: "chat",
-            sessionId: chatSessionId,
-            customerInfo: customerInfoPayload,
             message: text,
-            history: chatHistory.slice(-6)
+            history: chatHistory.slice(-6),
+            sessionId: chatSessionId,
+            customerInfo: customerInfo
           })
         });
         clearTimeout(timeoutId);
+
         const json = await res.json();
         removeTypingIndicator();
 
@@ -2737,23 +2742,29 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           throw new Error(json.error || "Phản hồi AI không hợp lệ");
         }
 
+        if (json.aiError) {
+          console.warn("[Tiệm giấy AI fallback]", json.source, json.aiError);
+        } else {
+          console.info("[Tiệm giấy AI source]", json.source);
+        }
+
         const ai = json.data;
-        appendBotMessage(ai.reply || "Dạ mình cần tiệm hỗ trợ thêm mẫu nào ạ?", {
-          intent: ai.intent,
+        appendBotMessage(ai.reply, {
           showContactButtons: Boolean(ai.showContactButtons),
           contactPrefill: ai.contactPrefill || text,
           suggestedItems: ai.suggestedItems || [],
-          animateReveal: true
+          source: json.source || "",
+          aiError: json.aiError || ""
         });
       } catch (err) {
         clearTimeout(timeoutId);
         removeTypingIndicator();
         const isTimeout = err && err.name === "AbortError";
         const fallbackMsg = isTimeout
-          ? "Dạ kết nối phản hồi tự động đang hơi chậm, bạn nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads hoặc bấm xem menu giấy bên dưới để tiệm hỗ trợ ngay nhé ạ!"
+          ? "Dạ kết nối mạng đang hơi chậm, bạn thử gửi lại câu hỏi hoặc nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm hỗ trợ ngay nhé ạ!"
           : (IS_DEBUG
             ? `[Lỗi kỹ thuật]: ${err.message}`
-            : "Dạ mình nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho mình ạ.");
+            : "Dạ bạn nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho bạn ạ.");
         appendBotMessage(fallbackMsg, {
           showContactButtons: true,
           contactPrefill: text
@@ -2768,24 +2779,8 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
     (async function init() {
       loadCartFromStorage();
       renderWelcome();
+      restorePersistedChatFeed();
       await loadInventory();
-
-      const savedMessages = loadChatMessagesFromStorage();
-      if (savedMessages.length > 0) {
-        persistedChatFeed = savedMessages;
-        savedMessages.forEach(m => {
-          if (!m || !m.text) return;
-          if (m.role === "user") {
-            appendUserMessage(m.text, true);
-          } else {
-            appendBotMessage(m.text, {
-              ...(m.extra || {}),
-              animateReveal: false,
-              skipPersist: true
-            });
-          }
-        });
-      }
     })();
   </script>
 </body>
