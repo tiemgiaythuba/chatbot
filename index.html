@@ -650,6 +650,15 @@
     }
     .send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
+    .ai-disclaimer {
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 6px;
+      padding: 0 4px;
+    }
+
     /* Modals */
     .overlay {
       position: fixed;
@@ -842,99 +851,6 @@
       transition: opacity 0.22s ease;
     }
     .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; margin-top: 3px; flex-shrink: 0; }
-/* ... existing code ... -->
-    function appendUserMessage(text) {
-      const row = document.createElement("div");
-      row.className = "msg-row user";
-      row.innerHTML = `<div class="bubble"></div>`;
-      row.querySelector(".bubble").textContent = text;
-      chatStream.appendChild(row);
-      chatHistory.push({ role: "user", text });
-      scrollBottom();
-    }
-
-    const TYPING_OPENERS = [
-      "Tiệm đang nhập, bạn chờ chút nhé...",
-      "Tiệm đang soạn tin nhắn cho bạn...",
-      "Chờ tiệm một xíu nhé, tiệm đang trả lời..."
-    ];
-
-    const RECYCLED_PAPER_FUN_FACTS = [
-      "💡 Fun fact: Mỗi tờ giấy thủ công ở tiệm đều được xeo tay từng tờ nên mép xơ và vân giấy không tờ nào giống hệt tờ nào đâu ạ.",
-      "💡 Bạn có biết: Giấy tái chế thủ công có sợi giấy ngắn và xốp tự nhiên nên thấm mực nhanh và giữ mùi thảo mộc rất dịu ạ.",
-      "💡 Góc nhỏ của tiệm: Vỏ quýt, quế, sả hay bã cà phê đều có thể phối vào bột giấy để tạo màu và hương thơm tự nhiên đó ạ.",
-      "💡 Mẹo nhỏ: Vì giấy thủ công không cắt máy công nghiệp nên mỗi tờ giữ nguyên viền xơ mềm mại rất hợp làm thiệp & viết thư ạ.",
-      "💡 Fun fact: Tái chế giấy giúp tiết kiệm đáng kể nước và gỗ tự nhiên, lại biến giấy cũ thành những trang viết mới đầy cảm hứng ạ.",
-      "💡 Góc nhỏ của tiệm: Sau khi xeo và ép nước, từng tờ giấy thủ công cần được phơi khô tự nhiên và gia keo nhẹ để hạn chế lem mực ạ.",
-      "💡 Bạn có biết: Không có hai mẻ giấy thủ công nào giống nhau 100%, vì sắc độ còn tùy thuộc vào từng mẻ nguyên liệu tái chế nữa ạ."
-    ];
-
-    let lastFunFactIdx = -1;
-
-    function buildWaitingSteps() {
-      const opener = TYPING_OPENERS[Math.floor(Math.random() * TYPING_OPENERS.length)];
-      let factIdx = Math.floor(Math.random() * RECYCLED_PAPER_FUN_FACTS.length);
-      if (RECYCLED_PAPER_FUN_FACTS.length > 1 && factIdx === lastFunFactIdx) {
-        factIdx = (factIdx + 1) % RECYCLED_PAPER_FUN_FACTS.length;
-      }
-      lastFunFactIdx = factIdx;
-
-      return [
-        opener,
-        RECYCLED_PAPER_FUN_FACTS[factIdx],
-        "Tiệm sắp gõ xong rồi, bạn chờ thêm xíu nữa ạ..."
-      ];
-    }
-
-    function appendTypingIndicator() {
-      removeTypingIndicator();
-
-      const dot = document.getElementById("statusDot");
-      const statusText = document.getElementById("statusText");
-      if (dot && statusText && lastReadyStatusText) {
-        dot.className = "status-dot loading";
-        statusText.textContent = "Tiệm đang nhập...";
-      }
-
-      const steps = buildWaitingSteps();
-      let stepIdx = 0;
-
-      const row = document.createElement("div");
-      row.id = "typingRow";
-      row.className = "msg-row bot";
-      row.innerHTML = `
-        <div class="bubble typing-bubble">
-          <div class="typing-dots"><span></span><span></span><span></span></div>
-          <span id="typingStepLabel" class="typing-label">${escapeHtml(steps[0])}</span>
-        </div>
-      `;
-      chatStream.appendChild(row);
-      scrollBottom();
-
-      typingStepTimer = setInterval(() => {
-        const labelEl = document.getElementById("typingStepLabel");
-        if (!labelEl) return;
-        if (stepIdx < steps.length - 1) {
-          stepIdx++;
-          labelEl.style.opacity = "0.25";
-          setTimeout(() => {
-            const freshEl = document.getElementById("typingStepLabel");
-            if (freshEl) {
-              freshEl.textContent = steps[stepIdx];
-              freshEl.style.opacity = "1";
-              scrollBottom();
-            }
-          }, 160);
-        }
-      }, 1500);
-    }
-    .typing-label {
-      font-size: 12.5px;
-      color: var(--text-muted);
-      font-style: italic;
-      transition: opacity 0.22s ease;
-    }
-    .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; flex-shrink: 0; }
     .typing-dots span {
       width: 6px;
       height: 6px;
@@ -990,6 +906,7 @@
           </svg>
         </button>
       </form>
+      <div class="ai-disclaimer">Câu trả lời được tổng hợp từ thông tin của tiệm bằng AI nên tốc độ có thể hơi chậm và đôi lúc chưa thật chính xác ạ.</div>
     </div>
   </div>
 
@@ -1028,9 +945,14 @@
     const CUSTOMER_STORAGE_KEY = "TGTB_CUSTOMER_INFO_V1";
     const IS_DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
 
+    function createChatSessionId() {
+      return "S" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
+    }
+
     let products = [];
     let cart = [];
     let chatHistory = [];
+    let chatSessionId = createChatSessionId();
     let selectedCategory = "Tất cả";
     let selectedPlatform = "Instagram";
     let isSending = false;
@@ -1326,6 +1248,7 @@
     function resetChatSession() {
       if (isSending) return;
       chatHistory = [];
+      chatSessionId = createChatSessionId();
       chatStream.innerHTML = "";
       renderWelcome();
       showToast("Đã làm mới cuộc trò chuyện");
@@ -1339,7 +1262,6 @@
 Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng/giá tiền hoặc lên đơn trực tiếp ở đây mà không cần chờ tiệm rep nhé.</div>
         <div class="quick-grid">
           <button class="chip-btn" onclick="renderCatalogMessage()">Xem các loại giấy đang có</button>
-          <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">Tư vấn chọn giấy</button>
           <button class="chip-btn" onclick="openCartModal()">Lên đơn nhanh</button>
         </div>
       `;
@@ -1889,48 +1811,50 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       scrollBottom();
     }
 
-    function getThinkingStepsForQuery(queryText) {
-      const q = String(queryText || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/đ/g, "d");
+    const TYPING_OPENERS = [
+      "Tiệm đang nhập, bạn chờ chút nhé...",
+      "Tiệm đang soạn tin nhắn cho bạn...",
+      "Chờ tiệm một xíu nhé, tiệm đang trả lời..."
+    ];
 
-      if (/\b(mua|dat|lay|gia|bao nhieu|con|het|goi|to|a4|a5|a6|kit|so tay|bao thu|vo quyt|que|sa|ca phe|rom|chuoi|hoa)\b/.test(q)) {
-        return [
-          "Tiệm đang kiểm tra kệ giấy trong kho...",
-          "Đang tính số lượng & giá giúp bạn...",
-          "Đang soạn phản hồi gửi bạn...",
-          "Chờ tiệm thêm một xíu nữa ạ..."
-        ];
+    const RECYCLED_PAPER_FUN_FACTS = [
+      "💡 Fun fact: Mỗi tờ giấy thủ công ở tiệm đều được xeo tay từng tờ nên mép xơ và vân giấy không tờ nào giống hệt tờ nào đâu ạ.",
+      "💡 Bạn có biết: Giấy tái chế thủ công có sợi giấy ngắn và xốp tự nhiên nên thấm mực nhanh và giữ mùi thảo mộc rất dịu ạ.",
+      "💡 Góc nhỏ của tiệm: Vỏ quýt, quế, sả hay bã cà phê đều có thể phối vào bột giấy để tạo màu và hương thơm tự nhiên đó ạ.",
+      "💡 Mẹo nhỏ: Vì giấy thủ công không cắt máy công nghiệp nên mỗi tờ giữ nguyên viền xơ mềm mại rất hợp làm thiệp & viết thư ạ.",
+      "💡 Fun fact: Tái chế giấy giúp tiết kiệm đáng kể nước và gỗ tự nhiên, lại biến giấy cũ thành những trang viết mới đầy cảm hứng ạ.",
+      "💡 Góc nhỏ của tiệm: Sau khi xeo và ép nước, từng tờ giấy thủ công cần được phơi khô tự nhiên và gia keo nhẹ để hạn chế lem mực ạ.",
+      "💡 Bạn có biết: Không có hai mẻ giấy thủ công nào giống nhau 100%, vì sắc độ còn tùy thuộc vào từng mẻ nguyên liệu tái chế nữa ạ."
+    ];
+
+    let lastFunFactIdx = -1;
+
+    function buildWaitingSteps() {
+      const opener = TYPING_OPENERS[Math.floor(Math.random() * TYPING_OPENERS.length)];
+      let factIdx = Math.floor(Math.random() * RECYCLED_PAPER_FUN_FACTS.length);
+      if (RECYCLED_PAPER_FUN_FACTS.length > 1 && factIdx === lastFunFactIdx) {
+        factIdx = (factIdx + 1) % RECYCLED_PAPER_FUN_FACTS.length;
       }
-      if (/\b(ship|giao|van chuyen|si|chiet khau|yeu cau|rieng)\b/.test(q)) {
-        return [
-          "Tiệm đang xem yêu cầu của bạn...",
-          "Đang kiểm tra quy định & chính sách tiệm...",
-          "Đang viết câu trả lời cho bạn...",
-          "Chờ tiệm thêm một xíu nữa ạ..."
-        ];
-      }
+      lastFunFactIdx = factIdx;
+
       return [
-        "Tiệm đang đọc câu hỏi của bạn...",
-        "Đang xem lại đặc tính giấy thủ công...",
-        "Đang soạn lời tư vấn cho bạn...",
-        "Chờ tiệm thêm một xíu nữa ạ..."
+        opener,
+        RECYCLED_PAPER_FUN_FACTS[factIdx],
+        "Tiệm sắp gõ xong rồi, bạn chờ thêm xíu nữa ạ..."
       ];
     }
 
-    function appendTypingIndicator(userText = "") {
+    function appendTypingIndicator() {
       removeTypingIndicator();
 
       const dot = document.getElementById("statusDot");
       const statusText = document.getElementById("statusText");
       if (dot && statusText && lastReadyStatusText) {
         dot.className = "status-dot loading";
-        statusText.textContent = "Tiệm đang trả lời...";
+        statusText.textContent = "Tiệm đang nhập...";
       }
 
-      const steps = getThinkingStepsForQuery(userText);
+      const steps = buildWaitingSteps();
       let stepIdx = 0;
 
       const row = document.createElement("div");
@@ -1960,7 +1884,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
             }
           }, 160);
         }
-      }, 1150);
+      }, 1500);
     }
 
     function removeTypingIndicator() {
@@ -2100,6 +2024,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({
             action: "chat",
+            sessionId: chatSessionId,
             message: text,
             history: chatHistory.slice(-8)
           })
