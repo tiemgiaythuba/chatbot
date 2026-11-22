@@ -2,8 +2,8 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>tiệm giấy Thứ Ba — Tư vấn & Đặt giấy thủ công</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>tiệm giấy Thứ Ba — Giấy tái chế thủ công</title>
   <link rel="icon" type="image/png" href="logo.png" />
   <link rel="apple-touch-icon" href="logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,13 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-page: #F4EFE6;
-      --bg-app: #FAF7F2;
+      --bg-outer: #EFE9DF;
+      --bg-surface: #FAF7F2;
       --bg-card: #FFFFFF;
-      --bg-soft: #F1EBE1;
+      --bg-soft: #F2ECE1;
       --border: #E5DDD0;
       --primary: #5C4033;
-      --primary-hover: #473026;
+      --primary-hover: #4A3329;
       --accent: #4B6B50;
       --accent-soft: #E8F0E9;
       --warn-bg: #FDF3E7;
@@ -25,195 +25,189 @@
       --text-main: #2D241E;
       --text-muted: #786B61;
       --shadow-sm: 0 2px 8px rgba(45, 36, 30, 0.05);
-      --shadow-md: 0 8px 24px rgba(45, 36, 30, 0.08);
+      --shadow-md: 0 8px 24px rgba(45, 36, 30, 0.09);
       --radius-lg: 18px;
       --radius-md: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg-page);
+      font-family: 'Be Vietnam Pro', -apple-system, sans-serif;
+      background: var(--bg-outer);
       color: var(--text-main);
       display: flex;
       justify-content: center;
-      min-height: 100dvh;
+      min-height: 100vh;
       line-height: 1.5;
     }
 
     .app-shell {
       width: 100%;
-      max-width: 480px;
-      height: 100dvh;
-      background: var(--bg-app);
+      max-width: 560px;
+      background: var(--bg-surface);
       display: flex;
       flex-direction: column;
-      position: relative;
+      height: 100vh;
+      height: 100dvh;
       box-shadow: var(--shadow-md);
+      position: relative;
       overflow: hidden;
     }
 
     /* Header */
     .header {
-      background: rgba(250, 247, 242, 0.94);
-      backdrop-filter: blur(10px);
+      background: var(--bg-card);
       border-bottom: 1px solid var(--border);
-      padding: 10px 14px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      z-index: 20;
+      z-index: 10;
       flex-shrink: 0;
     }
 
-    .brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-    .brand-avatar {
+    .brand-logo {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: var(--primary);
-      color: #FAF7F2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Lora', serif;
-      font-weight: 600;
-      font-size: 15px;
-      flex-shrink: 0;
-      overflow: hidden;
-      position: relative;
-      border: 1px solid var(--border);
-    }
-
-    .brand-avatar img {
-      width: 100%;
-      height: 100%;
       object-fit: cover;
-      position: absolute;
-      inset: 0;
-      background: #FFFFFF;
+      border: 1.5px solid var(--border);
+      background: var(--bg-soft);
     }
 
-    .brand-info { min-width: 0; }
-    .brand-info h1 {
+    .brand-title {
       font-family: 'Lora', serif;
-      font-size: 15.5px;
+      font-size: 17px;
       font-weight: 600;
-      color: var(--text-main);
+      color: var(--primary);
       line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .status-line {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
+    .brand-sub {
+      font-size: 11.5px;
       color: var(--text-muted);
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #4CAF50; display: inline-block; flex-shrink: 0; }
-    .status-dot.loading { background: #E6A23C; animation: pulse 1.2s infinite; }
-    .status-dot.error { background: #D9534F; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-
-    .header-actions {
+    .cart-trigger {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .cart-trigger:hover { background: var(--primary-hover); }
+
+    .cart-badge {
+      background: #fff;
+      color: var(--primary);
+      border-radius: 999px;
+      padding: 1px 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    /* Mode Switcher */
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
 
-    .new-chat-btn {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
+    .mode-tab {
+      padding: 10px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--text-muted);
-      padding: 7px 9px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 11.5px;
-      font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
     }
-    .new-chat-btn:active { background: var(--border); color: var(--primary); }
 
-    .cart-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+    .mode-tab.active {
       color: var(--primary);
-      padding: 7px 11px;
-      border-radius: 999px;
-      font-family: inherit;
-      font-size: 12.5px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-      white-space: nowrap;
+      border-bottom-color: var(--primary);
+      background: var(--bg-surface);
     }
 
-    .cart-badge {
-      background: var(--primary);
-      color: #fff;
-      font-size: 11px;
-      min-width: 19px;
-      height: 19px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 5px;
-    }
-
-    /* Chat Stream */
-    .chat-stream {
+    /* Views */
+    .view-panel {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 14px 20px;
+      display: none;
+      flex-direction: column;
+    }
+    .view-panel.active {
+      display: flex;
+    }
+
+    /* Chat Area */
+    .ai-notice-bar {
+      background: var(--bg-soft);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      flex-shrink: 0;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 14px;
-      scroll-behavior: smooth;
     }
 
     .msg-row {
       display: flex;
       flex-direction: column;
       max-width: 88%;
-      animation: fadeUp 0.22s ease-out;
+      animation: fadeUp 0.22s ease;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .msg-row.user { align-self: flex-end; align-items: flex-end; }
+    .msg-row.bot { align-self: flex-start; align-items: flex-start; }
 
-    .msg-row.bot { align-self: flex-start; }
-    .msg-row.user { align-self: flex-end; }
-    .msg-row.full-width { max-width: 100%; width: 100%; }
-
-    .bubble {
+    .msg-bubble {
       padding: 11px 14px;
       border-radius: 16px;
       font-size: 14px;
-      line-height: 1.52;
       white-space: pre-line;
       word-break: break-word;
     }
 
-    .msg-row.bot .bubble {
+    .msg-row.user .msg-bubble {
+      background: var(--primary);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-row.bot .msg-bubble {
       background: var(--bg-card);
       color: var(--text-main);
       border: 1px solid var(--border);
@@ -221,983 +215,993 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .msg-row.user .bubble {
-      background: var(--primary);
-      color: #FAF7F2;
-      border-bottom-right-radius: 4px;
+    /* Suggested Product Card in Chat */
+    .chat-suggestions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+      width: 100%;
     }
 
-    .quick-grid { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 8px; }
-
-    .chip-btn {
+    .mini-prod-card {
       background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--primary);
-      font-family: inherit;
-      font-size: 12.5px;
-      font-weight: 500;
-      padding: 7px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      box-shadow: var(--shadow-sm);
-    }
-
-    /* Catalog Carousel */
-    .catalog-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 12px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .cat-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
-    .cat-tabs::-webkit-scrollbar { display: none; }
-
-    .cat-tab {
-      border: 1px solid var(--border);
-      background: var(--bg-app);
-      color: var(--text-muted);
-      font-family: inherit;
-      font-size: 12px;
-      font-weight: 500;
-      padding: 5px 11px;
-      border-radius: 999px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-    .cat-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-    .product-carousel { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scroll-snap-type: x mandatory; }
-
-    .product-card {
-      min-width: 226px;
-      max-width: 226px;
-      background: var(--bg-app);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      scroll-snap-align: start;
-      flex-shrink: 0;
-    }
-
-    .product-thumb {
-      width: 100%;
-      height: 132px;
-      background: var(--bg-soft);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .product-thumb img.slide-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.55s ease-in-out;
-      z-index: 1;
-    }
-    .product-thumb img.slide-img.active {
-      opacity: 1;
-    }
-
-    .slide-dots {
-      position: absolute;
-      bottom: 6px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 4px;
-      z-index: 3;
-      background: rgba(30, 22, 17, 0.35);
-      padding: 3px 6px;
-      border-radius: 999px;
-    }
-    .slide-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.55);
-    }
-    .slide-dot.active {
-      background: #FFFFFF;
-      transform: scale(1.2);
-    }
-
-    .paper-art {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      text-align: center;
-      font-family: 'Lora', serif;
-      font-size: 12.5px;
-      color: var(--primary);
-      background-image: radial-gradient(rgba(92, 64, 51, 0.12) 1px, transparent 0);
-      background-size: 12px 12px;
-    }
-
-    .stock-pill {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      font-size: 10.5px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.94);
-      color: var(--accent);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-      z-index: 3;
-      max-width: calc(100% - 16px);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .stock-pill.out { background: var(--warn-bg); color: var(--warn-text); }
-
-    .in-cart-pill {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      font-size: 10px;
-      font-weight: 700;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: #FFFFFF;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.14);
-      z-index: 3;
-    }
-
-    .product-body {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .product-title {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-main);
-      line-height: 1.3;
-      cursor: pointer;
-    }
-    .product-title:hover { color: var(--primary); text-decoration: underline; }
-
-    .price-block { margin-top: 4px; display: flex; flex-direction: column; gap: 2px; }
-    .price-main { font-size: 13.5px; font-weight: 700; color: var(--primary); }
-    .price-sub { font-size: 11.5px; font-weight: 600; color: #4A3D34; }
-    .unsized-hint { font-size: 11px; color: var(--warn-text); margin-top: 2px; }
-
-    .card-actions { display: flex; flex-direction: column; gap: 5px; margin-top: 4px; }
-    .buy-btn-row { display: flex; gap: 5px; }
-
-    .btn-outline {
-      width: 100%;
-      background: #fff;
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      font-family: inherit;
-      font-size: 11.5px;
-      font-weight: 500;
-      padding: 5px 8px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .btn-primary-sm {
-      flex: 1;
-      background: var(--primary);
-      border: none;
-      color: #fff;
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 7px 6px;
-      border-radius: 8px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .btn-accent-sm {
-      flex: 1;
-      background: var(--accent-soft);
-      border: 1px solid #C8DBC9;
-      color: #2E5A36;
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 7px 6px;
-      border-radius: 8px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .btn-preorder-sm {
-      width: 100%;
-      background: var(--warn-bg);
-      border: 1px solid #EBD3B5;
-      color: var(--warn-text);
-      font-family: inherit;
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 6px 8px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    .btn-mix-sm {
-      width: 100%;
-      background: #F4EFE6;
-      border: 1px dashed var(--primary);
-      color: var(--primary);
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 5px 8px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    /* VietQR Payment Card */
-    .vietqr-card {
-      margin-top: 8px;
-      background: #FFFFFF;
-      border: 1.5px solid #C8DBC9;
-      border-radius: 14px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      text-align: center;
-    }
-    .vietqr-img {
-      width: 210px;
-      max-width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: contain;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #fff;
-      padding: 4px;
-    }
-    .vietqr-info-grid {
-      width: 100%;
-      background: var(--bg-app);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      text-align: left;
-    }
-    .vietqr-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Mix Paper Modal */
-    .mix-progress-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
       padding: 10px 12px;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-    }
-    .mix-flavor-row {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      padding: 9px 11px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-    }
-
-    /* Freeship Progress Bar inside Cart */
-    .freeship-bar-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 12px;
-    }
-    .freeship-bar-text {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-    .freeship-bar-text.done { color: var(--accent); }
-    .freeship-track {
-      width: 100%;
-      height: 7px;
-      background: var(--bg-soft);
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .freeship-fill {
-      height: 100%;
-      background: var(--primary);
-      border-radius: 999px;
-      transition: width 0.25s ease;
-    }
-    .freeship-fill.done { background: var(--accent); }
-
-    /* Order Lookup Card inside Chat */
-    .lookup-card {
-      margin-top: 8px;
-      background: var(--bg-app);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .lookup-form-row {
-      display: flex;
-      gap: 6px;
-    }
-    .lookup-input {
-      flex: 1;
-      padding: 8px 10px;
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      font-family: inherit;
-      font-size: 13px;
-      background: #fff;
-      color: var(--text-main);
-    }
-    .lookup-submit {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 9px;
-      padding: 8px 12px;
-      font-family: inherit;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .lookup-order-item {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 12.5px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .lookup-status-pill {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      background: var(--warn-bg);
-      color: var(--warn-text);
-    }
-    .lookup-status-pill.ok {
-      background: var(--accent-soft);
-      color: #2E5A36;
-    }
-
-    /* Detail Modal 2-Column Gallery */
-    .detail-gallery-split {
-      display: flex;
-      gap: 2%;
-      align-items: stretch;
-    }
-    .detail-gallery-main {
-      position: relative;
-      width: 80%;
-      aspect-ratio: 1 / 1;
-      max-height: 235px;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      background: var(--bg-soft);
-    }
-    .detail-gallery-main.single {
-      width: 100%;
-      max-height: 245px;
-    }
-    .detail-gallery-main img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .gallery-nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(255, 255, 255, 0.88);
-      color: var(--primary);
-      font-weight: 700;
-      cursor: pointer;
       box-shadow: var(--shadow-sm);
     }
-    .gallery-thumbs-col {
-      width: 18%;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      justify-content: flex-start;
-    }
-    .gallery-thumb-btn {
-      width: 100%;
-      aspect-ratio: 1 / 1;
+
+    .mini-prod-info { flex: 1; min-width: 0; }
+    .mini-prod-name { font-weight: 600; font-size: 13.5px; color: var(--text-main); }
+    .mini-prod-meta { font-size: 12px; color: var(--text-muted); }
+
+    .btn-add-mini {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid #C8DBC9;
       border-radius: 8px;
-      overflow: hidden;
-      border: 2px solid transparent;
-      padding: 0;
-      cursor: pointer;
-      background: var(--bg-soft);
-    }
-    .gallery-thumb-btn.active {
-      border-color: var(--primary);
-    }
-    .gallery-thumb-btn img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .spec-bullets {
-      list-style: disc;
-      padding-left: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 13.5px;
-      color: var(--text-main);
-    }
-
-    /* Suggested Items Card inside AI Reply */
-    .suggest-box {
-      margin-top: 8px;
-      background: var(--bg-app);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 9px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-
-    .suggest-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12.5px; }
-
-    .suggest-add {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 7px;
-      padding: 5px 10px;
-      font-size: 11.5px;
+      padding: 6px 10px;
+      font-family: inherit;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
     }
+    .btn-add-mini:hover { background: var(--accent); color: #fff; }
 
-    /* Contact Social Card */
-    .contact-card {
+    /* Social Redirect Box */
+    .social-box {
       margin-top: 8px;
       background: var(--bg-soft);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px;
+      border-radius: var(--radius-md);
+      padding: 11px 12px;
+      width: 100%;
     }
 
-    .prefill-box {
-      background: #fff;
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-      padding: 7px 9px;
+    .social-box-title {
       font-size: 12px;
-      color: var(--text-main);
+      color: var(--text-muted);
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
     }
 
-    .copy-mini {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--primary);
-      cursor: pointer;
-      white-space: nowrap;
+    .social-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
     }
 
-    .social-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-decoration: none;
+      text-align: center;
+      background: var(--bg-card);
+      color: var(--primary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 4px;
       font-size: 12px;
       font-weight: 600;
-      padding: 8px 6px;
-      border-radius: 8px;
-      color: #fff;
+      transition: all 0.15s;
     }
-    .social-fb { background: #1877F2; }
-    .social-ig { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-    .social-th { background: #1C1C1E; }
+    .social-btn:hover { background: var(--primary); color: #fff; }
 
-    /* Bottom Composer */
-    .composer-wrap {
+    /* Quick Prompts */
+    .quick-prompts {
+      padding: 8px 14px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .quick-prompts::-webkit-scrollbar { display: none; }
+
+    .chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      color: var(--primary);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .chip:hover { background: var(--bg-soft); }
+
+    /* Chat Input */
+    .chat-input-bar {
       background: var(--bg-card);
       border-top: 1px solid var(--border);
-      padding: 8px 12px 12px;
+      padding: 10px 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
       flex-shrink: 0;
     }
 
-    .hint-strip { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
-    .hint-strip::-webkit-scrollbar { display: none; }
-
-    .hint-pill {
-      background: var(--bg-app);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 11.5px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .input-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--bg-app);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 4px 6px 4px 14px;
-    }
-    .input-row:focus-within { border-color: var(--primary); }
-    .input-row input {
+    .chat-input {
       flex: 1;
-      border: none;
-      background: transparent;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      border-radius: 999px;
+      padding: 10px 15px;
       font-family: inherit;
       font-size: 14px;
       color: var(--text-main);
       outline: none;
-      padding: 7px 0;
     }
+    .chat-input:focus { border-color: var(--primary); }
 
     .send-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
       background: var(--primary);
       color: #fff;
       border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       flex-shrink: 0;
     }
-    .send-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    .ai-disclaimer {
-      font-size: 10.5px;
-      line-height: 1.35;
-      color: var(--text-muted);
-      text-align: center;
-      margin-top: 6px;
-      padding: 0 4px;
+    /* Catalog View */
+    .catalog-wrap { padding: 14px 16px 84px; }
+
+    .promo-banner {
+      background: var(--accent-soft);
+      border: 1px solid #C8DBC9;
+      color: #2E5A36;
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 12.5px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* Modals */
-    .overlay {
+    .cat-filter {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+    }
+    .cat-filter::-webkit-scrollbar { display: none; }
+
+    .cat-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 500;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .cat-pill.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Mix Pack Card */
+    .mix-card {
+      background: linear-gradient(180deg, #FFFFFF 0%, #FBF8F3 100%);
+      border: 1.5px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mix-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .mix-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 7px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .mix-row:last-child { border-bottom: none; }
+
+    .mix-stepper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mix-step-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .prod-gallery {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .prod-img-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .prod-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: 360px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      background: var(--bg-soft);
+      cursor: zoom-in;
+      display: block;
+    }
+
+    .prod-thumbs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 66px;
+      flex-shrink: 0;
+    }
+
+    .prod-thumb {
+      width: 66px;
+      height: 66px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.72;
+      transition: opacity 0.15s, border-color 0.15s;
+    }
+    .prod-thumb.active {
+      border-color: var(--primary);
+      opacity: 1;
+    }
+
+    .prod-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .prod-title {
+      font-family: 'Lora', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .stock-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .stock-ok { background: var(--accent-soft); color: #2E5A36; }
+    .stock-low { background: var(--warn-bg); color: var(--warn-text); }
+    .stock-out { background: #F3ECE6; color: var(--text-muted); }
+
+    .prod-specs {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .prod-spec-line {
+      line-height: 1.45;
+    }
+
+    /* Floating Category Quick Menu (Bottom-Left) */
+    .floating-cat-wrap {
+      position: fixed;
+      bottom: 18px;
+      left: max(14px, calc(50vw - 266px));
+      z-index: 35;
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .floating-cat-wrap.visible {
+      display: flex;
+    }
+
+    .floating-cat-menu {
+      background: var(--bg-card);
+      border: 1.5px solid var(--primary);
+      border-radius: 14px;
+      box-shadow: 0 10px 28px rgba(45, 36, 30, 0.18);
+      padding: 6px;
+      margin-bottom: 8px;
+      min-width: 180px;
+      max-width: 240px;
+      max-height: 55vh;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      animation: fadeUp 0.16s ease;
+    }
+    .floating-cat-menu.open {
+      display: flex;
+    }
+
+    .floating-cat-item {
+      background: transparent;
+      border: none;
+      text-align: left;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .floating-cat-item:hover {
+      background: var(--bg-soft);
+    }
+    .floating-cat-item.active {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .floating-cat-btn {
+      background: var(--primary);
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 10px 15px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(45, 36, 30, 0.24);
+      transition: transform 0.15s, background 0.15s;
+    }
+    .floating-cat-btn:hover {
+      background: var(--primary-hover);
+    }
+    .floating-cat-btn:active {
+      transform: scale(0.97);
+    }
+
+    .prod-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .buy-option-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
+    .buy-option-label {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .buy-option-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .btn-order {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-order:hover { background: var(--primary-hover); }
+    .btn-order.secondary {
+      background: var(--bg-card);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn-order.secondary:hover {
+      background: var(--bg-soft);
+    }
+
+    /* Cart Drawer Modal */
+    .drawer-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(30, 22, 17, 0.48);
+      background: rgba(45, 36, 30, 0.45);
       display: none;
-      align-items: flex-end;
       justify-content: center;
+      align-items: flex-end;
       z-index: 50;
     }
-    .overlay.open { display: flex; }
+    .drawer-backdrop.open { display: flex; }
 
-    .sheet-modal {
+    .drawer-panel {
       width: 100%;
-      max-width: 480px;
-      max-height: 90dvh;
-      background: var(--bg-app);
+      max-width: 560px;
+      max-height: 92vh;
+      background: var(--bg-surface);
       border-top-left-radius: 22px;
       border-top-right-radius: 22px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      animation: slideUp 0.24s ease-out;
+      animation: slideUp 0.25s ease;
     }
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-    .modal-head {
-      padding: 14px 16px;
+    .drawer-header {
       background: var(--bg-card);
+      padding: 14px 18px;
       border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
     }
-    .modal-head h2 { font-family: 'Lora', serif; font-size: 17px; font-weight: 600; }
+
+    .drawer-title {
+      font-family: 'Lora', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--primary);
+    }
 
     .close-btn {
-      width: 30px;
-      height: 30px;
+      background: var(--bg-soft);
+      border: none;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--bg-app);
-      font-size: 16px;
+      font-size: 18px;
+      color: var(--text-main);
       cursor: pointer;
     }
 
-    .modal-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .drawer-body {
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
 
-    .cart-item-row {
+    .cart-item {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 10px 12px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 10px;
     }
 
-    .qty-control {
+    .qty-box {
       display: flex;
       align-items: center;
       gap: 8px;
-      background: var(--bg-app);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 3px 6px;
-    }
-    .qty-btn { width: 24px; height: 24px; border: none; background: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
-
-    .form-group { display: flex; flex-direction: column; gap: 5px; }
-    .form-group label { font-size: 12.5px; font-weight: 600; color: var(--text-main); }
-    .form-group small { font-size: 11px; color: var(--text-muted); }
-    .form-control {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: #fff;
-      font-family: inherit;
-      font-size: 13.5px;
-      color: var(--text-main);
     }
 
-    .platform-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .plat-option {
-      border: 1px solid var(--border);
-      background: #fff;
-      border-radius: 10px;
-      padding: 8px;
-      text-align: center;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .plat-option.selected { border-color: var(--primary); background: var(--bg-soft); color: var(--primary); }
-
-    .saved-info-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      background: var(--accent-soft);
-      border: 1px solid #C8DBC9;
-      color: #2E5A36;
-      padding: 8px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-    }
-    .clear-saved-btn {
-      background: #fff;
-      border: 1px solid #C8DBC9;
-      color: #9C5A1E;
+    .qty-btn {
+      width: 26px;
+      height: 26px;
       border-radius: 6px;
-      padding: 3px 8px;
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      font-weight: 700;
       cursor: pointer;
-      white-space: nowrap;
     }
 
     .summary-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       padding: 12px;
-      font-size: 13px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      font-size: 13.5px;
     }
-    .summary-line { display: flex; justify-content: space-between; gap: 10px; }
-    .summary-total {
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .summary-row.total {
       border-top: 1px dashed var(--border);
       padding-top: 8px;
       margin-top: 2px;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 15.5px;
       color: var(--primary);
     }
 
-    .submit-order-btn {
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-input, .form-select, .form-textarea {
       width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 125px 1fr;
+      gap: 8px;
+    }
+
+    .submit-order-btn {
       background: var(--primary);
       color: #fff;
       border: none;
       border-radius: 12px;
       padding: 13px;
       font-family: inherit;
-      font-size: 14.5px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
+      width: 100%;
     }
-    .submit-order-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .submit-order-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
+    /* Payment method picker */
+    .pay-choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .pay-choice-btn {
+      border: 1.5px solid var(--border);
+      background: var(--bg-card);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pay-choice-btn.active {
+      border-color: var(--primary);
+      background: var(--bg-soft);
+    }
+    .pay-choice-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .pay-choice-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* VietQR Card in Chat */
+    .vietqr-box {
+      margin-top: 8px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--primary);
+      border-radius: 14px;
+      padding: 12px;
+      width: 100%;
+      box-shadow: var(--shadow-sm);
+    }
+    .vietqr-img {
+      width: 100%;
+      max-width: 230px;
+      display: block;
+      margin: 8px auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+    .vietqr-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      padding: 4px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .vietqr-info-row:last-child { border-bottom: none; }
+
+    /* Order Lookup Card in Chat */
+    .lookup-card {
+      margin-top: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 11px 12px;
+      width: 100%;
+      box-shadow: var(--shadow-sm);
+      font-size: 12.8px;
+    }
+    .lookup-status-pill {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--accent-soft);
+      color: #2E5A36;
+    }
+    .lookup-status-pill.warn {
+      background: var(--warn-bg);
+      color: var(--warn-text);
+    }
+
+    /* Lightbox xem ảnh phóng to */
+    .lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(25, 20, 16, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 90;
+    }
+    .lightbox-backdrop.open { display: flex; }
+    .lightbox-backdrop img {
+      max-width: 100%;
+      max-height: 86vh;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    /* Toast */
     .toast {
       position: fixed;
-      top: 66px;
+      bottom: 76px;
       left: 50%;
       transform: translateX(-50%);
       background: #2D241E;
       color: #fff;
-      padding: 8px 14px;
+      padding: 9px 16px;
       border-radius: 999px;
-      font-size: 12.5px;
-      z-index: 100;
+      font-size: 13px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
+      z-index: 80;
       white-space: nowrap;
-      max-width: 92vw;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .toast.show { opacity: 1; }
 
-    .typing-bubble {
-      display: inline-flex;
-      align-items: flex-start;
-      gap: 9px;
-      background: var(--bg-soft) !important;
-      border-style: dashed !important;
-    }
-    .typing-label {
-      font-size: 12.5px;
-      line-height: 1.45;
-      color: var(--text-muted);
-      font-style: italic;
-      transition: opacity 0.22s ease;
-    }
-    .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; margin-top: 3px; flex-shrink: 0; }
     .typing-dots span {
+      display: inline-block;
       width: 6px;
       height: 6px;
+      margin: 0 2px;
+      background: var(--text-muted);
       border-radius: 50%;
-      background: var(--primary);
       animation: bounce 1.2s infinite ease-in-out;
     }
-    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
-    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.45; } 40% { transform: scale(1); opacity: 1; } }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-    .debug-source-tag {
-      font-size: 10.5px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      padding-left: 4px;
-      font-family: monospace;
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
   </style>
 </head>
 <body>
   <div class="app-shell">
+    <!-- Header -->
     <header class="header">
       <div class="brand">
-        <div class="brand-avatar">
-          <img src="logo.png" alt="Logo Tiệm giấy Thứ Ba" onerror="this.remove();" />
-          <span>TB</span>
-        </div>
-        <div class="brand-info">
-          <h1>Tiệm giấy Thứ Ba</h1>
-          <div class="status-line">
-            <span id="statusDot" class="status-dot loading"></span>
-            <span id="statusText">Đang cập nhật kho giấy...</span>
-          </div>
+        <img src="logo.png" alt="tiệm giấy Thứ Ba" class="brand-logo" onerror="this.style.display='none'" />
+        <div>
+          <div class="brand-title">tiệm giấy Thứ Ba</div>
+          <div class="brand-sub">giấy tái chế thủ công</div>
         </div>
       </div>
-      <div class="header-actions">
-        <button type="button" class="new-chat-btn" onclick="resetChatSession()" title="Bắt đầu cuộc trò chuyện mới">↻ Chat mới</button>
-        <button type="button" class="cart-btn" onclick="openCartModal()">
-          <span>Giỏ hàng</span>
-          <span id="cartCount" class="cart-badge">0</span>
-        </button>
-      </div>
+      <button class="cart-trigger" onclick="openCart()">
+        <span>Giỏ hàng</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
     </header>
 
-    <main id="chatStream" class="chat-stream"></main>
+    <!-- Mode Switcher -->
+    <nav class="mode-tabs">
+      <button class="mode-tab active" id="tabChatBtn" onclick="switchView('chat')">Tư vấn & Đặt nhanh</button>
+      <button class="mode-tab" id="tabCatalogBtn" onclick="switchView('catalog')">Danh mục</button>
+    </nav>
 
-    <div class="composer-wrap">
-      <div class="hint-strip">
-        <button class="hint-pill" onclick="sendQuickText('Xem các loại giấy đang có sẵn')">Giấy đang có sẵn</button>
-        <button class="hint-pill" onclick="openOrderLookupCard()">Tra cứu đơn</button>
-        <button class="hint-pill" onclick="sendQuickText('Giấy có viết được bút mực không?')">Viết bút mực</button>
-        <button class="hint-pill" onclick="sendQuickText('Phí ship như thế nào ạ?')">Phí ship</button>
-        <button class="hint-pill" onclick="openCartModal()">Lên đơn ngay</button>
+    <!-- View 1: Chat -->
+    <section class="view-panel active" id="viewChat">
+      <div class="ai-notice-bar">
+        <span></span>
+        <span>Trợ lý AI phản hồi dựa trên dữ liệu kho &amp; hỏi đáp của tiệm nên có thể mất vài giây và đôi khi chưa thật sự chuẩn xác - cần tư vấn kỹ hơn bạn cứ nhắn trực tiếp cho tiệm nhé!</span>
       </div>
-      <form class="input-row" onsubmit="handleFormSubmit(event)">
-        <input id="chatInput" type="text" placeholder="Hỏi tiệm loại giấy, số lượng, giá tiền..." autocomplete="off" />
-        <button id="sendBtn" type="submit" class="send-btn" aria-label="Gửi">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
+      <div class="chat-messages" id="chatMessages"></div>
+
+      <div class="quick-prompts">
+        <button class="chip" onclick="sendQuickPrompt('Hôm nay tiệm còn những loại giấy nào?')">Còn giấy gì?</button>
+        <button class="chip" onclick="openLookupOrderModal()">Kiểm tra đơn hàng</button>
+        <button class="chip" onclick="sendQuickPrompt('Phí ship và chính sách freeship thế nào?')">Phí ship & Freeship</button>
+        <button class="chip" onclick="sendQuickPrompt('Giấy viết được bút mực không?')">Viết bút mực được không?</button>
+        <button class="chip" onclick="sendQuickPrompt('Bộ kit làm giấy dùng lại được không?')">Hỏi về Bộ kit</button>
+      </div>
+
+      <form class="chat-input-bar" onsubmit="handleChatSubmit(event)">
+        <input
+          type="text"
+          id="chatInput"
+          class="chat-input"
+          placeholder="Hỏi loại giấy, số lượng hoặc cách dùng..."
+          autocomplete="off"
+        />
+        <button type="submit" class="send-btn" id="sendBtn" aria-label="Gửi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
       </form>
-      <div class="ai-disclaimer">Câu trả lời được tổng hợp từ thông tin của tiệm bằng AI nên tốc độ có thể hơi chậm và đôi lúc chưa thật chính xác ạ.</div>
-    </div>
-  </div>
+    </section>
 
-  <div id="toast" class="toast"></div>
-
-  <div id="detailOverlay" class="overlay" onclick="closeOverlay(event, 'detailOverlay')">
-    <div class="sheet-modal">
-      <div class="modal-head">
-        <h2 id="detailTitle">Chi tiết sản phẩm</h2>
-        <button class="close-btn" onclick="hideModal('detailOverlay')">✕</button>
+    <!-- View 2: Catalog -->
+    <section class="view-panel" id="viewCatalog">
+      <div class="catalog-wrap">
+        <div class="promo-banner">
+          <span>🌿</span>
+          <span>Ship toàn quốc <strong>15K</strong> — <strong>Freeship</strong> đơn từ <strong>200K</strong>.</span>
+        </div>
+        <div class="cat-filter" id="catFilter"></div>
+        <div id="mixPackSection"></div>
+        <div class="product-grid" id="productGrid">
+          <div style="text-align:center; padding:30px; color:var(--text-muted); font-size:13.5px;">Đang tải danh mục giấy từ kho...</div>
+        </div>
       </div>
-      <div id="detailBody" class="modal-body"></div>
+    </section>
+
+    <!-- Nút nổi mở nhanh danh mục giấy (chỉ hiện chữ) ở góc trái -->
+    <div class="floating-cat-wrap" id="floatingCatWrap">
+      <div class="floating-cat-menu" id="floatingCatMenu"></div>
+      <button type="button" class="floating-cat-btn" id="floatingCatBtn" onclick="toggleFloatingCatMenu(event)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <span>Danh mục</span>
+      </button>
     </div>
   </div>
 
-  <div id="cartOverlay" class="overlay" onclick="closeOverlay(event, 'cartOverlay')">
-    <div class="sheet-modal">
-      <div class="modal-head">
-        <h2>Giỏ giấy & Thông tin gửi hàng</h2>
-        <button class="close-btn" onclick="hideModal('cartOverlay')">✕</button>
+  <!-- Cart & Checkout Drawer -->
+  <div class="drawer-backdrop" id="cartDrawer" onclick="if(event.target===this) closeCart()">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <span class="drawer-title">Giỏ hàng & Thông tin nhận giấy</span>
+        <button class="close-btn" onclick="closeCart()">×</button>
       </div>
-      <div id="cartBody" class="modal-body"></div>
+      <div class="drawer-body">
+        <div id="cartItemsList"></div>
+
+        <div class="summary-card" id="cartSummaryBox" style="display:none;">
+          <div class="summary-row">
+            <span>Tiền giấy & dụng cụ</span>
+            <span id="sumSubtotal">0đ</span>
+          </div>
+          <div class="summary-row">
+            <span>Phí vận chuyển</span>
+            <span id="sumShip">15.000đ</span>
+          </div>
+          <div class="summary-row total">
+            <span>Tổng thanh toán</span>
+            <span id="sumTotal">0đ</span>
+          </div>
+        </div>
+
+        <form id="checkoutForm" style="display:none; flex-direction:column; gap:11px;" onsubmit="submitOrder(event)">
+          <div class="form-group">
+            <label>Tên người nhận *</label>
+            <input type="text" id="custName" class="form-input" placeholder="Nhập họ tên người nhận hàng" required />
+          </div>
+
+          <div class="form-group">
+            <label>Số điện thoại nhận hàng *</label>
+            <input type="tel" id="custPhone" class="form-input" placeholder="VD: 0905xxxxxx" required />
+          </div>
+
+          <div class="form-group">
+            <label>Địa chỉ giao hàng chi tiết *</label>
+            <textarea id="custAddress" class="form-textarea" rows="2" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Tài khoản mạng xã hội (để tiệm nhắn xác nhận đơn) *</label>
+            <div class="form-row-2">
+              <select id="custPlatform" class="form-select">
+                <option value="Instagram">Instagram</option>
+                <option value="Threads">Threads</option>
+                <option value="Facebook">Facebook</option>
+              </select>
+              <input type="text" id="custHandle" class="form-input" placeholder="Tên tài khoản hoặc @username" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Hình thức thanh toán *</label>
+            <div class="pay-choice-grid">
+              <button type="button" id="payChoiceCod" class="pay-choice-btn active" onclick="setCheckoutPaymentMethod('COD')">
+                <div class="pay-choice-title">Thanh toán COD</div>
+                <div class="pay-choice-sub">Trả tiền mặt khi nhận hàng</div>
+              </button>
+              <button type="button" id="payChoiceQr" class="pay-choice-btn" onclick="setCheckoutPaymentMethod('Chuyển khoản trước')">
+                <div class="pay-choice-title">Quét QR chuyển khoản</div>
+                <div class="pay-choice-sub">Hiện mã VietQR ngay sau khi đặt</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Ghi chú thêm (nếu có)</label>
+            <input type="text" id="custNote" class="form-input" placeholder="VD: Giao giờ hành chính,..." />
+          </div>
+
+          <button type="submit" class="submit-order-btn" id="submitOrderBtn">Gửi đơn đặt hàng</button>
+        </form>
+      </div>
     </div>
   </div>
 
-  <div id="mixOverlay" class="overlay" onclick="closeOverlay(event, 'mixOverlay')">
-    <div class="sheet-modal">
-      <div class="modal-head">
-        <h2 id="mixModalTitle">Mix mẫu giấy theo gói</h2>
-        <button class="close-btn" onclick="hideModal('mixOverlay')">✕</button>
+  <!-- Modal Tra cứu đơn hàng -->
+  <div class="drawer-backdrop" id="lookupOrderModal" onclick="if(event.target===this) closeLookupOrderModal()">
+    <div class="drawer-panel" style="max-height:70vh;">
+      <div class="drawer-header">
+        <span class="drawer-title">Kiểm tra tình trạng đơn hàng</span>
+        <button class="close-btn" onclick="closeLookupOrderModal()">×</button>
       </div>
-      <div id="mixModalBody" class="modal-body"></div>
+      <div class="drawer-body">
+        <p style="font-size:13px; color:var(--text-muted);">
+          Nhập <strong>Số điện thoại đặt hàng</strong> hoặc <strong>Mã đơn hàng</strong> (VD: <code>DH261122...</code>) để xem trạng thái gói hàng và mã vận đơn:
+        </p>
+        <form onsubmit="submitOrderLookup(event)" style="display:flex; flex-direction:column; gap:10px;">
+          <input type="text" id="lookupQueryInput" class="form-input" placeholder="VD: 0905xxxxxx hoặc DH261122..." required />
+          <button type="submit" class="submit-order-btn" id="lookupSubmitBtn">Tra cứu đơn ngay</button>
+        </form>
+      </div>
     </div>
   </div>
+
+  <!-- Lightbox phóng to ảnh -->
+  <div class="lightbox-backdrop" id="imgLightbox" onclick="this.classList.remove('open')">
+    <img id="lightboxImg" src="" alt="Ảnh phóng to" />
+  </div>
+
+  <div class="toast" id="toast"></div>
 
   <script>
+    // =========================================================================
+    // CẤU HÌNH KẾT NỐI APPS SCRIPT & MẠNG XÃ HỘI TIỆM GIẤY THỨ BA
+    // =========================================================================
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
 
     const SOCIAL_LINKS = {
-      facebook: "https://www.facebook.com/search/top?q=Ti%E1%BB%87m%20gi%E1%BA%A5y%20Th%E1%BB%A9%20Ba",
-      instagram: "https://www.instagram.com/",
-      threads: "https://www.threads.net/"
+      facebook: "https://www.facebook.com/tiemgiaythuba",
+      instagram: "https://www.instagram.com/tiemgiaythuba/",
+      threads: "https://www.threads.com/@tiemgiaythuba"
     };
 
-    const CART_STORAGE_KEY = "TGTB_CART_V1";
-    const CUSTOMER_STORAGE_KEY = "TGTB_CUSTOMER_INFO_V1";
-    const SESSION_STORAGE_KEY = "TGTB_CHAT_SESSION_V1";
-    const CHAT_MESSAGES_STORAGE_KEY = "TGTB_CHAT_MESSAGES_V1";
-    const LAST_ORDER_STORAGE_KEY = "TGTB_LAST_ORDER_ID_V1";
-    const IS_DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
-
-    function createChatSessionId() {
-      return "S" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
-    }
-
-    function getOrCreateChatSessionId() {
+    const CHAT_SESSION_ID = (() => {
       try {
-        const saved = localStorage.getItem(SESSION_STORAGE_KEY);
-        if (saved && saved.length >= 6) return saved;
-        const fresh = createChatSessionId();
-        localStorage.setItem(SESSION_STORAGE_KEY, fresh);
-        return fresh;
+        const key = "tiemgiay_session_id";
+        let existing = localStorage.getItem(key);
+        if (!existing) {
+          existing = "S" + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 6).toUpperCase();
+          localStorage.setItem(key, existing);
+        }
+        return existing;
       } catch (e) {
-        return createChatSessionId();
+        return "S" + Date.now().toString(36).toUpperCase();
       }
-    }
+    })();
 
     let products = [];
-    let bankConfig = null;
     let cart = [];
     let chatHistory = [];
-    let persistedChatFeed = [];
-    let chatSessionId = getOrCreateChatSessionId();
-    let lastPlacedOrderId = "";
-    try { lastPlacedOrderId = localStorage.getItem(LAST_ORDER_STORAGE_KEY) || ""; } catch (e) {}
-    let selectedCategory = "Tất cả";
-    let selectedPlatform = "Instagram";
-    let selectedPaymentMethod = "COD";
-    let mixState = null;
-    let isSending = false;
-    let detailSlideIndex = 0;
-    let detailImages = [];
-    let detailTimer = null;
-    let typingStepTimer = null;
-    let lastReadyStatusText = "";
+    let activeCategory = "Tất cả";
+    let mixDraft = {};
+    let bankConfig = { bankId: "", accountNo: "", accountName: "" };
+    let selectedCheckoutPayment = "COD";
 
-    const chatStream = document.getElementById("chatStream");
-    const chatInput = document.getElementById("chatInput");
-    const sendBtn = document.getElementById("sendBtn");
+    const MIX_PACK_SIZE = 10;
+    const MIX_PACK_PRICE = 65000;
+
+    function formatVND(num) {
+      return Number(num || 0).toLocaleString("vi-VN") + "đ";
+    }
 
     function escapeHtml(str) {
       return String(str ?? "")
@@ -1216,853 +1220,256 @@
         .replace(/\r?\n/g, " ");
     }
 
-    // --- LƯU & KHÔI PHỤC LỊCH SỬ CHAT TRÊN TRÌNH DUYỆT KHÁCH ---
-    function saveChatMessagesToStorage() {
-      try {
-        localStorage.setItem(CHAT_MESSAGES_STORAGE_KEY, JSON.stringify(persistedChatFeed.slice(-40)));
-      } catch (e) {}
-    }
-
-    function loadChatMessagesFromStorage() {
-      try {
-        const raw = localStorage.getItem(CHAT_MESSAGES_STORAGE_KEY);
-        if (!raw) return [];
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        return [];
-      }
-    }
-
-    function saveCartToStorage() {
-      try {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
-      } catch (e) {}
-    }
-
-    function loadCartFromStorage() {
-      try {
-        const raw = localStorage.getItem(CART_STORAGE_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (Array.isArray(parsed)) {
-            cart = parsed.filter(it => it && it.id && Number(it.qty) > 0);
-          }
-        }
-      } catch (e) {}
-      updateCartBadge();
-    }
-
-    function reconcileCartWithInventory() {
-      if (!cart.length) return;
-      let adjusted = false;
-      const nextCart = [];
-      const usedMap = {};
-
-      cart.forEach(item => {
-        if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
-          let validMix = true;
-          item.mixBreakdown.forEach(part => {
-            const p = products.find(prod => prod.id === part.id);
-            const needed = Number(part.units || 0) * Number(item.qty || 1);
-            if (!p || (usedMap[p.id] || 0) + needed > p.stock) {
-              validMix = false;
-            }
-          });
-          if (!validMix) {
-            adjusted = true;
-            return;
-          }
-          item.mixBreakdown.forEach(part => {
-            usedMap[part.id] = (usedMap[part.id] || 0) + Number(part.units || 0) * Number(item.qty || 1);
-          });
-          nextCart.push(item);
-          return;
-        }
-
-        const p = products.find(prod => prod.id === item.id);
-        if (!p || p.stock <= 0) {
-          adjusted = true;
-          return;
-        }
-        let mode = item.buyMode === "pack" ? "pack" : "unit";
-        if (mode === "pack" && !hasPackOption(p)) mode = "unit";
-        if (mode === "unit" && !hasUnitOption(p) && hasPackOption(p)) mode = "pack";
-
-        const baseUnitsPerQty = mode === "pack" ? p.packSize : 1;
-        const price = mode === "pack" ? p.packPrice : p.unitPrice;
-        const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
-
-        if (price <= 0) {
-          adjusted = true;
-          return;
-        }
-
-        const alreadyUsed = usedMap[p.id] || 0;
-        const remainingStock = Math.max(0, p.stock - alreadyUsed);
-        const maxPossibleQty = Math.floor(remainingStock / baseUnitsPerQty);
-
-        if (maxPossibleQty <= 0) {
-          adjusted = true;
-          return;
-        }
-
-        const finalQty = Math.min(Number(item.qty || 1), maxPossibleQty);
-        if (finalQty !== Number(item.qty)) adjusted = true;
-
-        usedMap[p.id] = alreadyUsed + finalQty * baseUnitsPerQty;
-        nextCart.push({
-          key: `${p.id}_${mode}`,
-          id: p.id,
-          name: p.name,
-          buyMode: mode,
-          unitLabel,
-          baseUnitsPerQty,
-          price,
-          qty: finalQty
-        });
-      });
-
-      cart = nextCart;
-      saveCartToStorage();
-      updateCartBadge();
-      if (adjusted) {
-        showToast("Đã cập nhật lại giỏ hàng theo tồn kho mới nhất");
-      }
-    }
-
-    function loadSavedCustomerInfo() {
-      try {
-        const raw = localStorage.getItem(CUSTOMER_STORAGE_KEY);
-        if (!raw) return null;
-        const data = JSON.parse(raw);
-        if (data && typeof data === "object") return data;
-      } catch (e) {}
-      return null;
-    }
-
-    function saveCustomerInfoToStorage(info) {
-      try {
-        localStorage.setItem(CUSTOMER_STORAGE_KEY, JSON.stringify({
-          customerName: info.customerName || "",
-          phone: info.phone || "",
-          address: info.address || "",
-          platform: info.platform || "Instagram",
-          socialHandle: info.socialHandle || ""
-        }));
-      } catch (e) {}
-    }
-
-    function clearSavedCustomerInfo() {
-      try {
-        localStorage.removeItem(CUSTOMER_STORAGE_KEY);
-      } catch (e) {}
-      selectedPlatform = "Instagram";
-      renderCartModalContent(true);
-      showToast("Đã xóa thông tin giao hàng đã lưu");
-    }
-
-    function parseImages(p) {
-      if (Array.isArray(p.imageUrls) && p.imageUrls.length) {
-        return p.imageUrls.map(u => String(u).trim()).filter(Boolean).slice(0, 3);
-      }
-      if (!p.imageUrl) return [];
-      return String(p.imageUrl).split(/[\n,]+/).map(u => u.trim()).filter(Boolean).slice(0, 3);
-    }
-
-    function formatVND(num) {
-      return Number(num || 0).toLocaleString("vi-VN") + "đ";
-    }
-
-    function formatShortK(num) {
-      const n = Number(num || 0);
-      if (n >= 1000 && n % 1000 === 0) return (n / 1000) + "K";
-      return formatVND(n);
-    }
-
-    function showToast(text) {
+    function showToast(msg) {
       const t = document.getElementById("toast");
-      t.textContent = text;
+      t.textContent = msg;
       t.classList.add("show");
-      setTimeout(() => t.classList.remove("show"), 2400);
+      setTimeout(() => t.classList.remove("show"), 2600);
     }
 
-    function copyText(text, customMsg = "Đã copy nội dung") {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => showToast(customMsg));
-      } else {
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        showToast(customMsg);
-      }
+    function switchView(mode) {
+      document.getElementById("tabChatBtn").classList.toggle("active", mode === "chat");
+      document.getElementById("tabCatalogBtn").classList.toggle("active", mode === "catalog");
+      document.getElementById("viewChat").classList.toggle("active", mode === "chat");
+      document.getElementById("viewCatalog").classList.toggle("active", mode === "catalog");
+
+      const floatWrap = document.getElementById("floatingCatWrap");
+      const floatMenu = document.getElementById("floatingCatMenu");
+      if (floatWrap) floatWrap.classList.toggle("visible", mode === "catalog");
+      if (floatMenu) floatMenu.classList.remove("open");
     }
 
-    function scrollBottom() {
-      requestAnimationFrame(() => {
-        chatStream.scrollTop = chatStream.scrollHeight;
-      });
+    function toggleFloatingCatMenu(e) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById("floatingCatMenu");
+      if (menu) menu.classList.toggle("open");
     }
 
-    function hasPackOption(p) {
-      return Number(p.packPrice || 0) > 0 && Number(p.packSize || 1) > 1;
-    }
+    function selectFloatingCategory(cat, jumpToMix = false) {
+      const menu = document.getElementById("floatingCatMenu");
+      if (menu) menu.classList.remove("open");
 
-    function hasUnitOption(p) {
-      return Number(p.unitPrice || 0) > 0;
-    }
+      filterCategory(cat);
 
-    function getCompactStockBadge(p) {
-      if (p.stock > 0) {
-        return `Còn ${p.stock} ${p.baseUnit}`;
-      }
-      if (Number(p.unsizedStock || 0) > 0) {
-        return `Chưa gia keo (${p.unsizedStock})`;
-      }
-      return "Tạm hết sẵn";
-    }
-
-    function getFullStockDetail(p) {
-      if (p.stock > 0) {
-        if (hasPackOption(p)) {
-          const packs = Math.floor(p.stock / p.packSize);
-          return `Còn ${p.stock} ${p.baseUnit} (${packs} ${p.packUnit || "gói"})`;
+      const catalogPanel = document.getElementById("viewCatalog");
+      if (jumpToMix) {
+        const mixEl = document.getElementById("mixPackSection");
+        if (mixEl) {
+          mixEl.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
         }
-        return `Còn ${p.stock} ${p.baseUnit}`;
       }
-      return `0 ${p.baseUnit}`;
+      if (catalogPanel) {
+        catalogPanel.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
 
-    function formatSpecsBullets(specsText) {
-      const raw = String(specsText || "").trim() || "Giấy tái chế thủ công từ tiệm giấy Thứ Ba.";
-      const safe = raw.replace(/(\d)\.(\d)/g, "$1__DECIMAL__$2");
-      const parts = safe
+    document.addEventListener("click", (e) => {
+      const wrap = document.getElementById("floatingCatWrap");
+      const menu = document.getElementById("floatingCatMenu");
+      if (wrap && menu && !wrap.contains(e.target)) {
+        menu.classList.remove("open");
+      }
+    });
+
+    function formatSpecsHtml(specs) {
+      const raw = String(specs || "").trim();
+      if (!raw) return "";
+      const protectedText = raw.replace(/(\d)\.(\d)/g, "$1__DECIMAL__$2");
+      const lines = protectedText
         .split(/[\r\n.]+/)
         .map(s => s.replace(/__DECIMAL__/g, ".").trim())
         .filter(Boolean);
-
-      if (parts.length <= 1) {
-        return `<p style="font-size:13.5px; color:var(--text-main);">${escapeHtml(raw)}</p>`;
-      }
-      return `<ul class="spec-bullets">${parts.map(line => `<li>${escapeHtml(line)}</li>`).join("")}</ul>`;
+      if (!lines.length) return "";
+      return `<div class="prod-specs">${lines.map(line => `<div class="prod-spec-line">• ${escapeHtml(line)}.</div>`).join("")}</div>`;
     }
 
-    function handleThumbImgError(imgEl) {
-      const wrap = imgEl.parentElement;
-      imgEl.remove();
-      if (!wrap) return;
-      const remaining = wrap.querySelectorAll("img.slide-img");
-      if (remaining.length === 0) {
-        const dots = wrap.querySelector(".slide-dots");
-        if (dots) dots.remove();
-        const fallback = wrap.querySelector(".paper-art");
-        if (fallback) fallback.style.display = "flex";
-      } else if (!Array.from(remaining).some(i => i.classList.contains("active"))) {
-        remaining[0].classList.add("active");
-      }
+    function openLightbox(src) {
+      if (!src) return;
+      document.getElementById("lightboxImg").src = src;
+      document.getElementById("imgLightbox").classList.add("open");
     }
 
-    setInterval(() => {
-      document.querySelectorAll(".product-thumb[data-multi='1']").forEach(thumb => {
-        const imgs = thumb.querySelectorAll("img.slide-img");
-        const dots = thumb.querySelectorAll(".slide-dot");
-        if (imgs.length <= 1) return;
-        let activeIdx = Array.from(imgs).findIndex(img => img.classList.contains("active"));
-        const nextIdx = (activeIdx + 1) % imgs.length;
-        imgs.forEach((img, idx) => img.classList.toggle("active", idx === nextIdx));
-        dots.forEach((dot, idx) => dot.classList.toggle("active", idx === nextIdx));
+    function selectProdThumb(prodId, idx, src) {
+      const mainImg = document.getElementById("mainImg_" + prodId);
+      if (mainImg) mainImg.src = src;
+      document.querySelectorAll(`[data-thumb-prod="${prodId}"]`).forEach((el, i) => {
+        el.classList.toggle("active", i === idx);
       });
-    }, 3000);
+    }
 
-    async function loadInventory() {
-      const dot = document.getElementById("statusDot");
-      const statusText = document.getElementById("statusText");
-      dot.className = "status-dot loading";
-      statusText.textContent = "Đang cập nhật kho giấy...";
-
+    // -------------------------------------------------------------------------
+    // 1. TẢI DANH MỤC TỪ GOOGLE SHEETS
+    // -------------------------------------------------------------------------
+    async function loadProducts() {
       try {
         const res = await fetch(SCRIPT_URL);
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || "Không tải được kho");
-
-        bankConfig = json.bankConfig && json.bankConfig.accountNo ? json.bankConfig : null;
-
-        products = (json.products || []).map(p => ({
-          ...p,
-          stock: Number(p.stock || 0),
-          unsizedStock: Number(p.unsizedStock || 0),
-          packSize: Math.max(1, Number(p.packSize || 1)),
-          packPrice: Number(p.packPrice || 0),
-          unitPrice: Number(p.unitPrice || 0),
-          imageUrls: parseImages(p)
-        }));
-
-        reconcileCartWithInventory();
-
-        dot.className = "status-dot";
-        const availableCount = products.filter(p => p.stock > 0).length;
-        lastReadyStatusText = `Sẵn sàng • ${availableCount} mẫu đang có sẵn`;
-        statusText.textContent = lastReadyStatusText;
+        const data = await res.json();
+        if (data.ok && Array.isArray(data.products)) {
+          products = data.products;
+          if (data.bankConfig) {
+            bankConfig = data.bankConfig;
+          }
+          renderCategories();
+          renderMixPackBuilder();
+          renderProducts();
+        }
       } catch (err) {
-        dot.className = "status-dot error";
-        statusText.textContent = "Lỗi kết nối kho — chạm để thử lại";
-        statusText.style.cursor = "pointer";
-        statusText.onclick = loadInventory;
-        console.error(err);
+        document.getElementById("productGrid").innerHTML =
+          `<div style="text-align:center; padding:24px; color:#9C5A1E;">Không tải được dữ liệu kho. Bạn thử tải lại trang nhé!</div>`;
       }
     }
 
-    function resetChatSession() {
-      if (isSending) return;
-      chatHistory = [];
-      persistedChatFeed = [];
-      lastPlacedOrderId = "";
-      chatSessionId = createChatSessionId();
-      try {
-        localStorage.setItem(SESSION_STORAGE_KEY, chatSessionId);
-        localStorage.removeItem(CHAT_MESSAGES_STORAGE_KEY);
-        localStorage.removeItem(LAST_ORDER_STORAGE_KEY);
-      } catch (e) {}
-      chatStream.innerHTML = "";
-      renderWelcome();
-      showToast("Đã làm mới cuộc trò chuyện");
-    }
+    function renderCategories() {
+      const cats = ["Tất cả", ...new Set(products.map(p => p.category).filter(Boolean))];
+      const el = document.getElementById("catFilter");
+      el.innerHTML = cats.map(c => {
+        const safeCat = escapeAttrJs(c);
+        return `<button class="cat-pill ${c === activeCategory ? 'active' : ''}" onclick="filterCategory('${safeCat}')">${escapeHtml(c)}</button>`;
+      }).join("");
 
-    function renderWelcome() {
-      const row = document.createElement("div");
-      row.className = "msg-row bot";
-      row.innerHTML = `
-        <div class="bubble">Tiệm giấy Thứ Ba chào bạn.
-Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng/giá tiền hoặc lên đơn trực tiếp ở đây mà không cần chờ tiệm rep nhé.</div>
-        <div class="quick-grid">
-          <button class="chip-btn" onclick="renderCatalogMessage()">Xem các loại giấy đang có</button>
-          <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">Tư vấn chọn giấy</button>
-          <button class="chip-btn" onclick="openOrderLookupCard()">Tra cứu đơn hàng</button>
-          <button class="chip-btn" onclick="openCartModal()">Lên đơn nhanh</button>
-        </div>
-      `;
-      chatStream.appendChild(row);
-    }
-
-    // --- TRA CỨU TÌNH TRẠNG ĐƠN HÀNG NGAY TRONG CHAT ---
-    function openOrderLookupCard() {
-      const existing = document.getElementById("orderLookupRow");
-      if (existing) existing.remove();
-
-      const savedCust = loadSavedCustomerInfo();
-      const defaultQuery = lastPlacedOrderId || (savedCust && savedCust.phone ? savedCust.phone : "");
-
-      const row = document.createElement("div");
-      row.id = "orderLookupRow";
-      row.className = "msg-row bot full-width";
-      row.innerHTML = `
-        <div class="bubble" style="max-width:100%;">
-          <strong>Tra cứu tình trạng đơn hàng</strong>
-          <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Nhập Số điện thoại đặt hàng hoặc Mã đơn (VD: DH261122...) để kiểm tra trạng thái & mã vận đơn ạ:</div>
-          <div class="lookup-card">
-            <form class="lookup-form-row" onsubmit="submitOrderLookup(event)">
-              <input id="lookupQueryInput" class="lookup-input" type="text" placeholder="SĐT hoặc mã đơn..." value="${escapeHtml(defaultQuery)}" required />
-              <button id="lookupSubmitBtn" type="submit" class="lookup-submit">Kiểm tra</button>
-            </form>
-            <div id="lookupResultsBox"></div>
-          </div>
-        </div>
-      `;
-      chatStream.appendChild(row);
-      scrollBottom();
-      setTimeout(() => {
-        const inp = document.getElementById("lookupQueryInput");
-        if (inp) inp.focus();
-      }, 120);
-    }
-
-    async function submitOrderLookup(e) {
-      e.preventDefault();
-      const inp = document.getElementById("lookupQueryInput");
-      const btn = document.getElementById("lookupSubmitBtn");
-      const box = document.getElementById("lookupResultsBox");
-      if (!inp || !btn || !box) return;
-
-      const query = inp.value.trim();
-      if (!query) return;
-
-      btn.disabled = true;
-      btn.textContent = "Đang tìm...";
-      box.innerHTML = `<div style="font-size:12px; color:var(--text-muted);">Đang tra cứu đơn trên hệ thống tiệm...</div>`;
-
-      try {
-        const res = await fetch(SCRIPT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            action: "lookup_order",
-            query: query,
-            sessionId: chatSessionId
-          })
+      const floatMenu = document.getElementById("floatingCatMenu");
+      if (floatMenu) {
+        const hasMix = getMixableA5Products().length >= 2;
+        const itemsHtml = cats.map(c => {
+          const safeCat = escapeAttrJs(c);
+          return `<button type="button" class="floating-cat-item ${c === activeCategory ? 'active' : ''}" onclick="selectFloatingCategory('${safeCat}', false)">${escapeHtml(c)}</button>`;
         });
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || "Không tra cứu được");
-
-        const list = json.orders || [];
-        if (!list.length) {
-          box.innerHTML = `<div style="font-size:12.5px; color:var(--warn-text); background:var(--warn-bg); padding:8px 10px; border-radius:8px;">Dạ tiệm chưa tìm thấy đơn nào khớp với "<strong>${escapeHtml(query)}</strong>". Bạn kiểm tra lại SĐT hoặc nhắn trực tiếp cho tiệm nhé!</div>`;
-          return;
+        if (hasMix) {
+          itemsHtml.splice(
+            1,
+            0,
+            `<button type="button" class="floating-cat-item" onclick="selectFloatingCategory('Tất cả', true)">Gói Mix 10 tờ A5</button>`
+          );
         }
-
-        const activeBank = (json.bankConfig && json.bankConfig.accountNo) ? json.bankConfig : bankConfig;
-
-        box.innerHTML = list.map(o => {
-          const isOk = o.status === "Đã xác nhận" || o.status === "Đang giao" || o.status === "Hoàn thành";
-          const isPaid = o.paymentMethod === "Đã thanh toán CK";
-          const showQrBtn = !isPaid && activeBank && activeBank.accountNo && o.status !== "Đã hủy";
-          const trackHtml = o.trackingCode
-            ? `<div style="display:flex; align-items:center; justify-content:space-between; gap:6px; background:var(--bg-soft); padding:5px 8px; border-radius:7px; margin-top:3px;">
-                <span>Mã vận đơn: <strong>${escapeHtml(o.trackingCode)}</strong></span>
-                <button type="button" class="copy-mini" onclick="copyText('${escapeAttrJs(o.trackingCode)}', 'Đã copy mã vận đơn')">Copy mã</button>
-              </div>`
-            : `<div style="font-size:11.5px; color:var(--text-muted);">Mã vận đơn: Đang cập nhật</div>`;
-
-          const qrInlineHtml = showQrBtn
-            ? `<div style="margin-top:4px;">
-                <button type="button" class="copy-mini" style="width:100%; padding:6px;" onclick="appendVietQrMessage('${escapeAttrJs(o.orderId)}', ${Number(o.total || 0)}, activeBank)">📱 Hiện mã QR chuyển khoản VietQR (${formatVND(o.total)})</button>
-              </div>`
-            : "";
-
-          return `
-            <div class="lookup-order-item">
-              <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
-                <strong style="color:var(--primary);">#${escapeHtml(o.orderId)}</strong>
-                <span class="lookup-status-pill ${isOk ? 'ok' : ''}">${escapeHtml(o.status)}</span>
-              </div>
-              <div style="font-size:11.5px; color:var(--text-muted);">${escapeHtml(o.createdAt)} • ${escapeHtml(o.customerName)} (${escapeHtml(o.phoneMasked)})</div>
-              <div><strong>Sản phẩm:</strong> ${escapeHtml(o.itemsSummary)}</div>
-              <div><strong>Tổng đơn:</strong> ${formatVND(o.total)} (${isPaid ? "Đã thanh toán CK" : (o.paymentMethod === "Chuyển khoản trước" ? "Chờ xác nhận CK" : "COD khi nhận hàng")})</div>
-              ${trackHtml}
-              ${qrInlineHtml}
-            </div>
-          `;
-        }).join("");
-        scrollBottom();
-      } catch (err) {
-        box.innerHTML = `<div style="font-size:12px; color:#C94A4A;">Lỗi kết nối: ${escapeHtml(err.message)}</div>`;
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Kiểm tra";
+        floatMenu.innerHTML = itemsHtml.join("");
       }
     }
 
-    function getCartQtyForProduct(productId) {
-      return cart.reduce((sum, c) => {
-        if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
-          const found = c.mixBreakdown.find(part => part.id === productId);
-          return sum + (found ? Number(found.units || 0) * Number(c.qty || 1) : 0);
-        }
-        return c.id === productId ? sum + Number(c.qty || 0) : sum;
-      }, 0);
+    function filterCategory(cat) {
+      activeCategory = cat;
+      renderCategories();
+      renderMixPackBuilder();
+      renderProducts();
     }
 
-    function getMixableGroupForProduct(p) {
-      if (!p || !hasPackOption(p)) return [];
-      return products.filter(item =>
-        item.category === p.category &&
-        hasPackOption(item) &&
-        Number(item.packSize) === Number(p.packSize) &&
-        Number(item.packPrice) === Number(p.packPrice) &&
-        (item.stock - getUsedBaseUnitsForProduct(item.id)) > 0
-      );
+    // -------------------------------------------------------------------------
+    // GÓI MIX TÙY CHỌN 10 TỜ GIẤY A5 (65.000đ)
+    // -------------------------------------------------------------------------
+    function getMixableA5Products() {
+      return products.filter(p => {
+        const isPaper = p.productType !== "item";
+        const isA5 = String(p.category || "").toLowerCase().includes("a5") || String(p.name || "").toLowerCase().includes("a5");
+        return isPaper && isA5 && Number(p.stock || 0) > 0;
+      });
     }
 
-    function canMixProduct(p) {
-      const group = getMixableGroupForProduct(p);
-      if (group.length < 2) return false;
-      const totalAvail = group.reduce((s, item) => s + Math.max(0, item.stock - getUsedBaseUnitsForProduct(item.id)), 0);
-      return totalAvail >= Number(p.packSize);
-    }
+    function renderMixPackBuilder() {
+      const box = document.getElementById("mixPackSection");
+      if (!box) return;
 
-    function renderCatalogMessage(filterCat = "Tất cả") {
-      selectedCategory = filterCat;
-      const existing = document.getElementById("catalogCardRow");
-      if (existing) existing.remove();
-
-      const row = document.createElement("div");
-      row.id = "catalogCardRow";
-      row.className = "msg-row bot full-width";
-
-      if (!products.length) {
-        row.innerHTML = `<div class="bubble">Dạ kho giấy đang tải hoặc chưa có dữ liệu, bạn đợi vài giây rồi bấm lại giúp tiệm nhé.</div>`;
-        chatStream.appendChild(row);
-        scrollBottom();
+      const showInTab = activeCategory === "Tất cả" || activeCategory.toLowerCase().includes("a5");
+      const a5List = getMixableA5Products();
+      if (!showInTab || a5List.length < 2) {
+        box.innerHTML = "";
         return;
       }
 
-      const categories = ["Tất cả", ...new Set(products.map(p => p.category).filter(Boolean))];
-      const filtered = filterCat === "Tất cả" ? products : products.filter(p => p.category === filterCat);
+      const totalPicked = Object.values(mixDraft).reduce((s, v) => s + Number(v || 0), 0);
+      const remain = MIX_PACK_SIZE - totalPicked;
 
-      const tabsHtml = categories.map(c =>
-        `<button class="cat-tab ${c === filterCat ? 'active' : ''}" onclick="renderCatalogMessage('${escapeAttrJs(c)}')">${escapeHtml(c)}</button>`
-      ).join("");
-
-      const cardsHtml = filtered.map(p => {
-        const isOut = p.stock <= 0;
-        const hasUnsized = Number(p.unsizedStock || 0) > 0;
-        const canPack = hasPackOption(p) && p.stock >= p.packSize;
-        const canUnit = hasUnitOption(p) && p.stock >= 1;
-        const imgs = parseImages(p);
-        const inCartQty = getCartQtyForProduct(p.id);
-
-        let priceHtml = "";
-        if (hasPackOption(p) && hasUnitOption(p)) {
-          priceHtml = `
-            <div class="price-main">${formatShortK(p.packPrice)} / ${escapeHtml(p.packUnit || "gói")} (${p.packSize} ${escapeHtml(p.baseUnit)})</div>
-            <div class="price-sub">Mua lẻ: ${formatShortK(p.unitPrice)} / ${escapeHtml(p.baseUnit)}</div>
-          `;
-        } else if (hasPackOption(p)) {
-          priceHtml = `
-            <div class="price-main">${formatShortK(p.packPrice)} / ${escapeHtml(p.packUnit || "gói")}</div>
-            <div class="price-sub">Quy cách: ${p.packSize} ${escapeHtml(p.baseUnit)}/${escapeHtml(p.packUnit || "gói")}</div>
-          `;
-        } else {
-          priceHtml = `
-            <div class="price-main">${formatShortK(p.unitPrice)} / ${escapeHtml(p.baseUnit)}</div>
-          `;
-        }
-
-        const unsizedNoteHtml = hasUnsized
-          ? `<div class="unsized-hint">${isOut ? `Đang gia keo ${p.unsizedStock} ${escapeHtml(p.baseUnit)} (giao sau ~1 tuần)` : `Đang làm thêm ${p.unsizedStock} ${escapeHtml(p.baseUnit)} (~1 tuần)`}</div>`
-          : "";
-
-        let thumbHtml = "";
-        if (imgs.length > 0) {
-          const imgTags = imgs.map((url, idx) =>
-            `<img class="slide-img ${idx === 0 ? 'active' : ''}" src="${escapeHtml(url)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="handleThumbImgError(this);" />`
-          ).join("");
-          const dotsHtml = imgs.length > 1
-            ? `<div class="slide-dots">${imgs.map((_, idx) => `<span class="slide-dot ${idx === 0 ? 'active' : ''}"></span>`).join("")}</div>`
-            : "";
-          thumbHtml = `${imgTags}${dotsHtml}<div class="paper-art" style="display:none;"><span>${escapeHtml(p.name)}</span></div>`;
-        } else {
-          thumbHtml = `<div class="paper-art"><span>${escapeHtml(p.name)}</span></div>`;
-        }
-
-        const safeIdAttr = escapeAttrJs(p.id);
-        let actionButtonsHtml = "";
-        if (isOut && hasUnsized) {
-          actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${safeIdAttr}')">Đặt trước (giao sau ~1 tuần)</button>`;
-        } else if (isOut) {
-          actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${safeIdAttr}')">Đặt làm thêm</button>`;
-        } else if (canPack && canUnit) {
-          actionButtonsHtml = `
-            <div class="buy-btn-row">
-              <button class="btn-primary-sm" onclick="addToCart('${safeIdAttr}', 'pack', 1)">+ ${escapeHtml(p.packUnit || "Gói")} (${formatShortK(p.packPrice)})</button>
-              <button class="btn-accent-sm" onclick="addToCart('${safeIdAttr}', 'unit', 1)">+ Lẻ (${formatShortK(p.unitPrice)})</button>
-            </div>
-          `;
-        } else if (canPack) {
-          actionButtonsHtml = `<button class="btn-primary-sm" onclick="addToCart('${safeIdAttr}', 'pack', 1)">+ Thêm ${escapeHtml(p.packUnit || "gói")} (${formatShortK(p.packPrice)})</button>`;
-        } else if (canUnit) {
-          actionButtonsHtml = `<button class="btn-primary-sm" onclick="addToCart('${safeIdAttr}', 'unit', 1)">+ Thêm giỏ (${formatShortK(p.unitPrice)})</button>`;
-        } else {
-          actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${safeIdAttr}')">Không đủ gói — Đặt thêm</button>`;
-        }
-
-        const mixBtnHtml = canMixProduct(p)
-          ? `<button type="button" class="btn-mix-sm" onclick="openMixModal('${safeIdAttr}')">🎨 Mix ${p.packSize} ${escapeHtml(p.baseUnit)} nhiều mùi/màu</button>`
-          : "";
-
+      const rowsHtml = a5List.map(p => {
+        const picked = Number(mixDraft[p.id] || 0);
+        const safeId = escapeAttrJs(p.id);
         return `
-          <div class="product-card">
-            <div class="product-thumb" data-multi="${imgs.length > 1 ? '1' : '0'}" onclick="openDetailModal('${safeIdAttr}')">
-              ${thumbHtml}
-              ${inCartQty > 0 ? `<span class="in-cart-pill">✓ Đã có ${inCartQty} trong giỏ</span>` : ""}
-              <span class="stock-pill ${isOut ? 'out' : ''}">${getCompactStockBadge(p)}</span>
+          <div class="mix-row">
+            <div style="flex:1; min-width:0;">
+              <div style="font-size:13px; font-weight:600; color:var(--text-main);">${escapeHtml(p.name)}</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Còn sẵn: ${p.stock} ${escapeHtml(p.baseUnit)}</div>
             </div>
-            <div class="product-body">
-              <div>
-                <div class="product-title" onclick="openDetailModal('${safeIdAttr}')">${escapeHtml(p.name)}</div>
-                <div class="price-block">${priceHtml}${unsizedNoteHtml}</div>
-              </div>
-              <div class="card-actions">
-                ${actionButtonsHtml}
-                ${mixBtnHtml}
-                <button class="btn-outline" onclick="openDetailModal('${safeIdAttr}')">Xem chi tiết</button>
-              </div>
+            <div class="mix-stepper">
+              <button type="button" class="mix-step-btn" onclick="changeMixQty('${safeId}', -1)">−</button>
+              <span style="min-width:22px; text-align:center; font-weight:700; font-size:13.5px;">${picked}</span>
+              <button type="button" class="mix-step-btn" onclick="changeMixQty('${safeId}', 1)">+</button>
             </div>
           </div>
         `;
       }).join("");
 
-      row.innerHTML = `
-        <div class="catalog-box">
-          <div class="cat-tabs">${tabsHtml}</div>
-          <div class="product-carousel">${cardsHtml}</div>
-        </div>
-      `;
-      chatStream.appendChild(row);
-      scrollBottom();
-    }
-
-    function askPreorder(productId) {
-      const p = products.find(item => item.id === productId);
-      if (!p) return;
-      if (p.stock <= 0 && Number(p.unsizedStock || 0) > 0) {
-        sendQuickText(`Mẫu "${p.name}" đang có ${p.unsizedStock} ${p.baseUnit} chưa gia keo (giao sau ~1 tuần), mình muốn đặt trước mẫu này ạ`);
-      } else {
-        sendQuickText(`Mẫu "${p.name}" đang tạm hết, mình muốn hỏi đặt làm thêm ạ`);
-      }
-    }
-
-    function setDetailSlide(idx) {
-      if (!detailImages.length) return;
-      detailSlideIndex = (idx + detailImages.length) % detailImages.length;
-      const mainImg = document.getElementById("detailMainImg");
-      if (mainImg) mainImg.src = detailImages[detailSlideIndex];
-      document.querySelectorAll(".gallery-thumb-btn").forEach((btn, i) => {
-        btn.classList.toggle("active", i === detailSlideIndex);
-      });
-    }
-
-    function openDetailModal(id) {
-      const p = products.find(item => item.id === id);
-      if (!p) return;
-      if (detailTimer) clearInterval(detailTimer);
-
-      const isOut = p.stock <= 0;
-      const hasUnsized = Number(p.unsizedStock || 0) > 0;
-      const canPack = hasPackOption(p) && p.stock >= p.packSize;
-      const canUnit = hasUnitOption(p) && p.stock >= 1;
-      detailImages = parseImages(p);
-      detailSlideIndex = 0;
-
-      let galleryHtml = "";
-      if (detailImages.length > 0) {
-        const hasMulti = detailImages.length > 1;
-        const navArrows = hasMulti ? `
-          <button type="button" class="gallery-nav-btn" style="left:8px;" onclick="setDetailSlide(detailSlideIndex - 1)">‹</button>
-          <button type="button" class="gallery-nav-btn" style="right:8px;" onclick="setDetailSlide(detailSlideIndex + 1)">›</button>
-        ` : "";
-        const thumbsCol = hasMulti ? `
-          <div class="gallery-thumbs-col">
-            ${detailImages.map((url, idx) => `
-              <button type="button" class="gallery-thumb-btn ${idx === 0 ? 'active' : ''}" onclick="setDetailSlide(${idx})">
-                <img src="${escapeHtml(url)}" alt="Ảnh ${idx + 1}" />
-              </button>
-            `).join("")}
-          </div>
-        ` : "";
-        galleryHtml = `
-          <div class="detail-gallery-split">
-            <div class="detail-gallery-main ${hasMulti ? '' : 'single'}">
-              <img id="detailMainImg" src="${escapeHtml(detailImages[0])}" alt="${escapeHtml(p.name)}" />
-              ${navArrows}
+      box.innerHTML = `
+        <div class="mix-card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+            <div>
+              <span class="mix-badge">Gói Mix tự chọn</span>
+              <div class="prod-title">Gói Mix 10 tờ giấy A5 tùy chọn</div>
+              <div class="prod-specs">Chọn tự do đủ 10 tờ từ các mẫu giấy A5 đang có sẵn trong kho.</div>
             </div>
-            ${thumbsCol}
+            <div style="text-align:right; white-space:nowrap;">
+              <div class="buy-option-price" style="font-size:16px;">${formatVND(MIX_PACK_PRICE)}</div>
+              <div style="font-size:11px; color:var(--text-muted);">/ gói 10 tờ</div>
+            </div>
           </div>
-        `;
-      }
 
-      let priceRows = "";
-      if (hasPackOption(p)) {
-        priceRows += `<div class="summary-line"><span>Giá theo ${escapeHtml(p.packUnit || "gói")} (${p.packSize} ${escapeHtml(p.baseUnit)}):</span><strong>${formatVND(p.packPrice)}</strong></div>`;
-      }
-      if (hasUnitOption(p)) {
-        priceRows += `<div class="summary-line"><span>Giá lẻ từng ${escapeHtml(p.baseUnit)}:</span><strong>${formatVND(p.unitPrice)}</strong></div>`;
-      }
+          <div style="margin:8px 0; background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:4px 10px;">
+            ${rowsHtml}
+          </div>
 
-      const unsizedLine = hasUnsized
-        ? `<div class="summary-line"><span>Giấy chưa gia keo (giao sau ~1 tuần):</span><strong style="color:var(--warn-text);">${p.unsizedStock} ${escapeHtml(p.baseUnit)}</strong></div>`
-        : "";
-
-      const safeIdAttr = escapeAttrJs(p.id);
-      let modalButtons = "";
-      if (isOut) {
-        const btnLabel = hasUnsized
-          ? "Đặt trước mẻ chưa gia keo (giao sau ~1 tuần)"
-          : "Nhắn tiệm đặt làm thêm mẫu này";
-        modalButtons = `<button class="submit-order-btn" onclick="hideModal('detailOverlay'); askPreorder('${safeIdAttr}')">${btnLabel}</button>`;
-      } else {
-        modalButtons = `<div style="display:flex; gap:8px;">`;
-        if (canPack) {
-          modalButtons += `<button class="submit-order-btn" style="flex:1;" onclick="addToCart('${safeIdAttr}', 'pack', 1); hideModal('detailOverlay');">+ Thêm 1 ${escapeHtml(p.packUnit || "gói")} (${formatShortK(p.packPrice)})</button>`;
-        }
-        if (canUnit) {
-          modalButtons += `<button class="submit-order-btn" style="flex:1; background:var(--accent);" onclick="addToCart('${safeIdAttr}', 'unit', 1); hideModal('detailOverlay');">+ Thêm 1 ${escapeHtml(p.baseUnit)} (${formatShortK(p.unitPrice)})</button>`;
-        }
-        modalButtons += `</div>`;
-        if (canMixProduct(p)) {
-          modalButtons += `<button type="button" class="btn-mix-sm" style="padding:9px; font-size:12.5px;" onclick="hideModal('detailOverlay'); openMixModal('${safeIdAttr}')">🎨 Tự chọn Mix gói ${p.packSize} ${escapeHtml(p.baseUnit)} (nhiều mùi/màu)</button>`;
-        }
-      }
-
-      document.getElementById("detailTitle").textContent = p.name;
-      document.getElementById("detailBody").innerHTML = `
-        ${galleryHtml}
-        <div class="summary-card">
-          ${priceRows}
-          <div class="summary-line"><span>Sẵn sàng giao ngay:</span><strong>${getFullStockDetail(p)}</strong></div>
-          ${unsizedLine}
-          <div class="summary-line"><span>Nhóm:</span><span>${escapeHtml(p.category)}</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:8px;">
+            <span style="font-size:12.5px; font-weight:600; color:${remain === 0 ? 'var(--accent)' : 'var(--warn-text)'};">
+              Đã chọn: ${totalPicked}/${MIX_PACK_SIZE} tờ ${remain > 0 ? `(chọn thêm ${remain} tờ)` : "✓ Đủ 1 gói"}
+            </span>
+            <button type="button" class="btn-order" ${remain !== 0 ? "disabled style='opacity:0.5; cursor:not-allowed;'" : ""} onclick="addMixPackToCart()">
+              + Thêm gói Mix
+            </button>
+          </div>
         </div>
-        <div class="summary-card">
-          <strong style="font-size:13px;">Đặc điểm chi tiết:</strong>
-          ${formatSpecsBullets(p.specs)}
-        </div>
-        ${modalButtons}
       `;
-      document.getElementById("detailOverlay").classList.add("open");
-
-      if (detailImages.length > 1) {
-        detailTimer = setInterval(() => setDetailSlide(detailSlideIndex + 1), 3000);
-      }
     }
 
-    function hideModal(id) {
-      if (id === "detailOverlay" && detailTimer) {
-        clearInterval(detailTimer);
-        detailTimer = null;
-      }
-      document.getElementById(id).classList.remove("open");
-    }
-    function closeOverlay(e, id) { if (e.target.id === id) hideModal(id); }
+    function changeMixQty(prodId, delta) {
+      const p = products.find(item => item.id === prodId);
+      if (!p) return;
 
-    function updateCartBadge() {
-      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-      document.getElementById("cartCount").textContent = totalQty;
-    }
+      const cur = Number(mixDraft[prodId] || 0);
+      const totalPicked = Object.values(mixDraft).reduce((s, v) => s + Number(v || 0), 0);
 
-    function getUsedBaseUnitsForProduct(productId) {
-      return cart.reduce((sum, c) => {
-        if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
-          const part = c.mixBreakdown.find(pt => pt.id === productId);
-          return sum + (part ? Number(part.units || 0) * c.qty : 0);
+      if (delta > 0) {
+        if (totalPicked >= MIX_PACK_SIZE) {
+          showToast(`Mỗi gói Mix tối đa ${MIX_PACK_SIZE} tờ ạ`);
+          return;
         }
-        return c.id === productId ? sum + c.qty * c.baseUnitsPerQty : sum;
-      }, 0);
+        if (cur + 1 > Number(p.stock || 0)) {
+          showToast(`Mẫu ${p.name} chỉ còn sẵn ${p.stock} ${p.baseUnit}`);
+          return;
+        }
+        mixDraft[prodId] = cur + 1;
+      } else if (delta < 0 && cur > 0) {
+        mixDraft[prodId] = cur - 1;
+        if (mixDraft[prodId] === 0) delete mixDraft[prodId];
+      }
+      renderMixPackBuilder();
     }
 
-    // --- TÍNH NĂNG MIX MẪU GIẤY THEO GÓI ---
-    function openMixModal(seedProductId) {
-      const seed = products.find(item => item.id === seedProductId);
-      if (!seed) return;
-      const group = getMixableGroupForProduct(seed);
-      if (group.length < 2) {
-        showToast("Nhóm này hiện chưa đủ từ 2 mẫu có sẵn để mix ạ");
+    function addMixPackToCart() {
+      const a5List = getMixableA5Products();
+      const breakdown = [];
+      let total = 0;
+
+      a5List.forEach(p => {
+        const u = Number(mixDraft[p.id] || 0);
+        if (u > 0) {
+          breakdown.push({ id: p.id, name: p.name, units: u });
+          total += u;
+        }
+      });
+
+      if (total !== MIX_PACK_SIZE) {
+        showToast(`Bạn chọn đủ ${MIX_PACK_SIZE} tờ giúp tiệm nhé`);
         return;
       }
 
-      mixState = {
-        category: seed.category,
-        packSize: Number(seed.packSize),
-        packPrice: Number(seed.packPrice),
-        packUnit: seed.packUnit || "gói",
-        baseUnit: seed.baseUnit || "tờ",
-        items: group.map(item => ({
-          id: item.id,
-          name: item.name,
-          avail: Math.max(0, item.stock - getUsedBaseUnitsForProduct(item.id)),
-          qty: item.id === seed.id ? Math.min(Math.floor(seed.packSize / 2), Math.max(0, item.stock - getUsedBaseUnitsForProduct(item.id))) : 0
-        }))
-      };
-
-      document.getElementById("mixModalTitle").textContent = `Mix ${mixState.packUnit} ${mixState.category} (${mixState.packSize} ${mixState.baseUnit})`;
-      renderMixModalBody();
-      document.getElementById("mixOverlay").classList.add("open");
-    }
-
-    function changeMixItemQty(idx, delta) {
-      if (!mixState || !mixState.items[idx]) return;
-      const currentTotal = mixState.items.reduce((s, it) => s + it.qty, 0);
-      const item = mixState.items[idx];
-      if (delta > 0) {
-        if (currentTotal >= mixState.packSize) {
-          showToast(`Đã đủ ${mixState.packSize} ${mixState.baseUnit} cho 1 ${mixState.packUnit} rồi ạ`);
-          return;
-        }
-        if (item.qty + 1 > item.avail) {
-          showToast(`Mẫu này chỉ còn sẵn ${item.avail} ${mixState.baseUnit} ạ`);
-          return;
-        }
-        item.qty += 1;
-      } else if (delta < 0 && item.qty > 0) {
-        item.qty -= 1;
-      }
-      renderMixModalBody();
-    }
-
-    function autoDistributeMix() {
-      if (!mixState) return;
-      mixState.items.forEach(it => { it.qty = 0; });
-      let remaining = mixState.packSize;
-      let safety = 0;
-      while (remaining > 0 && safety < 200) {
-        let addedInPass = false;
-        for (let i = 0; i < mixState.items.length && remaining > 0; i++) {
-          if (mixState.items[i].qty < mixState.items[i].avail) {
-            mixState.items[i].qty += 1;
-            remaining -= 1;
-            addedInPass = true;
-          }
-        }
-        if (!addedInPass) break;
-        safety++;
-      }
-      renderMixModalBody();
-    }
-
-    function renderMixModalBody() {
-      if (!mixState) return;
-      const body = document.getElementById("mixModalBody");
-      const totalSelected = mixState.items.reduce((s, it) => s + it.qty, 0);
-      const remaining = mixState.packSize - totalSelected;
-      const isComplete = remaining === 0;
-
-      const rowsHtml = mixState.items.map((it, idx) => `
-        <div class="mix-flavor-row">
-          <div>
-            <div style="font-size:13.5px; font-weight:600; color:var(--text-main);">${escapeHtml(it.name)}</div>
-            <div style="font-size:11.5px; color:var(--text-muted);">Còn sẵn: ${it.avail} ${escapeHtml(mixState.baseUnit)}</div>
-          </div>
-          <div class="qty-control">
-            <button type="button" class="qty-btn" onclick="changeMixItemQty(${idx}, -1)">−</button>
-            <span style="font-size:13.5px; font-weight:700; min-width:22px; text-align:center; color:${it.qty > 0 ? 'var(--primary)' : 'var(--text-muted)'};">${it.qty}</span>
-            <button type="button" class="qty-btn" onclick="changeMixItemQty(${idx}, 1)">+</button>
-          </div>
-        </div>
-      `).join("");
-
-      body.innerHTML = `
-        <div class="mix-progress-box">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
-            <span style="font-size:13px; font-weight:700; color:${isComplete ? 'var(--accent)' : 'var(--primary)'};">
-              ${isComplete ? `✓ Đã chọn đủ ${mixState.packSize}/${mixState.packSize} ${escapeHtml(mixState.baseUnit)}` : `Đã chọn: ${totalSelected}/${mixState.packSize} ${escapeHtml(mixState.baseUnit)} (thiếu ${remaining})`}
-            </span>
-            <button type="button" class="copy-mini" onclick="autoDistributeMix()">Chia đều tự động</button>
-          </div>
-          <div style="font-size:12px; color:var(--text-muted);">Giá đồng giá gói mix: <strong style="color:var(--primary);">${formatVND(mixState.packPrice)}</strong> / ${escapeHtml(mixState.packUnit)}</div>
-        </div>
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          ${rowsHtml}
-        </div>
-        <button type="button" class="submit-order-btn" ${isComplete ? "" : "disabled"} onclick="confirmAddMixToCart()">
-          ${isComplete ? `+ Thêm gói mix vào giỏ (${formatShortK(mixState.packPrice)})` : `Chọn thêm ${remaining} ${escapeHtml(mixState.baseUnit)} để đủ gói`}
-        </button>
-      `;
-    }
-
-    function confirmAddMixToCart() {
-      if (!mixState) return;
-      const chosen = mixState.items.filter(it => it.qty > 0);
-      const totalSelected = chosen.reduce((s, it) => s + it.qty, 0);
-      if (totalSelected !== mixState.packSize) return;
-
-      const shortLabels = chosen.map(it => {
-        const shortName = it.name.replace(new RegExp("^" + mixState.category.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*", "i"), "").trim() || it.name;
-        return `${it.qty} ${shortName}`;
-      });
-      const mixTitle = `Mix ${mixState.category} (${shortLabels.join(" + ")})`;
-      const mixKey = "MIX_" + chosen.map(it => `${it.id}x${it.qty}`).join("_");
+      const detailLabel = breakdown.map(b => `${b.units} ${b.name}`).join(", ");
+      const mixKey = "MIX_" + breakdown.map(b => `${b.id}x${b.units}`).join("_");
 
       const existing = cart.find(c => c.key === mixKey);
       if (existing) {
@@ -2071,60 +1478,182 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         cart.push({
           key: mixKey,
           id: "",
-          name: mixTitle,
+          name: `Gói Mix A5 (${detailLabel})`,
           buyMode: "mix",
-          unitLabel: `${mixState.packUnit} mix (${mixState.packSize} ${mixState.baseUnit})`,
-          baseUnitsPerQty: mixState.packSize,
-          price: mixState.packPrice,
+          unitLabel: "gói 10 tờ",
+          price: MIX_PACK_PRICE,
+          baseUnitsPerQty: MIX_PACK_SIZE,
           qty: 1,
-          mixBreakdown: chosen.map(it => ({ id: it.id, name: it.name, units: it.qty }))
+          mixBreakdown: breakdown
         });
       }
 
-      saveCartToStorage();
+      mixDraft = {};
+      renderMixPackBuilder();
       updateCartBadge();
-      refreshCatalogCardIfOpen();
-      hideModal("mixOverlay");
-      showToast(`Đã thêm ${mixTitle} vào giỏ`);
+      showToast("Đã thêm gói Mix 10 tờ A5 vào giỏ");
     }
 
-    function refreshCatalogCardIfOpen() {
-      if (document.getElementById("catalogCardRow")) {
-        renderCatalogMessage(selectedCategory);
-      }
-    }
+    function renderProducts() {
+      const list = activeCategory === "Tất cả"
+        ? products
+        : products.filter(p => p.category === activeCategory);
 
-    function addToCart(id, buyMode = "pack", qty = 1) {
-      const p = products.find(item => item.id === id);
-      if (!p || p.stock <= 0) {
-        showToast("Mẫu này hiện tạm hết hàng có sẵn ạ");
+      const grid = document.getElementById("productGrid");
+      if (!list.length) {
+        grid.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted);">Chưa có sản phẩm nào trong nhóm này.</div>`;
         return;
       }
 
-      let mode = buyMode;
-      if (mode === "pack" && !hasPackOption(p)) mode = "unit";
-      if (mode === "unit" && !hasUnitOption(p) && hasPackOption(p)) mode = "pack";
+      grid.innerHTML = list.map(p => {
+        const isItem = p.productType === "item";
+        const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
+        const hasUnit = Number(p.unitPrice) > 0;
+        const packsAvail = hasPack ? Math.floor(p.stock / p.packSize) : 0;
 
-      const baseUnitsPerQty = mode === "pack" ? p.packSize : 1;
-      const price = mode === "pack" ? p.packPrice : p.unitPrice;
+        let badgeClass = "stock-ok";
+        let badgeText = isItem
+          ? `Còn ${p.stock} ${escapeHtml(p.baseUnit)}`
+          : (hasPack
+            ? `Sẵn ${p.stock} ${escapeHtml(p.baseUnit)} (${packsAvail} ${escapeHtml(p.packUnit || "gói")})`
+            : `Còn ${p.stock} ${escapeHtml(p.baseUnit)}`);
+
+        if (p.stock <= 0) {
+          badgeClass = "stock-out";
+          badgeText = p.unsizedStock > 0 ? "Đang đợi gia keo (~1 tuần)" : "Hết hàng sẵn";
+        } else if ((hasPack && packsAvail <= 2) || (!hasPack && p.stock <= 5)) {
+          badgeClass = "stock-low";
+        }
+
+        const imgs = Array.isArray(p.imageUrls) && p.imageUrls.length
+          ? p.imageUrls
+          : (p.imageUrl ? String(p.imageUrl).split(/[\n,]+/).map(u => u.trim()).filter(Boolean).slice(0, 3) : []);
+
+        const safeId = escapeAttrJs(p.id);
+        const safeName = escapeAttrJs(p.name);
+
+        let galleryHtml = "";
+        if (imgs.length > 0) {
+          const thumbsHtml = imgs.length > 1
+            ? `<div class="prod-thumbs">${imgs.map((u, idx) => {
+                const safeUrl = escapeAttrJs(u);
+                return `<img src="${escapeHtml(u)}" data-thumb-prod="${escapeHtml(p.id)}" class="prod-thumb ${idx === 0 ? 'active' : ''}" onclick="selectProdThumb('${safeId}', ${idx}, '${safeUrl}')" alt="Ảnh ${idx + 1}" />`;
+              }).join("")}</div>`
+            : "";
+          galleryHtml = `
+            <div class="prod-gallery">
+              <div class="prod-img-wrap">
+                <img id="mainImg_${escapeHtml(p.id)}" src="${escapeHtml(imgs[0])}" class="prod-img" alt="${escapeHtml(p.name)}" onclick="openLightbox(this.src)" onerror="this.style.display='none'" />
+              </div>
+              ${thumbsHtml}
+            </div>
+          `;
+        }
+
+        let actionsHtml = "";
+        if (p.stock <= 0) {
+          actionsHtml = `
+            <button class="btn-order secondary" style="width:100%; padding:9px;" onclick="askPreorder('${safeName}')">
+              Nhắn tiệm đặt làm thêm
+            </button>
+          `;
+        } else {
+          if (hasPack) {
+            const canBuyPack = p.stock >= p.packSize;
+            actionsHtml += `
+              <div class="buy-option-row">
+                <div>
+                  <div class="buy-option-label">Mua theo ${escapeHtml(p.packUnit || "gói")} (${p.packSize} ${escapeHtml(p.baseUnit)})</div>
+                  <div class="buy-option-price">${formatVND(p.packPrice)}</div>
+                </div>
+                ${canBuyPack
+                  ? `<button class="btn-order" onclick="addToCart('${safeId}', 'pack', 1)">+ Thêm ${escapeHtml(p.packUnit || "gói")}</button>`
+                  : `<span style="font-size:11.5px; color:var(--text-muted);">Không đủ 1 ${escapeHtml(p.packUnit || "gói")}</span>`
+                }
+              </div>
+            `;
+          }
+          if (hasUnit) {
+            const unitLabelText = isItem
+              ? `Giá bán / 1 ${escapeHtml(p.baseUnit)}`
+              : `Mua lẻ từng ${escapeHtml(p.baseUnit)}`;
+            const addBtnText = isItem
+              ? `+ Thêm vào giỏ`
+              : `+ Thêm lẻ`;
+            actionsHtml += `
+              <div class="buy-option-row">
+                <div>
+                  <div class="buy-option-label">${unitLabelText}</div>
+                  <div class="buy-option-price">${formatVND(p.unitPrice)}</div>
+                </div>
+                <button class="btn-order ${hasPack ? 'secondary' : ''}" onclick="addToCart('${safeId}', 'unit', 1)">${addBtnText}</button>
+              </div>
+            `;
+          }
+        }
+
+        return `
+          <div class="product-card">
+            ${galleryHtml}
+            <div class="prod-top">
+              <div class="prod-title">${escapeHtml(p.name)}</div>
+              <span class="stock-pill ${badgeClass}">${badgeText}</span>
+            </div>
+            ${formatSpecsHtml(p.specs)}
+            <div class="prod-actions">${actionsHtml}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function askPreorder(prodName) {
+      switchView("chat");
+      sendQuickPrompt(`Mình muốn đặt trước mẫu ${prodName} thì bao lâu có ạ?`);
+    }
+
+    // -------------------------------------------------------------------------
+    // 2. GIỎ HÀNG & TÍNH SHIP TỰ ĐỘNG
+    // -------------------------------------------------------------------------
+    function getProductReservedBaseUnits(prodId, excludeKey = "") {
+      return cart.reduce((sum, item) => {
+        if (item.key === excludeKey) return sum;
+        if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
+          const part = item.mixBreakdown.find(b => b.id === prodId);
+          return sum + (part ? Number(part.units || 0) * item.qty : 0);
+        }
+        if (item.id === prodId) {
+          return sum + (item.qty * item.baseUnitsPerQty);
+        }
+        return sum;
+      }, 0);
+    }
+
+    function addToCart(prodId, buyMode = "pack", qtyToAdd = 1) {
+      const p = products.find(item => item.id === prodId);
+      if (!p || p.stock <= 0) return;
+
+      const isItem = p.productType === "item";
+      const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
+      const mode = (buyMode === "pack" && hasPack) ? "pack" : "unit";
+      const baseUnitsPerQty = mode === "pack" ? Number(p.packSize) : 1;
+      const unitPrice = mode === "pack" ? Number(p.packPrice) : Number(p.unitPrice);
       const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
+      const key = `${p.id}_${mode}`;
 
-      if (price <= 0) {
-        showToast("Sản phẩm chưa có giá cho tùy chọn này ạ");
-        return;
-      }
-
-      const alreadyUsed = getUsedBaseUnitsForProduct(id);
-      const needed = qty * baseUnitsPerQty;
-      if (alreadyUsed + needed > p.stock) {
-        showToast(`Kho sẵn sàng chỉ còn ${p.stock} ${p.baseUnit} ạ`);
-        return;
-      }
-
-      const key = `${id}_${mode}`;
+      const reservedElsewhere = getProductReservedBaseUnits(p.id, key);
       const existing = cart.find(c => c.key === key);
+      const currentQty = existing ? existing.qty : 0;
+      const nextBaseUnits = reservedElsewhere + (currentQty + qtyToAdd) * baseUnitsPerQty;
+
+      if (nextBaseUnits > p.stock) {
+        const remainUnits = Math.max(0, p.stock - reservedElsewhere);
+        const maxPossible = Math.floor(remainUnits / baseUnitsPerQty);
+        showToast(`Kho chỉ còn đủ tối đa ${maxPossible} ${unitLabel}`);
+        return;
+      }
+
       if (existing) {
-        existing.qty += qty;
+        existing.qty += qtyToAdd;
       } else {
         cart.push({
           key,
@@ -2132,656 +1661,546 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           name: p.name,
           buyMode: mode,
           unitLabel,
+          price: unitPrice,
           baseUnitsPerQty,
-          price,
-          qty
+          qty: qtyToAdd
         });
       }
 
-      saveCartToStorage();
       updateCartBadge();
-      refreshCatalogCardIfOpen();
-      showToast(`Đã thêm ${qty} ${unitLabel} ${p.name}`);
+      showToast(`Đã thêm ${p.name} (${unitLabel})`);
     }
 
-    function changeCartQty(key, delta) {
-      const idx = cart.findIndex(c => c.key === key);
-      if (idx === -1) return;
-      const item = cart[idx];
-      const p = products.find(prod => prod.id === item.id);
-      const nextQty = item.qty + delta;
+    function updateCartQty(key, delta) {
+      const item = cart.find(c => c.key === key);
+      if (!item) return;
 
+      const nextQty = item.qty + delta;
       if (nextQty <= 0) {
-        cart.splice(idx, 1);
-      } else {
-        if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
-          for (let i = 0; i < item.mixBreakdown.length; i++) {
-            const part = item.mixBreakdown[i];
-            const prod = products.find(pr => pr.id === part.id);
-            if (prod) {
-              const otherUsed = cart
-                .filter(c => c.key !== key)
-                .reduce((s, c) => {
-                  if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
-                    const f = c.mixBreakdown.find(pt => pt.id === part.id);
-                    return s + (f ? Number(f.units || 0) * c.qty : 0);
-                  }
-                  return c.id === part.id ? s + c.qty * c.baseUnitsPerQty : s;
-                }, 0);
-              if (otherUsed + nextQty * Number(part.units || 0) > prod.stock) {
-                showToast(`Mẫu "${prod.name}" chỉ còn sẵn ${prod.stock} ${prod.baseUnit} ạ`);
-                return;
-              }
-            }
-          }
-        } else if (p) {
-          const otherUsed = cart
-            .filter(c => c.id === item.id && c.key !== key)
-            .reduce((s, c) => s + c.qty * c.baseUnitsPerQty, 0);
-          if (otherUsed + nextQty * item.baseUnitsPerQty > p.stock) {
-            showToast(`Kho sẵn sàng chỉ còn tối đa ${p.stock} ${p.baseUnit} ạ`);
+        cart = cart.filter(c => c.key !== key);
+      } else if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
+        for (let i = 0; i < item.mixBreakdown.length; i++) {
+          const part = item.mixBreakdown[i];
+          const p = products.find(prod => prod.id === part.id);
+          if (!p) continue;
+          const reservedElsewhere = getProductReservedBaseUnits(p.id, key);
+          if (reservedElsewhere + nextQty * Number(part.units || 0) > p.stock) {
+            showToast(`Mẫu ${p.name} trong gói Mix không đủ thêm số lượng`);
             return;
           }
         }
         item.qty = nextQty;
+      } else {
+        const p = products.find(prod => prod.id === item.id);
+        const reservedElsewhere = getProductReservedBaseUnits(item.id, key);
+        if (p && (reservedElsewhere + nextQty * item.baseUnitsPerQty) > p.stock) {
+          showToast(`Kho chỉ còn sẵn ${p.stock} ${p.baseUnit}`);
+          return;
+        }
+        item.qty = nextQty;
       }
-      saveCartToStorage();
       updateCartBadge();
-      refreshCatalogCardIfOpen();
-      renderCartModalContent();
+      renderCartDrawer();
     }
 
-    function calcCartTotals() {
-      const subtotal = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
-      const hasKit = cart.some(i => i.name.toLowerCase().includes("kit"));
-      const totalPacks = cart.filter(i => i.buyMode === "pack").reduce((sum, i) => sum + i.qty, 0);
-      const totalBaseUnits = cart.reduce((sum, i) => sum + i.qty * i.baseUnitsPerQty, 0);
+    function calculateTotals() {
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const hasKit = cart.some(item => item.name.toLowerCase().includes("kit"));
       const shipFee = (subtotal === 0 || subtotal >= 200000 || hasKit) ? 0 : 15000;
-      return { subtotal, shipFee, total: subtotal + shipFee, totalPacks, totalBaseUnits, hasKit };
+      return { subtotal, shipFee, total: subtotal + shipFee };
     }
 
-    function openCartModal() {
-      renderCartModalContent();
-      document.getElementById("cartOverlay").classList.add("open");
+    function updateCartBadge() {
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("cartBadge").textContent = totalItems;
     }
 
-    function renderCartModalContent(forceBlankCustomer = false) {
-      const body = document.getElementById("cartBody");
+    function openCart() {
+      renderCartDrawer();
+      document.getElementById("cartDrawer").classList.add("open");
+    }
+
+    function closeCart() {
+      document.getElementById("cartDrawer").classList.remove("open");
+    }
+
+    function renderCartDrawer() {
+      const listEl = document.getElementById("cartItemsList");
+      const sumBox = document.getElementById("cartSummaryBox");
+      const formEl = document.getElementById("checkoutForm");
+
       if (!cart.length) {
-        body.innerHTML = `
-          <div style="text-align:center; padding:24px 10px;">
-            <p style="color:var(--text-muted); font-size:14px; margin-bottom:14px;">Giỏ giấy của mình đang trống ạ.</p>
-            <button class="submit-order-btn" onclick="hideModal('cartOverlay'); renderCatalogMessage();">Xem các loại giấy đang có</button>
-          </div>
-        `;
+        listEl.innerHTML = `<div style="text-align:center; padding:24px 12px; color:var(--text-muted); font-size:14px;">Giỏ hàng đang trống. Bạn có thể chọn giấy ở Danh mục hoặc nhờ trợ lý tư vấn nhé!</div>`;
+        sumBox.style.display = "none";
+        formEl.style.display = "none";
         return;
       }
 
-      const savedCust = forceBlankCustomer ? null : loadSavedCustomerInfo();
-      if (savedCust && savedCust.platform) {
-        selectedPlatform = savedCust.platform;
-      }
-
-      const { subtotal, shipFee, total, totalPacks, totalBaseUnits, hasKit } = calcCartTotals();
-
-      // Thanh tiến trình Freeship
-      let freeshipBannerHtml = "";
-      if (hasKit) {
-        freeshipBannerHtml = `
-          <div class="freeship-bar-box">
-            <div class="freeship-bar-text done"><span>🎉 Đơn có Bộ kit làm giấy — Miễn phí ship!</span><span>100%</span></div>
-            <div class="freeship-track"><div class="freeship-fill done" style="width:100%;"></div></div>
-          </div>
-        `;
-      } else if (subtotal >= 200000) {
-        freeshipBannerHtml = `
-          <div class="freeship-bar-box">
-            <div class="freeship-bar-text done"><span>🎉 Đã đạt mốc Freeship 200K (tiết kiệm 15K)</span><span>100%</span></div>
-            <div class="freeship-track"><div class="freeship-fill done" style="width:100%;"></div></div>
-          </div>
-        `;
-      } else {
-        const missing = 200000 - subtotal;
-        const pct = Math.min(100, Math.round((subtotal / 200000) * 100));
-        freeshipBannerHtml = `
-          <div class="freeship-bar-box">
-            <div class="freeship-bar-text">
-              <span>🚚 Mua thêm <strong>${formatVND(missing)}</strong> để được Freeship</span>
-              <span>${pct}%</span>
-            </div>
-            <div class="freeship-track"><div class="freeship-fill" style="width:${pct}%;"></div></div>
-          </div>
-        `;
-      }
-
-      const itemsHtml = cart.map(item => {
-        const safeKeyAttr = escapeAttrJs(item.key);
+      listEl.innerHTML = cart.map(item => {
+        const safeKey = escapeAttrJs(item.key);
         return `
-          <div class="cart-item-row">
+          <div class="cart-item">
             <div>
-              <div style="font-size:13.5px; font-weight:600;">${escapeHtml(item.name)}</div>
+              <div style="font-weight:600; font-size:13.5px;">${escapeHtml(item.name)}</div>
               <div style="font-size:12px; color:var(--text-muted);">${formatVND(item.price)} / ${escapeHtml(item.unitLabel)}</div>
             </div>
-            <div class="qty-control">
-              <button type="button" class="qty-btn" onclick="changeCartQty('${safeKeyAttr}', -1)">−</button>
-              <span style="font-size:13px; font-weight:600; min-width:18px; text-align:center;">${item.qty}</span>
-              <button type="button" class="qty-btn" onclick="changeCartQty('${safeKeyAttr}', 1)">+</button>
+            <div class="qty-box">
+              <button type="button" class="qty-btn" onclick="updateCartQty('${safeKey}', -1)">−</button>
+              <span style="min-width:18px; text-align:center; font-weight:600; font-size:13.5px;">${item.qty}</span>
+              <button type="button" class="qty-btn" onclick="updateCartQty('${safeKey}', 1)">+</button>
             </div>
           </div>
         `;
       }).join("");
 
-      const wholesaleNotice = (totalPacks >= 10 || totalBaseUnits >= 100) ? `
-        <div style="background:var(--warn-bg); color:var(--warn-text); padding:10px 12px; border-radius:10px; font-size:12.5px;">
-          Đơn của mình có <strong>${totalBaseUnits} tờ/cái</strong> — đơn số lượng lớn tiệm có áp dụng chiết khấu riêng. Mình có thể nhắn trực tiếp cho tiệm trước để chốt giá ưu đãi nhé!
-        </div>
-      ` : "";
+      const { subtotal, shipFee, total } = calculateTotals();
+      document.getElementById("sumSubtotal").textContent = formatVND(subtotal);
+      document.getElementById("sumShip").textContent = shipFee === 0 ? "Miễn phí" : formatVND(shipFee);
+      document.getElementById("sumTotal").textContent = formatVND(total);
 
-      const savedInfoBanner = savedCust ? `
-        <div class="saved-info-bar">
-          <span>✓ Đã tự điền thông tin từ lần đặt trước</span>
-          <button type="button" class="clear-saved-btn" onclick="clearSavedCustomerInfo()">Xóa thông tin đã lưu</button>
-        </div>
-      ` : "";
-
-      body.innerHTML = `
-        ${freeshipBannerHtml}
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          ${itemsHtml}
-        </div>
-        ${wholesaleNotice}
-        <div class="summary-card">
-          <div class="summary-line"><span>Tiền giấy:</span><span>${formatVND(subtotal)}</span></div>
-          <div class="summary-line"><span>Phí ship (Freeship đơn từ 200K & Bộ kit):</span><span>${shipFee === 0 ? "Miễn phí" : formatVND(shipFee)}</span></div>
-          <div class="summary-line summary-total"><span>Tổng thanh toán:</span><span>${formatVND(total)}</span></div>
-        </div>
-
-        ${savedInfoBanner}
-
-        <form id="orderForm" onsubmit="submitOrder(event)" style="display:flex; flex-direction:column; gap:11px;">
-          <div class="form-group">
-            <label>1. Tên người nhận *</label>
-            <input id="custName" class="form-control" type="text" placeholder="Ví dụ: Minh Anh" value="${escapeHtml(savedCust ? savedCust.customerName : "")}" required />
-          </div>
-
-          <div class="form-group">
-            <label>2. Số điện thoại nhận hàng *</label>
-            <input id="custPhone" class="form-control" type="tel" placeholder="Ví dụ: 0912345678" value="${escapeHtml(savedCust ? savedCust.phone : "")}" required />
-          </div>
-
-          <div class="form-group">
-            <label>3. Địa chỉ giao hàng chi tiết *</label>
-            <textarea id="custAddress" class="form-control" rows="2" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành phố..." required>${escapeHtml(savedCust ? savedCust.address : "")}</textarea>
-          </div>
-
-          <div class="form-group">
-            <label>4. Bạn nhắn tiệm qua ứng dụng nào? *</label>
-            <div class="platform-pills">
-              <div class="plat-option ${selectedPlatform === 'Instagram' ? 'selected' : ''}" onclick="selectPlatform('Instagram', this)">Instagram</div>
-              <div class="plat-option ${selectedPlatform === 'Threads' ? 'selected' : ''}" onclick="selectPlatform('Threads', this)">Threads</div>
-              <div class="plat-option ${selectedPlatform === 'Facebook' ? 'selected' : ''}" onclick="selectPlatform('Facebook', this)">Facebook</div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>5. Tên tài khoản (User / Nickname) trên ${escapeHtml(selectedPlatform)} *</label>
-            <input id="custSocial" class="form-control" type="text" placeholder="Ví dụ: @minhanh.paper hoặc tên Facebook của bạn" value="${escapeHtml(savedCust ? savedCust.socialHandle : "")}" required />
-            <small>Để tiệm nhắn tin xác nhận đơn và gửi ảnh gói hàng cho bạn ạ</small>
-          </div>
-
-          <div class="form-group">
-            <label>6. Hình thức thanh toán *</label>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-              <div class="plat-option ${selectedPaymentMethod === 'COD' ? 'selected' : ''}" onclick="selectPaymentMethod('COD', this)">💵 COD khi nhận hàng</div>
-              <div class="plat-option ${selectedPaymentMethod === 'Chuyển khoản trước' ? 'selected' : ''}" onclick="selectPaymentMethod('Chuyển khoản trước', this)">📱 Quét QR chuyển khoản</div>
-            </div>
-            <small id="payMethodHint">${selectedPaymentMethod === 'Chuyển khoản trước' ? (bankConfig && bankConfig.accountNo ? 'Hệ thống sẽ tự tạo mã VietQR đúng số tiền & mã đơn ngay sau khi gửi đơn ạ' : 'Tiệm sẽ gửi thông tin chuyển khoản khi nhắn xác nhận đơn ạ') : 'Thanh toán tiền mặt cho shipper khi nhận gói giấy ạ'}</small>
-          </div>
-
-          <div class="form-group">
-            <label>7. Ghi chú thêm (nếu có)</label>
-            <input id="custNote" class="form-control" type="text" placeholder="Ví dụ: Giao giờ hành chính, gói kỹ giúp mình..." />
-          </div>
-
-          <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-main); cursor:pointer; user-select:none;">
-            <input id="saveCustInfoChk" type="checkbox" checked style="width:16px; height:16px; accent-color:var(--primary);" />
-            <span>Lưu thông tin cho lần đặt sau</span>
-          </label>
-
-          <button id="confirmOrderBtn" type="submit" class="submit-order-btn">Gửi đơn đặt hàng</button>
-        </form>
-      `;
+      sumBox.style.display = "flex";
+      formEl.style.display = "flex";
     }
 
-    function selectPlatform(plat, el) {
-      selectedPlatform = plat;
-      document.querySelectorAll(".plat-option").forEach(node => {
-        if (node.parentElement === el.parentElement) node.classList.remove("selected");
-      });
-      el.classList.add("selected");
-      const label = el.closest(".form-group").nextElementSibling.querySelector("label");
-      if (label) label.textContent = `5. Tên tài khoản (User / Nickname) trên ${plat} *`;
-    }
-
-    function selectPaymentMethod(method, el) {
-      selectedPaymentMethod = method;
-      document.querySelectorAll(".plat-option").forEach(node => {
-        if (node.parentElement === el.parentElement) node.classList.remove("selected");
-      });
-      el.classList.add("selected");
-      const hint = document.getElementById("payMethodHint");
-      if (hint) {
-        hint.textContent = method === "Chuyển khoản trước"
-          ? (bankConfig && bankConfig.accountNo ? "Hệ thống sẽ tự tạo mã VietQR đúng số tiền & mã đơn ngay sau khi gửi đơn ạ" : "Tiệm sẽ gửi thông tin chuyển khoản khi nhắn xác nhận đơn ạ")
-          : "Thanh toán tiền mặt cho shipper khi nhận gói giấy ạ";
-      }
-    }
-
-    function appendVietQrMessage(orderId, amount, customBank = null) {
-      const bank = customBank || bankConfig;
-      if (!bank || !bank.bankId || !bank.accountNo) {
-        appendBotMessage(`Dạ mã đơn của mình là #${orderId} (${formatVND(amount)}). Tiệm sẽ nhắn thông tin chuyển khoản qua tin nhắn xác nhận ngay cho mình ạ!`);
-        return;
-      }
-
-      const addInfo = encodeURIComponent(orderId);
-      const accName = encodeURIComponent(bank.accountName || "");
-      const qrUrl = `https://img.vietqr.io/image/${encodeURIComponent(bank.bankId)}-${encodeURIComponent(bank.accountNo)}-compact2.png?amount=${Math.round(amount)}&addInfo=${addInfo}&accountName=${accName}`;
-
-      const row = document.createElement("div");
-      row.className = "msg-row bot";
-      row.innerHTML = `
-        <div class="bubble">
-          <strong>📱 Mã QR Chuyển khoản VietQR — Đơn #${escapeHtml(orderId)}</strong>
-          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Mở app Ngân hàng bất kỳ và quét mã dưới đây (đã điền sẵn số tiền & nội dung):</div>
-          <div class="vietqr-card">
-            <img class="vietqr-img" src="${escapeHtml(qrUrl)}" alt="Mã VietQR đơn ${escapeHtml(orderId)}" onerror="this.style.display='none';" />
-            <div class="vietqr-info-grid">
-              <div class="vietqr-line"><span>Ngân hàng:</span><strong>${escapeHtml(bank.bankId)}</strong></div>
-              <div class="vietqr-line"><span>Số tài khoản: <strong>${escapeHtml(bank.accountNo)}</strong></span><button type="button" class="copy-mini" onclick="copyText('${escapeAttrJs(bank.accountNo)}', 'Đã copy số tài khoản')">Copy STK</button></div>
-              ${bank.accountName ? `<div class="vietqr-line"><span>Chủ TK:</span><strong>${escapeHtml(bank.accountName)}</strong></div>` : ""}
-              <div class="vietqr-line"><span>Số tiền: <strong style="color:var(--primary);">${formatVND(amount)}</strong></span><button type="button" class="copy-mini" onclick="copyText('${Math.round(amount)}', 'Đã copy số tiền')">Copy tiền</button></div>
-              <div class="vietqr-line"><span>Nội dung CK: <strong style="color:var(--accent);">${escapeHtml(orderId)}</strong></span><button type="button" class="copy-mini" onclick="copyText('${escapeAttrJs(orderId)}', 'Đã copy nội dung chuyển khoản')">Copy ND</button></div>
-            </div>
-            <button type="button" class="submit-order-btn" style="padding:9px; font-size:12.5px; background:var(--accent);" onclick="this.disabled=true; this.textContent='✓ Đã ghi nhận bạn đã chuyển khoản'; showToast('Cảm ơn bạn! Tiệm sẽ kiểm tra và xác nhận đơn ngay ạ');">✓ Tôi đã chuyển khoản xong</button>
-          </div>
-        </div>
-      `;
-      chatStream.appendChild(row);
-      scrollBottom();
+    function setCheckoutPaymentMethod(method) {
+      selectedCheckoutPayment = method;
+      document.getElementById("payChoiceCod").classList.toggle("active", method === "COD");
+      document.getElementById("payChoiceQr").classList.toggle("active", method !== "COD");
     }
 
     async function submitOrder(e) {
       e.preventDefault();
-      const btn = document.getElementById("confirmOrderBtn");
-      const customerName = document.getElementById("custName").value.trim();
-      const phone = document.getElementById("custPhone").value.trim();
-      const address = document.getElementById("custAddress").value.trim();
-      const socialHandle = document.getElementById("custSocial").value.trim();
-      const note = document.getElementById("custNote").value.trim();
-      const shouldSaveCust = document.getElementById("saveCustInfoChk")?.checked;
+      if (!cart.length) return;
 
-      if (!customerName || !phone || !address || !socialHandle) {
-        showToast("Bạn điền đủ thông tin bắt buộc nhé");
-        return;
-      }
-
-      if (shouldSaveCust) {
-        saveCustomerInfoToStorage({
-          customerName,
-          phone,
-          address,
-          platform: selectedPlatform,
-          socialHandle
-        });
-      }
-
-      const { subtotal, shipFee, total } = calcCartTotals();
+      const btn = document.getElementById("submitOrderBtn");
       btn.disabled = true;
-      btn.textContent = "Đang gửi đơn...";
+      btn.textContent = "Đang gửi đơn hàng...";
+
+      const { subtotal, shipFee, total } = calculateTotals();
+      const chosenPayMethod = selectedCheckoutPayment || "COD";
+      const transcriptPayload = chatHistory
+        .slice(-24)
+        .map(m => ({ role: m.role, text: String(m.text || "").slice(0, 600) }));
+
+      const orderPayload = {
+        customerName: document.getElementById("custName").value.trim(),
+        phone: document.getElementById("custPhone").value.trim(),
+        address: document.getElementById("custAddress").value.trim(),
+        platform: document.getElementById("custPlatform").value,
+        socialHandle: document.getElementById("custHandle").value.trim(),
+        note: document.getElementById("custNote").value.trim(),
+        paymentMethod: chosenPayMethod,
+        sessionId: CHAT_SESSION_ID,
+        chatTranscript: transcriptPayload,
+        items: cart.map(c => {
+          const baseObj = {
+            id: c.id,
+            name: c.name,
+            buyMode: c.buyMode,
+            unitLabel: c.unitLabel,
+            qty: c.qty,
+            price: c.price,
+            baseUnits: c.qty * c.baseUnitsPerQty
+          };
+          if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
+            baseObj.mixBreakdown = c.mixBreakdown;
+          }
+          return baseObj;
+        }),
+        subtotal,
+        shipFee,
+        total
+      };
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({
-            action: "create_order",
-            order: {
-              customerName,
-              phone,
-              address,
-              platform: selectedPlatform,
-              socialHandle,
-              paymentMethod: selectedPaymentMethod,
-              note,
-              sessionId: chatSessionId,
-              chatTranscript: chatHistory.slice(-24),
-              items: cart.map(i => {
-                const baseItem = {
-                  id: i.id,
-                  name: i.name,
-                  buyMode: i.buyMode,
-                  unitLabel: i.unitLabel,
-                  qty: i.qty,
-                  price: i.price,
-                  baseUnits: i.qty * i.baseUnitsPerQty
-                };
-                if (i.buyMode === "mix" && Array.isArray(i.mixBreakdown)) {
-                  baseItem.mixBreakdown = i.mixBreakdown;
-                }
-                return baseItem;
-              }),
-              subtotal,
-              shipFee,
-              total
-            }
-          })
+          body: JSON.stringify({ action: "create_order", order: orderPayload })
+        });
+        const data = await res.json();
+
+        if (!data.ok) throw new Error(data.error || "Gửi đơn thất bại");
+
+        const createdOrderId = data.orderId || "";
+        cart = [];
+        updateCartBadge();
+        closeCart();
+        switchView("chat");
+
+        const isQrChosen = chosenPayMethod === "Chuyển khoản trước";
+        const confirmText = `Dạ tiệm đã nhận được đơn hàng #${createdOrderId} của ${orderPayload.customerName} rồi ạ!\n• Tổng đơn: ${formatVND(total)} (${shipFee === 0 ? "Freeship" : "gồm 15K ship"})\n• Thanh toán: ${isQrChosen ? "Chuyển khoản VietQR (Chờ xác nhận)" : "Thanh toán khi nhận hàng (COD)"}\n• Tiệm sẽ nhắn xác nhận qua ${orderPayload.platform} (${orderPayload.socialHandle}) trước khi gói gửi đi ạ.`;
+
+        appendBotMessage(confirmText, {
+          showContactButtons: false
         });
 
-        const json = await res.json();
-        if (!json.ok) throw new Error(json.error || "Không gửi được đơn");
-
-        const itemsText = cart.map(i => `• ${i.name} (${i.qty} ${i.unitLabel})`).join("\n");
-        const chosenPayMethod = selectedPaymentMethod;
-        cart = [];
-        saveCartToStorage();
-        updateCartBadge();
-        hideModal("cartOverlay");
-
-        lastPlacedOrderId = json.orderId;
-        try { localStorage.setItem(LAST_ORDER_STORAGE_KEY, json.orderId); } catch (e) {}
-
-        const confirmText = `Tiệm đã nhận được đơn #${json.orderId} của ${customerName} rồi ạ!\n\nSản phẩm đặt:\n${itemsText}\n\nTổng đơn: ${formatVND(total)} (${chosenPayMethod === "Chuyển khoản trước" ? "Chuyển khoản VietQR" : (shipFee === 0 ? "Freeship • COD" : "Đã gồm 15K ship • COD")})\nGiao tới: ${address}\n\nTiệm sẽ nhắn xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng nhé!`;
-        appendBotMessage(confirmText);
-
-        if (chosenPayMethod === "Chuyển khoản trước") {
-          appendVietQrMessage(json.orderId, total);
+        if (isQrChosen) {
+          appendVietQrMessage(createdOrderId, total);
         }
 
-        await loadInventory();
-        refreshCatalogCardIfOpen();
+        loadProducts();
       } catch (err) {
-        alert("Lỗi gửi đơn: " + err.message);
+        showToast("Có lỗi khi gửi đơn: " + err.message);
+      } finally {
         btn.disabled = false;
         btn.textContent = "Gửi đơn đặt hàng";
       }
     }
 
-    function sendQuickText(text) {
-      chatInput.value = text;
-      handleFormSubmit(new Event("submit"));
-    }
-
-    function appendUserMessage(text, skipSave = false) {
-      const row = document.createElement("div");
-      row.className = "msg-row user";
-      row.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
-      chatStream.appendChild(row);
-      if (!skipSave) {
-        chatHistory.push({ role: "user", text });
-        persistedChatFeed.push({ role: "user", text });
-        saveChatMessagesToStorage();
+    async function confirmCustomerTransferSent(orderId, btn) {
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "✓ Đã ghi nhận bạn đã chuyển khoản";
       }
-      scrollBottom();
+      showToast("Cảm ơn bạn! Tiệm sẽ kiểm tra và xác nhận đơn ngay ạ");
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "notify_transfer_sent",
+            orderId: orderId
+          })
+        });
+      } catch (err) {
+        console.error("Lỗi báo đã chuyển khoản:", err);
+      }
     }
 
-    function appendBotMessage(text, options = {}, skipSave = false) {
+    // -------------------------------------------------------------------------
+    // VIETQR ĐỘNG & TRA CỨU ĐƠN HÀNG TRONG CHAT
+    // -------------------------------------------------------------------------
+    function appendVietQrMessage(orderId, amount, customBank = null) {
+      const cfg = customBank || bankConfig || {};
+      const container = document.getElementById("chatMessages");
       const row = document.createElement("div");
       row.className = "msg-row bot";
 
-      let extraHtml = "";
+      const transferNote = `${orderId}`;
+      const hasBank = Boolean(cfg.bankId && cfg.accountNo);
 
-      if (Array.isArray(options.suggestedItems) && options.suggestedItems.length > 0) {
-        const validItems = options.suggestedItems.map(s => {
-          const p = products.find(item => item.id === s.id);
-          if (!p || p.stock <= 0) return null;
-          const mode = s.buyMode === "unit" && hasUnitOption(p) ? "unit" : (hasPackOption(p) ? "pack" : "unit");
-          const unitPrice = mode === "pack" ? p.packPrice : p.unitPrice;
-          const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
-          const qty = Math.max(1, Number(s.qty || 1));
-          return { p, mode, unitPrice, unitLabel, qty };
-        }).filter(Boolean);
-
-        if (validItems.length > 0) {
-          extraHtml += `<div class="suggest-box">` + validItems.map(({ p, mode, unitPrice, unitLabel, qty }) => `
-            <div class="suggest-item">
-              <span><strong>${escapeHtml(p.name)}</strong> — ${qty} ${escapeHtml(unitLabel)} (${formatShortK(unitPrice * qty)})</span>
-              <button class="suggest-add" onclick="addToCart('${escapeAttrJs(p.id)}', '${mode}', ${qty})">+ Thêm giỏ</button>
-            </div>
-          `).join("") + `</div>`;
-        }
-      }
-
-      if (options.showContactButtons) {
-        const prefill = options.contactPrefill || "";
-        const safePrefillAttr = escapeAttrJs(prefill);
-        extraHtml += `
-          <div class="contact-card">
-            ${prefill ? `
-              <div class="prefill-box">
-                <span style="overflow:hidden; text-overflow:ellipsis;">"${escapeHtml(prefill)}"</span>
-                <button class="copy-mini" onclick="copyText('${safePrefillAttr}')">Copy nội dung</button>
-              </div>
-            ` : ""}
-            <div class="social-links">
-              <a class="social-btn social-fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener">Facebook</a>
-              <a class="social-btn social-ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener">Instagram</a>
-              <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener">Threads</a>
-            </div>
+      if (!hasBank) {
+        const box = document.createElement("div");
+        box.className = "vietqr-box";
+        box.innerHTML = `
+          <div style="font-weight:700; color:var(--primary); font-size:13.5px; margin-bottom:4px;">📲 Thông tin chuyển khoản đơn #${escapeHtml(orderId)}</div>
+          <div style="font-size:12.5px; color:var(--text-muted);">
+            Tiệm chưa bật mã QR tự động trên web — bạn nhắn trực tiếp qua Facebook/Instagram/Threads giúp tiệm để nhận số tài khoản chuyển khoản nhanh ạ!
+          </div>
+          <div class="social-links" style="margin-top:8px;">
+            <a href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer" class="social-btn">Facebook</a>
+            <a href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer" class="social-btn">Instagram</a>
+            <a href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer" class="social-btn">Threads</a>
           </div>
         `;
+        row.appendChild(box);
+        container.appendChild(row);
+        container.scrollTop = container.scrollHeight;
+        return;
       }
 
-      const debugHtml = (IS_DEBUG && options.source)
-        ? `<div class="debug-source-tag">[Nguồn: ${escapeHtml(options.source)}${options.aiError ? " | " + escapeHtml(options.aiError) : ""}]</div>`
-        : "";
+      const qrUrl = `https://img.vietqr.io/image/${encodeURIComponent(cfg.bankId)}-${encodeURIComponent(cfg.accountNo)}-compact2.png?amount=${encodeURIComponent(amount)}&addInfo=${encodeURIComponent(transferNote)}&accountName=${encodeURIComponent(cfg.accountName || "")}`;
 
-      row.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>${extraHtml}${debugHtml}`;
-      chatStream.appendChild(row);
-      if (!skipSave) {
-        chatHistory.push({ role: "model", text });
-        persistedChatFeed.push({ role: "model", text, options });
-        saveChatMessagesToStorage();
-      }
-      scrollBottom();
-    }
-
-    function restorePersistedChatFeed() {
-      const savedFeed = loadChatMessagesFromStorage();
-      if (!savedFeed.length) return false;
-      persistedChatFeed = savedFeed;
-      savedFeed.forEach(item => {
-        if (!item || !item.text) return;
-        if (item.role === "user") {
-          appendUserMessage(item.text, true);
-          chatHistory.push({ role: "user", text: item.text });
-        } else if (item.role === "model") {
-          appendBotMessage(item.text, item.options || {}, true);
-          chatHistory.push({ role: "model", text: item.text });
-        }
-      });
-      return true;
-    }
-
-    function buildWaitingSteps(userText) {
-      const lower = String(userText || "").toLowerCase();
-      const matchedProd = products.find(p => p && p.name && lower.includes(p.name.toLowerCase()));
-      const isPriceOrStock = /(giá|bao nhiêu|còn|hết|mua|đặt|gói|tờ|lẻ|ship|giao|mix)/i.test(lower);
-      const isCareOrSpec = /(bút|mực|màu|vẽ|in|kích thước|size|định lượng|gsm|keo|kit|bột)/i.test(lower);
-
-      const step1 = matchedProd
-        ? `Đang kiểm tra thông tin mẫu ${matchedProd.name}...`
-        : (isPriceOrStock
-          ? "Đang tra cứu tồn kho & bảng giá hiện tại của tiệm..."
-          : (isCareOrSpec
-            ? "Đang đối chiếu đặc tính giấy & sổ tay hỏi đáp của tiệm..."
-            : "Tiệm đang đọc câu hỏi của bạn..."));
-
-      return [
-        { delay: 0, text: step1, status: "Đang xử lý câu hỏi..." },
-        { delay: 2200, text: "Đang nhờ trợ lý AI tổng hợp câu trả lời chính xác nhất...", status: "Trợ lý AI đang phân tích..." },
-        { delay: 6500, text: "AI đang kiểm tra kỹ số liệu trong kho giấy, bạn đợi thêm vài giây nhé...", status: "Đang tổng hợp phản hồi..." },
-        { delay: 12000, text: "Kết nối mạng hơi chậm một chút, tiệm đang hoàn tất câu trả lời...", status: "Đang hoàn tất phản hồi..." }
-      ];
-    }
-
-    function showTypingIndicator(userText) {
-      removeTypingIndicator();
-      const row = document.createElement("div");
-      row.id = "typingRow";
-      row.className = "msg-row bot";
-      row.innerHTML = `
-        <div class="bubble typing-bubble">
-          <div class="typing-dots"><span></span><span></span><span></span></div>
-          <span id="typingStepLabel" class="typing-label"></span>
+      const box = document.createElement("div");
+      box.className = "vietqr-box";
+      box.innerHTML = `
+        <div style="font-weight:700; color:var(--primary); font-size:13.5px; text-align:center;">📲 Quét mã VietQR để chuyển khoản</div>
+        <img src="${escapeHtml(qrUrl)}" alt="Mã VietQR đơn ${escapeHtml(orderId)}" class="vietqr-img" onclick="openLightbox(this.src)" />
+        <div class="vietqr-info-row">
+          <span style="color:var(--text-muted);">Ngân hàng:</span>
+          <strong>${escapeHtml(cfg.bankId)}</strong>
+        </div>
+        <div class="vietqr-info-row">
+          <span style="color:var(--text-muted);">Số tài khoản:</span>
+          <span>
+            <strong>${escapeHtml(cfg.accountNo)}</strong>
+            <button type="button" class="btn-add-mini" style="padding:2px 7px; font-size:11px; margin-left:4px;" onclick="copyQrField('${escapeAttrJs(cfg.accountNo)}', 'Đã copy số tài khoản')">Copy</button>
+          </span>
+        </div>
+        ${cfg.accountName ? `
+          <div class="vietqr-info-row">
+            <span style="color:var(--text-muted);">Chủ TK:</span>
+            <strong>${escapeHtml(cfg.accountName)}</strong>
+          </div>
+        ` : ""}
+        <div class="vietqr-info-row">
+          <span style="color:var(--text-muted);">Số tiền:</span>
+          <strong style="color:var(--primary);">${formatVND(amount)}</strong>
+        </div>
+        <div class="vietqr-info-row">
+          <span style="color:var(--text-muted);">Nội dung CK:</span>
+          <span>
+            <strong>${escapeHtml(transferNote)}</strong>
+            <button type="button" class="btn-add-mini" style="padding:2px 7px; font-size:11px; margin-left:4px;" onclick="copyQrField('${escapeAttrJs(transferNote)}', 'Đã copy nội dung chuyển khoản')">Copy</button>
+          </span>
+        </div>
+        <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+          <button type="button" class="submit-order-btn" style="padding:9px; font-size:12.5px; background:var(--accent);" onclick="confirmCustomerTransferSent('${escapeAttrJs(orderId)}', this)">✓ Tôi đã chuyển khoản xong</button>
         </div>
       `;
-      chatStream.appendChild(row);
-      scrollBottom();
-
-      const steps = buildWaitingSteps(userText);
-      const labelEl = document.getElementById("typingStepLabel");
-      const statusText = document.getElementById("statusText");
-      let stepIdx = 0;
-
-      const applyStep = (step) => {
-        if (labelEl) {
-          labelEl.style.opacity = "0.35";
-          setTimeout(() => {
-            if (labelEl) {
-              labelEl.textContent = step.text;
-              labelEl.style.opacity = "1";
-            }
-          }, 120);
-        }
-        if (statusText && step.status) {
-          statusText.textContent = step.status;
-        }
-      };
-
-      applyStep(steps[0]);
-
-      typingStepTimer = setInterval(() => {
-        if (stepIdx + 1 < steps.length) {
-          stepIdx++;
-          applyStep(steps[stepIdx]);
-        }
-      }, 3600);
+      row.appendChild(box);
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
     }
 
-    function removeTypingIndicator() {
-      if (typingStepTimer) {
-        clearInterval(typingStepTimer);
-        typingStepTimer = null;
+    function copyQrField(val, msg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).then(() => showToast(msg));
+      } else {
+        showToast(msg);
       }
-      const statusText = document.getElementById("statusText");
-      if (statusText && lastReadyStatusText) {
-        statusText.textContent = lastReadyStatusText;
-      }
-      const el = document.getElementById("typingRow");
-      if (el) el.remove();
     }
 
-    async function handleFormSubmit(e) {
+    function openLookupOrderModal() {
+      document.getElementById("lookupQueryInput").value = "";
+      document.getElementById("lookupOrderModal").classList.add("open");
+      setTimeout(() => document.getElementById("lookupQueryInput").focus(), 100);
+    }
+
+    function closeLookupOrderModal() {
+      document.getElementById("lookupOrderModal").classList.remove("open");
+    }
+
+    async function submitOrderLookup(e) {
       e.preventDefault();
-      if (isSending) return;
+      const query = document.getElementById("lookupQueryInput").value.trim();
+      if (!query) return;
 
-      const text = chatInput.value.trim();
-      if (!text) return;
+      const btn = document.getElementById("lookupSubmitBtn");
+      btn.disabled = true;
+      btn.textContent = "Đang tra cứu...";
 
-      chatInput.value = "";
-      appendUserMessage(text);
-
-      const lower = text.toLowerCase();
-      if (lower.includes("xem các loại giấy") || lower === "menu" || lower === "danh sách giấy") {
-        renderCatalogMessage();
-        return;
-      }
-
-      if (lower === "tra cứu đơn" || lower === "tra cứu đơn hàng" || lower === "kiểm tra đơn") {
-        openOrderLookupCard();
-        return;
-      }
-
-      isSending = true;
-      sendBtn.disabled = true;
-      showTypingIndicator(text);
-
-      const savedCust = loadSavedCustomerInfo();
-      const customerInfo = savedCust ? {
-        customerName: savedCust.customerName || "",
-        phone: savedCust.phone || "",
-        platform: savedCust.platform || "",
-        socialHandle: savedCust.socialHandle || "",
-        orderId: lastPlacedOrderId || ""
-      } : (lastPlacedOrderId ? { orderId: lastPlacedOrderId } : null);
-
-      const controller = new AbortController();
-      // Tăng thời gian chờ lên 25 giây để đủ cho Apps Script + Gemini AI phản hồi hoàn chỉnh
-      const timeoutId = setTimeout(() => controller.abort(), 25000);
+      closeLookupOrderModal();
+      switchView("chat");
+      appendUserMessage(`Kiểm tra đơn hàng: ${query}`);
+      const typingEl = appendTyping();
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-          signal: controller.signal,
           body: JSON.stringify({
-            action: "chat",
-            message: text,
-            history: chatHistory.slice(-6),
-            sessionId: chatSessionId,
-            customerInfo: customerInfo
+            action: "lookup_order",
+            query,
+            sessionId: CHAT_SESSION_ID
           })
         });
-        clearTimeout(timeoutId);
+        const data = await res.json();
+        typingEl.remove();
 
-        const json = await res.json();
-        removeTypingIndicator();
+        if (!data.ok) throw new Error(data.error || "Không tra cứu được");
+        if (data.bankConfig) bankConfig = data.bankConfig;
 
-        if (!json.ok || !json.data) {
-          throw new Error(json.error || "Phản hồi AI không hợp lệ");
+        const orders = data.orders || [];
+        if (!orders.length) {
+          appendBotMessage(
+            `Dạ tiệm chưa tìm thấy đơn hàng nào khớp với "${query}" ạ. Bạn kiểm tra lại đúng số điện thoại lúc đặt hàng hoặc nhắn trực tiếp cho tiệm hỗ trợ nhé!`,
+            { showContactButtons: true, contactPrefill: `Mình cần kiểm tra đơn hàng (${query})` }
+          );
+          return;
         }
 
-        if (json.aiError) {
-          console.warn("[Tiệm giấy AI fallback]", json.source, json.aiError);
-        } else {
-          console.info("[Tiệm giấy AI source]", json.source);
-        }
-
-        const ai = json.data;
-        appendBotMessage(ai.reply, {
-          showContactButtons: Boolean(ai.showContactButtons),
-          contactPrefill: ai.contactPrefill || text,
-          suggestedItems: ai.suggestedItems || [],
-          source: json.source || "",
-          aiError: json.aiError || ""
+        appendBotMessage(`Dạ tiệm tìm thấy ${orders.length} đơn hàng gần nhất của bạn đây ạ:`, {
+          showContactButtons: false
         });
+
+        const container = document.getElementById("chatMessages");
+        orders.forEach(o => {
+          const row = document.createElement("div");
+          row.className = "msg-row bot";
+          const isPaid = o.paymentMethod === "Đã thanh toán CK";
+          const isPreTransfer = o.paymentMethod === "Chuyển khoản trước" || o.paymentMethod === "Khách báo đã CK";
+          const statusIsDone = o.status === "Hoàn thành" || o.status === "Đang giao" || o.status === "Đã xác nhận";
+
+          const card = document.createElement("div");
+          card.className = "lookup-card";
+          card.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; border-bottom:1px solid var(--border); padding-bottom:6px;">
+              <strong style="color:var(--primary);">#${escapeHtml(o.orderId)}</strong>
+              <span class="lookup-status-pill ${statusIsDone ? '' : 'warn'}">${escapeHtml(o.status)}</span>
+            </div>
+            <div style="margin-bottom:3px;"><strong>Người nhận:</strong> ${escapeHtml(o.customerName)} (${escapeHtml(o.phoneMasked)})</div>
+            <div style="margin-bottom:3px;"><strong>Ngày đặt:</strong> ${escapeHtml(o.createdAt)}</div>
+            <div style="margin-bottom:4px;"><strong>Sản phẩm:</strong> ${escapeHtml(o.itemsSummary)}</div>
+            <div style="margin-bottom:4px;"><strong>Tổng đơn:</strong> ${formatVND(o.total)} — <span style="color:var(--primary); font-weight:600;">${isPaid ? "Đã thanh toán CK (0đ COD)" : (isPreTransfer ? "Chuyển khoản VietQR" : "Thu hộ COD: " + formatVND(o.total))}</span></div>
+            ${o.trackingCode ? `<div style="background:var(--accent-soft); color:#2E5A36; padding:5px 8px; border-radius:7px; font-weight:600; margin-top:4px;">🚚 Mã vận đơn: ${escapeHtml(o.trackingCode)}</div>` : ""}
+            ${(!isPaid && isPreTransfer && o.status !== "Đã hủy") ? `<button type="button" class="btn-order" style="width:100%; margin-top:8px;" onclick="appendVietQrMessage('${escapeAttrJs(o.orderId)}', ${Number(o.total || 0)})">📲 Hiện lại mã QR chuyển khoản</button>` : ""}
+          `;
+          row.appendChild(card);
+          container.appendChild(row);
+        });
+        container.scrollTop = container.scrollHeight;
       } catch (err) {
-        clearTimeout(timeoutId);
-        removeTypingIndicator();
-        const isTimeout = err && err.name === "AbortError";
-        const fallbackMsg = isTimeout
-          ? "Dạ kết nối mạng đang hơi chậm, bạn thử gửi lại câu hỏi hoặc nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm hỗ trợ ngay nhé ạ!"
-          : (IS_DEBUG
-            ? `[Lỗi kỹ thuật]: ${err.message}`
-            : "Dạ bạn nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho bạn ạ.");
-        appendBotMessage(fallbackMsg, {
+        typingEl.remove();
+        appendBotMessage("Dạ hệ thống đang bận một chút, bạn nhắn trực tiếp qua Facebook/Instagram/Threads giúp tiệm kiểm tra đơn ạ!", {
           showContactButtons: true,
-          contactPrefill: text
+          contactPrefill: `Mình cần kiểm tra đơn hàng (${query})`
         });
-        console.error(err);
       } finally {
-        isSending = false;
-        sendBtn.disabled = false;
+        btn.disabled = false;
+        btn.textContent = "Tra cứu đơn ngay";
       }
     }
 
-    (async function init() {
-      loadCartFromStorage();
-      renderWelcome();
-      restorePersistedChatFeed();
-      await loadInventory();
-    })();
+    // -------------------------------------------------------------------------
+    // 3. CHATBOT TƯ VẤN & TẠO THẺ GỢI Ý SẢN PHẨM
+    // -------------------------------------------------------------------------
+    function appendUserMessage(text) {
+      const container = document.getElementById("chatMessages");
+      const row = document.createElement("div");
+      row.className = "msg-row user";
+      row.innerHTML = `<div class="msg-bubble">${escapeHtml(text)}</div>`;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendTyping() {
+      const container = document.getElementById("chatMessages");
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+      row.innerHTML = `<div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+      return row;
+    }
+
+    function appendBotMessage(text, options = {}) {
+      const container = document.getElementById("chatMessages");
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+
+      const bubble = document.createElement("div");
+      bubble.className = "msg-bubble";
+      bubble.textContent = text;
+      row.appendChild(bubble);
+
+      if (Array.isArray(options.suggestedItems) && options.suggestedItems.length > 0) {
+        const listDiv = document.createElement("div");
+        listDiv.className = "chat-suggestions";
+
+        options.suggestedItems.forEach(sug => {
+          const p = products.find(item => item.id === sug.id);
+          if (!p || p.stock <= 0) return;
+
+          const isItem = p.productType === "item";
+          const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
+          const mode = (sug.buyMode === "pack" && hasPack) ? "pack" : (Number(p.unitPrice) > 0 ? "unit" : (hasPack ? "pack" : "unit"));
+          const qty = Math.max(1, Number(sug.qty || 1));
+          const price = mode === "pack" ? Number(p.packPrice) : Number(p.unitPrice);
+          const unitLabel = mode === "pack" ? `${p.packUnit || "gói"} (${p.packSize} ${p.baseUnit})` : p.baseUnit;
+
+          const card = document.createElement("div");
+          card.className = "mini-prod-card";
+          card.innerHTML = `
+            <div class="mini-prod-info">
+              <div class="mini-prod-name">${escapeHtml(p.name)}</div>
+              <div class="mini-prod-meta">${formatVND(price)} / ${escapeHtml(unitLabel)} • Sẵn ${p.stock} ${escapeHtml(p.baseUnit)}</div>
+            </div>
+            <button class="btn-add-mini" onclick="addToCart('${escapeAttrJs(p.id)}', '${escapeAttrJs(mode)}', ${qty})">+ Thêm giỏ</button>
+          `;
+          listDiv.appendChild(card);
+        });
+
+        if (listDiv.children.length > 0) {
+          row.appendChild(listDiv);
+        }
+      }
+
+      if (options.showContactButtons) {
+        const socialDiv = document.createElement("div");
+        socialDiv.className = "social-box";
+        socialDiv.innerHTML = `
+          <div class="social-box-title">Nhắn trực tiếp cho Tiệm giấy Thứ Ba qua:</div>
+          <div class="social-links">
+            <a href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer" class="social-btn" onclick="copyPrefill('${escapeAttrJs(options.contactPrefill || "")}')">Facebook</a>
+            <a href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer" class="social-btn" onclick="copyPrefill('${escapeAttrJs(options.contactPrefill || "")}')">Instagram</a>
+            <a href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer" class="social-btn" onclick="copyPrefill('${escapeAttrJs(options.contactPrefill || "")}')">Threads</a>
+          </div>
+        `;
+        row.appendChild(socialDiv);
+      }
+
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function copyPrefill(text) {
+      if (!text) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("Đã copy nội dung để bạn dán vào tin nhắn");
+        });
+      }
+    }
+
+    function sendQuickPrompt(text) {
+      document.getElementById("chatInput").value = text;
+      handleChatSubmit(new Event("submit"));
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById("chatInput");
+      const sendBtn = document.getElementById("sendBtn");
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      input.value = "";
+      sendBtn.disabled = true;
+
+      appendUserMessage(msg);
+      chatHistory.push({ role: "user", text: msg });
+
+      const typingEl = appendTyping();
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "chat",
+            message: msg,
+            history: chatHistory.slice(-8),
+            sessionId: CHAT_SESSION_ID
+          })
+        });
+        const result = await res.json();
+        typingEl.remove();
+
+        if (!result.ok || !result.data) {
+          throw new Error(result.error || "Không nhận được phản hồi");
+        }
+
+        const aiData = result.data;
+        chatHistory.push({ role: "model", text: aiData.reply });
+
+        appendBotMessage(aiData.reply, {
+          suggestedItems: aiData.suggestedItems || [],
+          showContactButtons: Boolean(aiData.showContactButtons),
+          contactPrefill: aiData.contactPrefill || msg
+        });
+      } catch (err) {
+        typingEl.remove();
+        appendBotMessage(
+          "Dạ kết nối tới trợ lý đang hơi chập chờn một chút. Bạn có thể xem trực tiếp ở tab Danh mục giấy hoặc nhắn cho tiệm qua các kênh bên dưới nhé!",
+          { showContactButtons: true, contactPrefill: msg }
+        );
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // KHỞI ĐỘNG ỨNG DỤNG
+    // -------------------------------------------------------------------------
+    window.addEventListener("DOMContentLoaded", () => {
+      const welcomeText = "Chào bạn ghé Tiệm giấy Thứ Ba!\nBạn đang tìm loại giấy tái chế thủ công nào, khổ mấy hay muốn đặt số lượng bao nhiêu để tiệm kiểm tra giúp bạn nhé?";
+      chatHistory.push({ role: "model", text: welcomeText });
+      appendBotMessage(welcomeText);
+      loadProducts();
+    });
   </script>
 </body>
 </html>
