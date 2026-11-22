@@ -292,6 +292,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
     }
 
     .product-thumb img.slide-img {
@@ -366,6 +367,20 @@
     }
     .stock-pill.out { background: var(--warn-bg); color: var(--warn-text); }
 
+    .in-cart-pill {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #FFFFFF;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.14);
+      z-index: 3;
+    }
+
     .product-body {
       padding: 10px;
       display: flex;
@@ -375,7 +390,15 @@
       gap: 8px;
     }
 
-    .product-title { font-size: 13.5px; font-weight: 600; color: var(--text-main); line-height: 1.3; }
+    .product-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.3;
+      cursor: pointer;
+    }
+    .product-title:hover { color: var(--primary); text-decoration: underline; }
+
     .price-block { margin-top: 4px; display: flex; flex-direction: column; gap: 2px; }
     .price-main { font-size: 13.5px; font-weight: 700; color: var(--primary); }
     .price-sub { font-size: 11.5px; font-weight: 600; color: #4A3D34; }
@@ -436,6 +459,176 @@
       padding: 6px 8px;
       border-radius: 8px;
       cursor: pointer;
+    }
+
+    .btn-mix-sm {
+      width: 100%;
+      background: #F4EFE6;
+      border: 1px dashed var(--primary);
+      color: var(--primary);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    /* VietQR Payment Card */
+    .vietqr-card {
+      margin-top: 8px;
+      background: #FFFFFF;
+      border: 1.5px solid #C8DBC9;
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-align: center;
+    }
+    .vietqr-img {
+      width: 210px;
+      max-width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 4px;
+    }
+    .vietqr-info-grid {
+      width: 100%;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: left;
+    }
+    .vietqr-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Mix Paper Modal */
+    .mix-progress-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .mix-flavor-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 9px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* Freeship Progress Bar inside Cart */
+    .freeship-bar-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .freeship-bar-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .freeship-bar-text.done { color: var(--accent); }
+    .freeship-track {
+      width: 100%;
+      height: 7px;
+      background: var(--bg-soft);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .freeship-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+    .freeship-fill.done { background: var(--accent); }
+
+    /* Order Lookup Card inside Chat */
+    .lookup-card {
+      margin-top: 8px;
+      background: var(--bg-app);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .lookup-form-row {
+      display: flex;
+      gap: 6px;
+    }
+    .lookup-input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 13px;
+      background: #fff;
+      color: var(--text-main);
+    }
+    .lookup-submit {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .lookup-order-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 12.5px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .lookup-status-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--warn-bg);
+      color: var(--warn-text);
+    }
+    .lookup-status-pill.ok {
+      background: var(--accent-soft);
+      color: #2E5A36;
     }
 
     /* Detail Modal 2-Column Gallery */
@@ -893,6 +1086,7 @@
     <div class="composer-wrap">
       <div class="hint-strip">
         <button class="hint-pill" onclick="sendQuickText('Xem các loại giấy đang có sẵn')">Giấy đang có sẵn</button>
+        <button class="hint-pill" onclick="openOrderLookupCard()">Tra cứu đơn</button>
         <button class="hint-pill" onclick="sendQuickText('Giấy có viết được bút mực không?')">Viết bút mực</button>
         <button class="hint-pill" onclick="sendQuickText('Phí ship như thế nào ạ?')">Phí ship</button>
         <button class="hint-pill" onclick="openCartModal()">Lên đơn ngay</button>
@@ -932,6 +1126,16 @@
     </div>
   </div>
 
+  <div id="mixOverlay" class="overlay" onclick="closeOverlay(event, 'mixOverlay')">
+    <div class="sheet-modal">
+      <div class="modal-head">
+        <h2 id="mixModalTitle">Mix mẫu giấy theo gói</h2>
+        <button class="close-btn" onclick="hideModal('mixOverlay')">✕</button>
+      </div>
+      <div id="mixModalBody" class="modal-body"></div>
+    </div>
+  </div>
+
   <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
 
@@ -944,6 +1148,8 @@
     const CART_STORAGE_KEY = "TGTB_CART_V1";
     const CUSTOMER_STORAGE_KEY = "TGTB_CUSTOMER_INFO_V1";
     const SESSION_STORAGE_KEY = "TGTB_CHAT_SESSION_V1";
+    const CHAT_MESSAGES_STORAGE_KEY = "TGTB_CHAT_MESSAGES_V1";
+    const LAST_ORDER_STORAGE_KEY = "TGTB_LAST_ORDER_ID_V1";
     const IS_DEBUG = new URLSearchParams(window.location.search).get("debug") === "1";
 
     function createChatSessionId() {
@@ -963,12 +1169,17 @@
     }
 
     let products = [];
+    let bankConfig = null;
     let cart = [];
     let chatHistory = [];
+    let persistedChatFeed = [];
     let chatSessionId = getOrCreateChatSessionId();
     let lastPlacedOrderId = "";
+    try { lastPlacedOrderId = localStorage.getItem(LAST_ORDER_STORAGE_KEY) || ""; } catch (e) {}
     let selectedCategory = "Tất cả";
     let selectedPlatform = "Instagram";
+    let selectedPaymentMethod = "COD";
+    let mixState = null;
     let isSending = false;
     let detailSlideIndex = 0;
     let detailImages = [];
@@ -997,6 +1208,24 @@
         .replace(/\r?\n/g, " ");
     }
 
+    // --- LƯU & KHÔI PHỤC LỊCH SỬ CHAT TRÊN TRÌNH DUYỆT KHÁCH ---
+    function saveChatMessagesToStorage() {
+      try {
+        localStorage.setItem(CHAT_MESSAGES_STORAGE_KEY, JSON.stringify(persistedChatFeed.slice(-40)));
+      } catch (e) {}
+    }
+
+    function loadChatMessagesFromStorage() {
+      try {
+        const raw = localStorage.getItem(CHAT_MESSAGES_STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
     function saveCartToStorage() {
       try {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
@@ -1023,6 +1252,26 @@
       const usedMap = {};
 
       cart.forEach(item => {
+        if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
+          let validMix = true;
+          item.mixBreakdown.forEach(part => {
+            const p = products.find(prod => prod.id === part.id);
+            const needed = Number(part.units || 0) * Number(item.qty || 1);
+            if (!p || (usedMap[p.id] || 0) + needed > p.stock) {
+              validMix = false;
+            }
+          });
+          if (!validMix) {
+            adjusted = true;
+            return;
+          }
+          item.mixBreakdown.forEach(part => {
+            usedMap[part.id] = (usedMap[part.id] || 0) + Number(part.units || 0) * Number(item.qty || 1);
+          });
+          nextCart.push(item);
+          return;
+        }
+
         const p = products.find(prod => prod.id === item.id);
         if (!p || p.stock <= 0) {
           adjusted = true;
@@ -1130,9 +1379,9 @@
       setTimeout(() => t.classList.remove("show"), 2400);
     }
 
-    function copyText(text) {
+    function copyText(text, customMsg = "Đã copy nội dung") {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => showToast("Đã copy nội dung để bạn dán tin nhắn"));
+        navigator.clipboard.writeText(text).then(() => showToast(customMsg));
       } else {
         const ta = document.createElement("textarea");
         ta.value = text;
@@ -1140,7 +1389,7 @@
         ta.select();
         document.execCommand("copy");
         document.body.removeChild(ta);
-        showToast("Đã copy nội dung để bạn dán tin nhắn");
+        showToast(customMsg);
       }
     }
 
@@ -1231,6 +1480,8 @@
         const json = await res.json();
         if (!json.ok) throw new Error(json.error || "Không tải được kho");
 
+        bankConfig = json.bankConfig && json.bankConfig.accountNo ? json.bankConfig : null;
+
         products = (json.products || []).map(p => ({
           ...p,
           stock: Number(p.stock || 0),
@@ -1259,10 +1510,13 @@
     function resetChatSession() {
       if (isSending) return;
       chatHistory = [];
+      persistedChatFeed = [];
       lastPlacedOrderId = "";
       chatSessionId = createChatSessionId();
       try {
         localStorage.setItem(SESSION_STORAGE_KEY, chatSessionId);
+        localStorage.removeItem(CHAT_MESSAGES_STORAGE_KEY);
+        localStorage.removeItem(LAST_ORDER_STORAGE_KEY);
       } catch (e) {}
       chatStream.innerHTML = "";
       renderWelcome();
@@ -1278,10 +1532,146 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         <div class="quick-grid">
           <button class="chip-btn" onclick="renderCatalogMessage()">Xem các loại giấy đang có</button>
           <button class="chip-btn" onclick="sendQuickText('Tư vấn giúp mình chọn giấy phù hợp nhé')">Tư vấn chọn giấy</button>
+          <button class="chip-btn" onclick="openOrderLookupCard()">Tra cứu đơn hàng</button>
           <button class="chip-btn" onclick="openCartModal()">Lên đơn nhanh</button>
         </div>
       `;
       chatStream.appendChild(row);
+    }
+
+    // --- TRA CỨU TÌNH TRẠNG ĐƠN HÀNG NGAY TRONG CHAT ---
+    function openOrderLookupCard() {
+      const existing = document.getElementById("orderLookupRow");
+      if (existing) existing.remove();
+
+      const savedCust = loadSavedCustomerInfo();
+      const defaultQuery = lastPlacedOrderId || (savedCust && savedCust.phone ? savedCust.phone : "");
+
+      const row = document.createElement("div");
+      row.id = "orderLookupRow";
+      row.className = "msg-row bot full-width";
+      row.innerHTML = `
+        <div class="bubble" style="max-width:100%;">
+          <strong>Tra cứu tình trạng đơn hàng</strong>
+          <div style="font-size:12.5px; color:var(--text-muted); margin-top:2px;">Nhập Số điện thoại đặt hàng hoặc Mã đơn (VD: DH261122...) để kiểm tra trạng thái & mã vận đơn ạ:</div>
+          <div class="lookup-card">
+            <form class="lookup-form-row" onsubmit="submitOrderLookup(event)">
+              <input id="lookupQueryInput" class="lookup-input" type="text" placeholder="SĐT hoặc mã đơn..." value="${escapeHtml(defaultQuery)}" required />
+              <button id="lookupSubmitBtn" type="submit" class="lookup-submit">Kiểm tra</button>
+            </form>
+            <div id="lookupResultsBox"></div>
+          </div>
+        </div>
+      `;
+      chatStream.appendChild(row);
+      scrollBottom();
+      setTimeout(() => {
+        const inp = document.getElementById("lookupQueryInput");
+        if (inp) inp.focus();
+      }, 120);
+    }
+
+    async function submitOrderLookup(e) {
+      e.preventDefault();
+      const inp = document.getElementById("lookupQueryInput");
+      const btn = document.getElementById("lookupSubmitBtn");
+      const box = document.getElementById("lookupResultsBox");
+      if (!inp || !btn || !box) return;
+
+      const query = inp.value.trim();
+      if (!query) return;
+
+      btn.disabled = true;
+      btn.textContent = "Đang tìm...";
+      box.innerHTML = `<div style="font-size:12px; color:var(--text-muted);">Đang tra cứu đơn trên hệ thống tiệm...</div>`;
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "lookup_order",
+            query: query,
+            sessionId: chatSessionId
+          })
+        });
+        const json = await res.json();
+        if (!json.ok) throw new Error(json.error || "Không tra cứu được");
+
+        const list = json.orders || [];
+        if (!list.length) {
+          box.innerHTML = `<div style="font-size:12.5px; color:var(--warn-text); background:var(--warn-bg); padding:8px 10px; border-radius:8px;">Dạ tiệm chưa tìm thấy đơn nào khớp với "<strong>${escapeHtml(query)}</strong>". Bạn kiểm tra lại SĐT hoặc nhắn trực tiếp cho tiệm nhé!</div>`;
+          return;
+        }
+
+        const activeBank = (json.bankConfig && json.bankConfig.accountNo) ? json.bankConfig : bankConfig;
+
+        box.innerHTML = list.map(o => {
+          const isOk = o.status === "Đã xác nhận" || o.status === "Đang giao" || o.status === "Hoàn thành";
+          const isPaid = o.paymentMethod === "Đã thanh toán CK";
+          const showQrBtn = !isPaid && activeBank && activeBank.accountNo && o.status !== "Đã hủy";
+          const trackHtml = o.trackingCode
+            ? `<div style="display:flex; align-items:center; justify-content:space-between; gap:6px; background:var(--bg-soft); padding:5px 8px; border-radius:7px; margin-top:3px;">
+                <span>Mã vận đơn: <strong>${escapeHtml(o.trackingCode)}</strong></span>
+                <button type="button" class="copy-mini" onclick="copyText('${escapeAttrJs(o.trackingCode)}', 'Đã copy mã vận đơn')">Copy mã</button>
+              </div>`
+            : `<div style="font-size:11.5px; color:var(--text-muted);">Mã vận đơn: Đang cập nhật</div>`;
+
+          const qrInlineHtml = showQrBtn
+            ? `<div style="margin-top:4px;">
+                <button type="button" class="copy-mini" style="width:100%; padding:6px;" onclick="appendVietQrMessage('${escapeAttrJs(o.orderId)}', ${Number(o.total || 0)}, activeBank)">📱 Hiện mã QR chuyển khoản VietQR (${formatVND(o.total)})</button>
+              </div>`
+            : "";
+
+          return `
+            <div class="lookup-order-item">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                <strong style="color:var(--primary);">#${escapeHtml(o.orderId)}</strong>
+                <span class="lookup-status-pill ${isOk ? 'ok' : ''}">${escapeHtml(o.status)}</span>
+              </div>
+              <div style="font-size:11.5px; color:var(--text-muted);">${escapeHtml(o.createdAt)} • ${escapeHtml(o.customerName)} (${escapeHtml(o.phoneMasked)})</div>
+              <div><strong>Sản phẩm:</strong> ${escapeHtml(o.itemsSummary)}</div>
+              <div><strong>Tổng đơn:</strong> ${formatVND(o.total)} (${isPaid ? "Đã thanh toán CK" : (o.paymentMethod === "Chuyển khoản trước" ? "Chờ xác nhận CK" : "COD khi nhận hàng")})</div>
+              ${trackHtml}
+              ${qrInlineHtml}
+            </div>
+          `;
+        }).join("");
+        scrollBottom();
+      } catch (err) {
+        box.innerHTML = `<div style="font-size:12px; color:#C94A4A;">Lỗi kết nối: ${escapeHtml(err.message)}</div>`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Kiểm tra";
+      }
+    }
+
+    function getCartQtyForProduct(productId) {
+      return cart.reduce((sum, c) => {
+        if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
+          const found = c.mixBreakdown.find(part => part.id === productId);
+          return sum + (found ? Number(found.units || 0) * Number(c.qty || 1) : 0);
+        }
+        return c.id === productId ? sum + Number(c.qty || 0) : sum;
+      }, 0);
+    }
+
+    function getMixableGroupForProduct(p) {
+      if (!p || !hasPackOption(p)) return [];
+      return products.filter(item =>
+        item.category === p.category &&
+        hasPackOption(item) &&
+        Number(item.packSize) === Number(p.packSize) &&
+        Number(item.packPrice) === Number(p.packPrice) &&
+        (item.stock - getUsedBaseUnitsForProduct(item.id)) > 0
+      );
+    }
+
+    function canMixProduct(p) {
+      const group = getMixableGroupForProduct(p);
+      if (group.length < 2) return false;
+      const totalAvail = group.reduce((s, item) => s + Math.max(0, item.stock - getUsedBaseUnitsForProduct(item.id)), 0);
+      return totalAvail >= Number(p.packSize);
     }
 
     function renderCatalogMessage(filterCat = "Tất cả") {
@@ -1313,6 +1703,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         const canPack = hasPackOption(p) && p.stock >= p.packSize;
         const canUnit = hasUnitOption(p) && p.stock >= 1;
         const imgs = parseImages(p);
+        const inCartQty = getCartQtyForProduct(p.id);
 
         let priceHtml = "";
         if (hasPackOption(p) && hasUnitOption(p)) {
@@ -1369,19 +1760,25 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           actionButtonsHtml = `<button class="btn-preorder-sm" onclick="askPreorder('${safeIdAttr}')">Không đủ gói — Đặt thêm</button>`;
         }
 
+        const mixBtnHtml = canMixProduct(p)
+          ? `<button type="button" class="btn-mix-sm" onclick="openMixModal('${safeIdAttr}')">🎨 Mix ${p.packSize} ${escapeHtml(p.baseUnit)} nhiều mùi/màu</button>`
+          : "";
+
         return `
           <div class="product-card">
-            <div class="product-thumb" data-multi="${imgs.length > 1 ? '1' : '0'}">
+            <div class="product-thumb" data-multi="${imgs.length > 1 ? '1' : '0'}" onclick="openDetailModal('${safeIdAttr}')">
               ${thumbHtml}
+              ${inCartQty > 0 ? `<span class="in-cart-pill">✓ Đã có ${inCartQty} trong giỏ</span>` : ""}
               <span class="stock-pill ${isOut ? 'out' : ''}">${getCompactStockBadge(p)}</span>
             </div>
             <div class="product-body">
               <div>
-                <div class="product-title">${escapeHtml(p.name)}</div>
+                <div class="product-title" onclick="openDetailModal('${safeIdAttr}')">${escapeHtml(p.name)}</div>
                 <div class="price-block">${priceHtml}${unsizedNoteHtml}</div>
               </div>
               <div class="card-actions">
                 ${actionButtonsHtml}
+                ${mixBtnHtml}
                 <button class="btn-outline" onclick="openDetailModal('${safeIdAttr}')">Xem chi tiết</button>
               </div>
             </div>
@@ -1486,6 +1883,9 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           modalButtons += `<button class="submit-order-btn" style="flex:1; background:var(--accent);" onclick="addToCart('${safeIdAttr}', 'unit', 1); hideModal('detailOverlay');">+ Thêm 1 ${escapeHtml(p.baseUnit)} (${formatShortK(p.unitPrice)})</button>`;
         }
         modalButtons += `</div>`;
+        if (canMixProduct(p)) {
+          modalButtons += `<button type="button" class="btn-mix-sm" style="padding:9px; font-size:12.5px;" onclick="hideModal('detailOverlay'); openMixModal('${safeIdAttr}')">🎨 Tự chọn Mix gói ${p.packSize} ${escapeHtml(p.baseUnit)} (nhiều mùi/màu)</button>`;
+        }
       }
 
       document.getElementById("detailTitle").textContent = p.name;
@@ -1525,9 +1925,165 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
     }
 
     function getUsedBaseUnitsForProduct(productId) {
-      return cart
-        .filter(c => c.id === productId)
-        .reduce((sum, c) => sum + c.qty * c.baseUnitsPerQty, 0);
+      return cart.reduce((sum, c) => {
+        if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
+          const part = c.mixBreakdown.find(pt => pt.id === productId);
+          return sum + (part ? Number(part.units || 0) * c.qty : 0);
+        }
+        return c.id === productId ? sum + c.qty * c.baseUnitsPerQty : sum;
+      }, 0);
+    }
+
+    // --- TÍNH NĂNG MIX MẪU GIẤY THEO GÓI ---
+    function openMixModal(seedProductId) {
+      const seed = products.find(item => item.id === seedProductId);
+      if (!seed) return;
+      const group = getMixableGroupForProduct(seed);
+      if (group.length < 2) {
+        showToast("Nhóm này hiện chưa đủ từ 2 mẫu có sẵn để mix ạ");
+        return;
+      }
+
+      mixState = {
+        category: seed.category,
+        packSize: Number(seed.packSize),
+        packPrice: Number(seed.packPrice),
+        packUnit: seed.packUnit || "gói",
+        baseUnit: seed.baseUnit || "tờ",
+        items: group.map(item => ({
+          id: item.id,
+          name: item.name,
+          avail: Math.max(0, item.stock - getUsedBaseUnitsForProduct(item.id)),
+          qty: item.id === seed.id ? Math.min(Math.floor(seed.packSize / 2), Math.max(0, item.stock - getUsedBaseUnitsForProduct(item.id))) : 0
+        }))
+      };
+
+      document.getElementById("mixModalTitle").textContent = `Mix ${mixState.packUnit} ${mixState.category} (${mixState.packSize} ${mixState.baseUnit})`;
+      renderMixModalBody();
+      document.getElementById("mixOverlay").classList.add("open");
+    }
+
+    function changeMixItemQty(idx, delta) {
+      if (!mixState || !mixState.items[idx]) return;
+      const currentTotal = mixState.items.reduce((s, it) => s + it.qty, 0);
+      const item = mixState.items[idx];
+      if (delta > 0) {
+        if (currentTotal >= mixState.packSize) {
+          showToast(`Đã đủ ${mixState.packSize} ${mixState.baseUnit} cho 1 ${mixState.packUnit} rồi ạ`);
+          return;
+        }
+        if (item.qty + 1 > item.avail) {
+          showToast(`Mẫu này chỉ còn sẵn ${item.avail} ${mixState.baseUnit} ạ`);
+          return;
+        }
+        item.qty += 1;
+      } else if (delta < 0 && item.qty > 0) {
+        item.qty -= 1;
+      }
+      renderMixModalBody();
+    }
+
+    function autoDistributeMix() {
+      if (!mixState) return;
+      mixState.items.forEach(it => { it.qty = 0; });
+      let remaining = mixState.packSize;
+      let safety = 0;
+      while (remaining > 0 && safety < 200) {
+        let addedInPass = false;
+        for (let i = 0; i < mixState.items.length && remaining > 0; i++) {
+          if (mixState.items[i].qty < mixState.items[i].avail) {
+            mixState.items[i].qty += 1;
+            remaining -= 1;
+            addedInPass = true;
+          }
+        }
+        if (!addedInPass) break;
+        safety++;
+      }
+      renderMixModalBody();
+    }
+
+    function renderMixModalBody() {
+      if (!mixState) return;
+      const body = document.getElementById("mixModalBody");
+      const totalSelected = mixState.items.reduce((s, it) => s + it.qty, 0);
+      const remaining = mixState.packSize - totalSelected;
+      const isComplete = remaining === 0;
+
+      const rowsHtml = mixState.items.map((it, idx) => `
+        <div class="mix-flavor-row">
+          <div>
+            <div style="font-size:13.5px; font-weight:600; color:var(--text-main);">${escapeHtml(it.name)}</div>
+            <div style="font-size:11.5px; color:var(--text-muted);">Còn sẵn: ${it.avail} ${escapeHtml(mixState.baseUnit)}</div>
+          </div>
+          <div class="qty-control">
+            <button type="button" class="qty-btn" onclick="changeMixItemQty(${idx}, -1)">−</button>
+            <span style="font-size:13.5px; font-weight:700; min-width:22px; text-align:center; color:${it.qty > 0 ? 'var(--primary)' : 'var(--text-muted)'};">${it.qty}</span>
+            <button type="button" class="qty-btn" onclick="changeMixItemQty(${idx}, 1)">+</button>
+          </div>
+        </div>
+      `).join("");
+
+      body.innerHTML = `
+        <div class="mix-progress-box">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+            <span style="font-size:13px; font-weight:700; color:${isComplete ? 'var(--accent)' : 'var(--primary)'};">
+              ${isComplete ? `✓ Đã chọn đủ ${mixState.packSize}/${mixState.packSize} ${escapeHtml(mixState.baseUnit)}` : `Đã chọn: ${totalSelected}/${mixState.packSize} ${escapeHtml(mixState.baseUnit)} (thiếu ${remaining})`}
+            </span>
+            <button type="button" class="copy-mini" onclick="autoDistributeMix()">Chia đều tự động</button>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted);">Giá đồng giá gói mix: <strong style="color:var(--primary);">${formatVND(mixState.packPrice)}</strong> / ${escapeHtml(mixState.packUnit)}</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          ${rowsHtml}
+        </div>
+        <button type="button" class="submit-order-btn" ${isComplete ? "" : "disabled"} onclick="confirmAddMixToCart()">
+          ${isComplete ? `+ Thêm gói mix vào giỏ (${formatShortK(mixState.packPrice)})` : `Chọn thêm ${remaining} ${escapeHtml(mixState.baseUnit)} để đủ gói`}
+        </button>
+      `;
+    }
+
+    function confirmAddMixToCart() {
+      if (!mixState) return;
+      const chosen = mixState.items.filter(it => it.qty > 0);
+      const totalSelected = chosen.reduce((s, it) => s + it.qty, 0);
+      if (totalSelected !== mixState.packSize) return;
+
+      const shortLabels = chosen.map(it => {
+        const shortName = it.name.replace(new RegExp("^" + mixState.category.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*", "i"), "").trim() || it.name;
+        return `${it.qty} ${shortName}`;
+      });
+      const mixTitle = `Mix ${mixState.category} (${shortLabels.join(" + ")})`;
+      const mixKey = "MIX_" + chosen.map(it => `${it.id}x${it.qty}`).join("_");
+
+      const existing = cart.find(c => c.key === mixKey);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          key: mixKey,
+          id: "",
+          name: mixTitle,
+          buyMode: "mix",
+          unitLabel: `${mixState.packUnit} mix (${mixState.packSize} ${mixState.baseUnit})`,
+          baseUnitsPerQty: mixState.packSize,
+          price: mixState.packPrice,
+          qty: 1,
+          mixBreakdown: chosen.map(it => ({ id: it.id, name: it.name, units: it.qty }))
+        });
+      }
+
+      saveCartToStorage();
+      updateCartBadge();
+      refreshCatalogCardIfOpen();
+      hideModal("mixOverlay");
+      showToast(`Đã thêm ${mixTitle} vào giỏ`);
+    }
+
+    function refreshCatalogCardIfOpen() {
+      if (document.getElementById("catalogCardRow")) {
+        renderCatalogMessage(selectedCategory);
+      }
     }
 
     function addToCart(id, buyMode = "pack", qty = 1) {
@@ -1576,6 +2132,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
 
       saveCartToStorage();
       updateCartBadge();
+      refreshCatalogCardIfOpen();
       showToast(`Đã thêm ${qty} ${unitLabel} ${p.name}`);
     }
 
@@ -1589,7 +2146,27 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       if (nextQty <= 0) {
         cart.splice(idx, 1);
       } else {
-        if (p) {
+        if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
+          for (let i = 0; i < item.mixBreakdown.length; i++) {
+            const part = item.mixBreakdown[i];
+            const prod = products.find(pr => pr.id === part.id);
+            if (prod) {
+              const otherUsed = cart
+                .filter(c => c.key !== key)
+                .reduce((s, c) => {
+                  if (c.buyMode === "mix" && Array.isArray(c.mixBreakdown)) {
+                    const f = c.mixBreakdown.find(pt => pt.id === part.id);
+                    return s + (f ? Number(f.units || 0) * c.qty : 0);
+                  }
+                  return c.id === part.id ? s + c.qty * c.baseUnitsPerQty : s;
+                }, 0);
+              if (otherUsed + nextQty * Number(part.units || 0) > prod.stock) {
+                showToast(`Mẫu "${prod.name}" chỉ còn sẵn ${prod.stock} ${prod.baseUnit} ạ`);
+                return;
+              }
+            }
+          }
+        } else if (p) {
           const otherUsed = cart
             .filter(c => c.id === item.id && c.key !== key)
             .reduce((s, c) => s + c.qty * c.baseUnitsPerQty, 0);
@@ -1602,6 +2179,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       }
       saveCartToStorage();
       updateCartBadge();
+      refreshCatalogCardIfOpen();
       renderCartModalContent();
     }
 
@@ -1611,7 +2189,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       const totalPacks = cart.filter(i => i.buyMode === "pack").reduce((sum, i) => sum + i.qty, 0);
       const totalBaseUnits = cart.reduce((sum, i) => sum + i.qty * i.baseUnitsPerQty, 0);
       const shipFee = (subtotal === 0 || subtotal >= 200000 || hasKit) ? 0 : 15000;
-      return { subtotal, shipFee, total: subtotal + shipFee, totalPacks, totalBaseUnits };
+      return { subtotal, shipFee, total: subtotal + shipFee, totalPacks, totalBaseUnits, hasKit };
     }
 
     function openCartModal() {
@@ -1636,7 +2214,38 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         selectedPlatform = savedCust.platform;
       }
 
-      const { subtotal, shipFee, total, totalPacks, totalBaseUnits } = calcCartTotals();
+      const { subtotal, shipFee, total, totalPacks, totalBaseUnits, hasKit } = calcCartTotals();
+
+      // Thanh tiến trình Freeship
+      let freeshipBannerHtml = "";
+      if (hasKit) {
+        freeshipBannerHtml = `
+          <div class="freeship-bar-box">
+            <div class="freeship-bar-text done"><span>🎉 Đơn có Bộ kit làm giấy — Miễn phí ship!</span><span>100%</span></div>
+            <div class="freeship-track"><div class="freeship-fill done" style="width:100%;"></div></div>
+          </div>
+        `;
+      } else if (subtotal >= 200000) {
+        freeshipBannerHtml = `
+          <div class="freeship-bar-box">
+            <div class="freeship-bar-text done"><span>🎉 Đã đạt mốc Freeship 200K (tiết kiệm 15K)</span><span>100%</span></div>
+            <div class="freeship-track"><div class="freeship-fill done" style="width:100%;"></div></div>
+          </div>
+        `;
+      } else {
+        const missing = 200000 - subtotal;
+        const pct = Math.min(100, Math.round((subtotal / 200000) * 100));
+        freeshipBannerHtml = `
+          <div class="freeship-bar-box">
+            <div class="freeship-bar-text">
+              <span>🚚 Mua thêm <strong>${formatVND(missing)}</strong> để được Freeship</span>
+              <span>${pct}%</span>
+            </div>
+            <div class="freeship-track"><div class="freeship-fill" style="width:${pct}%;"></div></div>
+          </div>
+        `;
+      }
+
       const itemsHtml = cart.map(item => {
         const safeKeyAttr = escapeAttrJs(item.key);
         return `
@@ -1668,6 +2277,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       ` : "";
 
       body.innerHTML = `
+        ${freeshipBannerHtml}
         <div style="display:flex; flex-direction:column; gap:8px;">
           ${itemsHtml}
         </div>
@@ -1675,7 +2285,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         <div class="summary-card">
           <div class="summary-line"><span>Tiền giấy:</span><span>${formatVND(subtotal)}</span></div>
           <div class="summary-line"><span>Phí ship (Freeship đơn từ 200K & Bộ kit):</span><span>${shipFee === 0 ? "Miễn phí" : formatVND(shipFee)}</span></div>
-          <div class="summary-line summary-total"><span>Tổng thanh toán (COD):</span><span>${formatVND(total)}</span></div>
+          <div class="summary-line summary-total"><span>Tổng thanh toán:</span><span>${formatVND(total)}</span></div>
         </div>
 
         ${savedInfoBanner}
@@ -1687,33 +2297,17 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           </div>
 
           <div class="form-group">
-            <label>2. Số điện thoại nhận hàng *</label>
-            <input id="custPhone" class="form-control" type="tel" placeholder="Ví dụ: 0912345678" value="${escapeHtml(savedCust ? savedCust.phone : "")}" required />
-          </div>
-
-          <div class="form-group">
-            <label>3. Địa chỉ giao hàng *</label>
-            <textarea id="custAddress" class="form-control" rows="2" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố" required>${escapeHtml(savedCust ? savedCust.address : "")}</textarea>
-          </div>
-
-          <div class="form-group">
-            <label>4. Ứng dụng bạn dùng để nhắn với tiệm *</label>
-            <div class="platform-pills">
-              <div class="plat-option ${selectedPlatform === 'Instagram' ? 'selected' : ''}" onclick="selectPlatform('Instagram', this)">Instagram</div>
-              <div class="plat-option ${selectedPlatform === 'Threads' ? 'selected' : ''}" onclick="selectPlatform('Threads', this)">Threads</div>
-              <div class="plat-option ${selectedPlatform === 'Facebook' ? 'selected' : ''}" onclick="selectPlatform('Facebook', this)">Facebook</div>
+            <label>6. Hình thức thanh toán *</label>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <div class="plat-option ${selectedPaymentMethod === 'COD' ? 'selected' : ''}" onclick="selectPaymentMethod('COD', this)">💵 COD khi nhận hàng</div>
+              <div class="plat-option ${selectedPaymentMethod === 'Chuyển khoản trước' ? 'selected' : ''}" onclick="selectPaymentMethod('Chuyển khoản trước', this)">📱 Quét QR chuyển khoản</div>
             </div>
+            <small id="payMethodHint">${selectedPaymentMethod === 'Chuyển khoản trước' ? (bankConfig && bankConfig.accountNo ? 'Hệ thống sẽ tự tạo mã VietQR đúng số tiền & mã đơn ngay sau khi gửi đơn ạ' : 'Tiệm sẽ gửi thông tin chuyển khoản khi nhắn xác nhận đơn ạ') : 'Thanh toán tiền mặt cho shipper khi nhận gói giấy ạ'}</small>
           </div>
 
           <div class="form-group">
-            <label>5. Tên tài khoản (User / Nickname) trên ${escapeHtml(selectedPlatform)} *</label>
-            <small>Tiệm lưu lại để tìm đúng tài khoản của mình và nhắn xác nhận đơn ạ</small>
-            <input id="custSocial" class="form-control" type="text" placeholder="Ví dụ: @minhanh.paper hoặc tên Facebook của mình" value="${escapeHtml(savedCust ? savedCust.socialHandle : "")}" required />
-          </div>
-
-          <div class="form-group">
-            <label>6. Ghi chú thêm (nếu có)</label>
-            <input id="custNote" class="form-control" type="text" placeholder="Ví dụ: Mix 5 tờ quế + 5 tờ vỏ quýt, hoặc muốn chuyển khoản trước..." />
+            <label>7. Ghi chú thêm (nếu có)</label>
+            <input id="custNote" class="form-control" type="text" placeholder="Ví dụ: Giao giờ hành chính, gói kỹ giúp mình..." />
           </div>
 
           <label style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-main); cursor:pointer; user-select:none;">
@@ -1728,10 +2322,60 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
 
     function selectPlatform(plat, el) {
       selectedPlatform = plat;
-      document.querySelectorAll(".plat-option").forEach(node => node.classList.remove("selected"));
+      document.querySelectorAll(".plat-option").forEach(node => {
+        if (node.parentElement === el.parentElement) node.classList.remove("selected");
+      });
       el.classList.add("selected");
       const label = el.closest(".form-group").nextElementSibling.querySelector("label");
       if (label) label.textContent = `5. Tên tài khoản (User / Nickname) trên ${plat} *`;
+    }
+
+    function selectPaymentMethod(method, el) {
+      selectedPaymentMethod = method;
+      document.querySelectorAll(".plat-option").forEach(node => {
+        if (node.parentElement === el.parentElement) node.classList.remove("selected");
+      });
+      el.classList.add("selected");
+      const hint = document.getElementById("payMethodHint");
+      if (hint) {
+        hint.textContent = method === "Chuyển khoản trước"
+          ? (bankConfig && bankConfig.accountNo ? "Hệ thống sẽ tự tạo mã VietQR đúng số tiền & mã đơn ngay sau khi gửi đơn ạ" : "Tiệm sẽ gửi thông tin chuyển khoản khi nhắn xác nhận đơn ạ")
+          : "Thanh toán tiền mặt cho shipper khi nhận gói giấy ạ";
+      }
+    }
+
+    function appendVietQrMessage(orderId, amount, customBank = null) {
+      const bank = customBank || bankConfig;
+      if (!bank || !bank.bankId || !bank.accountNo) {
+        appendBotMessage(`Dạ mã đơn của mình là #${orderId} (${formatVND(amount)}). Tiệm sẽ nhắn thông tin chuyển khoản qua tin nhắn xác nhận ngay cho mình ạ!`);
+        return;
+      }
+
+      const addInfo = encodeURIComponent(orderId);
+      const accName = encodeURIComponent(bank.accountName || "");
+      const qrUrl = `https://img.vietqr.io/image/${encodeURIComponent(bank.bankId)}-${encodeURIComponent(bank.accountNo)}-compact2.png?amount=${Math.round(amount)}&addInfo=${addInfo}&accountName=${accName}`;
+
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+      row.innerHTML = `
+        <div class="bubble">
+          <strong>📱 Mã QR Chuyển khoản VietQR — Đơn #${escapeHtml(orderId)}</strong>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Mở app Ngân hàng bất kỳ và quét mã dưới đây (đã điền sẵn số tiền & nội dung):</div>
+          <div class="vietqr-card">
+            <img class="vietqr-img" src="${escapeHtml(qrUrl)}" alt="Mã VietQR đơn ${escapeHtml(orderId)}" onerror="this.style.display='none';" />
+            <div class="vietqr-info-grid">
+              <div class="vietqr-line"><span>Ngân hàng:</span><strong>${escapeHtml(bank.bankId)}</strong></div>
+              <div class="vietqr-line"><span>Số tài khoản: <strong>${escapeHtml(bank.accountNo)}</strong></span><button type="button" class="copy-mini" onclick="copyText('${escapeAttrJs(bank.accountNo)}', 'Đã copy số tài khoản')">Copy STK</button></div>
+              ${bank.accountName ? `<div class="vietqr-line"><span>Chủ TK:</span><strong>${escapeHtml(bank.accountName)}</strong></div>` : ""}
+              <div class="vietqr-line"><span>Số tiền: <strong style="color:var(--primary);">${formatVND(amount)}</strong></span><button type="button" class="copy-mini" onclick="copyText('${Math.round(amount)}', 'Đã copy số tiền')">Copy tiền</button></div>
+              <div class="vietqr-line"><span>Nội dung CK: <strong style="color:var(--accent);">${escapeHtml(orderId)}</strong></span><button type="button" class="copy-mini" onclick="copyText('${escapeAttrJs(orderId)}', 'Đã copy nội dung chuyển khoản')">Copy ND</button></div>
+            </div>
+            <button type="button" class="submit-order-btn" style="padding:9px; font-size:12.5px; background:var(--accent);" onclick="this.disabled=true; this.textContent='✓ Đã ghi nhận bạn đã chuyển khoản'; showToast('Cảm ơn bạn! Tiệm sẽ kiểm tra và xác nhận đơn ngay ạ');">✓ Tôi đã chuyển khoản xong</button>
+          </div>
+        </div>
+      `;
+      chatStream.appendChild(row);
+      scrollBottom();
     }
 
     async function submitOrder(e) {
@@ -1752,28 +2396,29 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       const { subtotal, shipFee, total } = calcCartTotals();
       const orderPayload = {
         sessionId: chatSessionId,
-        customerName,
-        phone,
-        address,
-        platform: selectedPlatform,
-        socialHandle,
-        note,
-        items: cart.map(i => ({
-          id: i.id,
-          name: i.name,
-          buyMode: i.buyMode,
-          unitLabel: i.unitLabel,
-          qty: i.qty,
-          price: i.price,
-          baseUnits: i.qty * i.baseUnitsPerQty
-        })),
+        chatTranscript: chatHistory.slice(-20),
+        items: cart.map(i => {
+          const baseObj = {
+            id: i.id,
+            name: i.name,
+            buyMode: i.buyMode,
+            unitLabel: i.unitLabel,
+            qty: i.qty,
+            price: i.price,
+            baseUnits: i.qty * i.baseUnitsPerQty
+          };
+          if (i.buyMode === "mix" && Array.isArray(i.mixBreakdown)) {
+            baseObj.mixBreakdown = i.mixBreakdown;
+          }
+          return baseObj;
+        }),
         subtotal,
         discountType: "amount",
         discountValue: 0,
         discountAmount: 0,
         shipFee,
         total,
-        paymentMethod: "COD",
+        paymentMethod: selectedPaymentMethod,
         trackingCode: ""
       };
 
@@ -1790,6 +2435,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         if (!json.ok) throw new Error(json.error || "Không gửi được đơn");
 
         lastPlacedOrderId = json.orderId || "";
+        try { localStorage.setItem(LAST_ORDER_STORAGE_KEY, lastPlacedOrderId); } catch (err) {}
 
         if (shouldSaveInfo) {
           saveCustomerInfoToStorage({
@@ -1811,7 +2457,13 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         await loadInventory();
 
         const shipDisplay = shipFee === 0 ? "(miễn phí ship)" : `(gồm ship ${formatVND(shipFee)})`;
-        appendBotMessage(`Dạ tiệm đã nhận được đơn của mình rồi ạ!\n\nNgười nhận: ${customerName} (${phone})\nĐịa chỉ: ${address}\nTài khoản liên hệ: ${socialHandle} (${selectedPlatform})\nĐơn giấy:\n${itemsSummary}\nTổng cộng: ${formatVND(total)} ${shipDisplay}\n\nMình vui lòng chờ tiệm kiểm tra và nhắn tin xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng ạ.`);
+        const payDisplay = selectedPaymentMethod === "Chuyển khoản trước" ? "Chuyển khoản trước (VietQR)" : "Thu hộ COD khi nhận hàng";
+        const orderCodeLine = lastPlacedOrderId ? `Mã đơn: #${lastPlacedOrderId}\n` : "";
+        appendBotMessage(`Dạ tiệm đã nhận được đơn của mình rồi ạ!\n\n${orderCodeLine}Người nhận: ${customerName} (${phone})\nĐịa chỉ: ${address}\nTài khoản liên hệ: ${socialHandle} (${selectedPlatform})\nThanh toán: ${payDisplay}\nĐơn giấy:\n${itemsSummary}\nTổng cộng: ${formatVND(total)} ${shipDisplay}\n\nMình vui lòng chờ tiệm kiểm tra và nhắn tin xác nhận lại qua ${selectedPlatform} (${socialHandle}) trước khi gói hàng ạ.`);
+
+        if (selectedPaymentMethod === "Chuyển khoản trước" && lastPlacedOrderId) {
+          appendVietQrMessage(lastPlacedOrderId, total);
+        }
       } catch (err) {
         btn.disabled = false;
         btn.textContent = "Gửi đơn đặt hàng";
@@ -1820,30 +2472,32 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       }
     }
 
-    function appendUserMessage(text) {
+    function appendUserMessage(text, skipPersist = false) {
       const row = document.createElement("div");
       row.className = "msg-row user";
       row.innerHTML = `<div class="bubble"></div>`;
       row.querySelector(".bubble").textContent = text;
       chatStream.appendChild(row);
       chatHistory.push({ role: "user", text });
+
+      if (!skipPersist) {
+        persistedChatFeed.push({ role: "user", text });
+        saveChatMessagesToStorage();
+      }
       scrollBottom();
     }
 
     const TYPING_OPENERS = [
-      "Tiệm đang nhập, bạn chờ chút nhé...",
-      "Tiệm đang soạn tin nhắn cho bạn...",
-      "Chờ tiệm một xíu nhé, tiệm đang trả lời..."
+      "Tiệm đang xem câu hỏi của bạn...",
+      "Tiệm đang kiểm tra thông tin cho bạn..."
     ];
 
     const RECYCLED_PAPER_FUN_FACTS = [
-      "💡 Fun fact: Mỗi tờ giấy thủ công ở tiệm đều được xeo tay từng tờ nên mép xơ và vân giấy không tờ nào giống hệt tờ nào đâu ạ.",
-      "💡 Bạn có biết: Giấy tái chế thủ công có sợi giấy ngắn và xốp tự nhiên nên thấm mực nhanh và giữ mùi thảo mộc rất dịu ạ.",
-      "💡 Góc nhỏ của tiệm: Vỏ quýt, quế, sả hay bã cà phê đều có thể phối vào bột giấy để tạo màu và hương thơm tự nhiên đó ạ.",
-      "💡 Mẹo nhỏ: Vì giấy thủ công không cắt máy công nghiệp nên mỗi tờ giữ nguyên viền xơ mềm mại rất hợp làm thiệp & viết thư ạ.",
-      "💡 Fun fact: Tái chế giấy giúp tiết kiệm đáng kể nước và gỗ tự nhiên, lại biến giấy cũ thành những trang viết mới đầy cảm hứng ạ.",
-      "💡 Góc nhỏ của tiệm: Sau khi xeo và ép nước, từng tờ giấy thủ công cần được phơi khô tự nhiên và gia keo nhẹ để hạn chế lem mực ạ.",
-      "💡 Bạn có biết: Không có hai mẻ giấy thủ công nào giống nhau 100%, vì sắc độ còn tùy thuộc vào từng mẻ nguyên liệu tái chế nữa ạ."
+      "💡 Fun fact: Mỗi tờ giấy xeo tay đều có vân và mép xơ độc bản, không tờ nào giống hệt tờ nào ạ.",
+      "💡 Bạn có biết: Giấy tái chế thủ công có sợi giấy ngắn nên giữ hương thảo mộc rất dịu ạ.",
+      "💡 Góc nhỏ: Vỏ quýt, quế, sả hay bã cà phê đều dùng để tạo màu và mùi thơm tự nhiên cho giấy ạ.",
+      "💡 Mẹo nhỏ: Viền xơ tự nhiên của giấy thủ công rất hợp để làm thiệp quà tặng và viết thư tay ạ.",
+      "💡 Góc nhỏ: Từng tờ giấy sau khi xeo đều được phơi khô tự nhiên và gia keo nhẹ để hạn chế lem mực ạ."
     ];
 
     let lastFunFactIdx = -1;
@@ -1859,7 +2513,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       return [
         opener,
         RECYCLED_PAPER_FUN_FACTS[factIdx],
-        "Tiệm sắp gõ xong rồi, bạn chờ thêm xíu nữa ạ..."
+        "Tiệm sắp trả lời xong rồi, bạn chờ thêm xíu nhé..."
       ];
     }
 
@@ -1874,7 +2528,6 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       }
 
       const steps = buildWaitingSteps();
-      let stepIdx = 0;
 
       const row = document.createElement("div");
       row.id = "typingRow";
@@ -1888,27 +2541,32 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       chatStream.appendChild(row);
       scrollBottom();
 
-      typingStepTimer = setInterval(() => {
+      // Hiển thị Fun fact sau 1.1s và GIỮ NGUYÊN suốt 5.2s để khách đọc trọn vẹn
+      const switchText = (nextStr) => {
         const labelEl = document.getElementById("typingStepLabel");
         if (!labelEl) return;
-        if (stepIdx < steps.length - 1) {
-          stepIdx++;
-          labelEl.style.opacity = "0.25";
-          setTimeout(() => {
-            const freshEl = document.getElementById("typingStepLabel");
-            if (freshEl) {
-              freshEl.textContent = steps[stepIdx];
-              freshEl.style.opacity = "1";
-              scrollBottom();
-            }
-          }, 160);
-        }
-      }, 1500);
+        labelEl.style.opacity = "0.25";
+        setTimeout(() => {
+          const freshEl = document.getElementById("typingStepLabel");
+          if (freshEl) {
+            freshEl.textContent = nextStr;
+            freshEl.style.opacity = "1";
+            scrollBottom();
+          }
+        }, 160);
+      };
+
+      const t1 = setTimeout(() => switchText(steps[1]), 1100);
+      const t2 = setTimeout(() => switchText(steps[2]), 6400);
+      typingStepTimer = [t1, t2];
     }
 
     function removeTypingIndicator() {
-      if (typingStepTimer) {
-        clearInterval(typingStepTimer);
+      if (Array.isArray(typingStepTimer)) {
+        typingStepTimer.forEach(id => clearTimeout(id));
+        typingStepTimer = null;
+      } else if (typingStepTimer) {
+        clearTimeout(typingStepTimer);
         typingStepTimer = null;
       }
       const dot = document.getElementById("statusDot");
@@ -1983,9 +2641,9 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
               <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer">Threads</a>
             </div>
           `;
-          contactCard.querySelector(".copy-mini").onclick = () => copyText(prefill);
+          contactCard.querySelector(".copy-mini").onclick = () => copyText(prefill, "Đã copy nội dung để bạn dán tin nhắn");
           contactCard.querySelectorAll(".social-btn").forEach(a => {
-            a.addEventListener("click", () => copyText(prefill));
+            a.addEventListener("click", () => copyText(prefill, "Đã copy nội dung để bạn dán tin nhắn"));
           });
           row.appendChild(contactCard);
         }
@@ -1994,6 +2652,19 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
 
       chatStream.appendChild(row);
       chatHistory.push({ role: "model", text: replyText });
+
+      if (!extra.skipPersist) {
+        persistedChatFeed.push({
+          role: "model",
+          text: replyText,
+          extra: {
+            suggestedItems: extra.suggestedItems || [],
+            showContactButtons: Boolean(extra.showContactButtons),
+            contactPrefill: extra.contactPrefill || ""
+          }
+        });
+        saveChatMessagesToStorage();
+      }
 
       if (extra.animateReveal && replyText.length > 0) {
         const chunkSize = Math.max(3, Math.ceil(replyText.length / 24));
@@ -2033,31 +2704,32 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
         return;
       }
 
+      if (/^(tra cứu|kiểm tra đơn|tình trạng đơn|đơn hàng của mình)/i.test(text) && text.length < 40) {
+        openOrderLookupCard();
+        return;
+      }
+
       isSending = true;
       sendBtn.disabled = true;
       appendTypingIndicator();
 
-      const savedCust = loadSavedCustomerInfo();
-      const customerInfoPayload = (lastPlacedOrderId || savedCust) ? {
-        orderId: lastPlacedOrderId || "",
-        customerName: savedCust ? (savedCust.customerName || "") : "",
-        phone: savedCust ? (savedCust.phone || "") : "",
-        platform: savedCust ? (savedCust.platform || "") : "",
-        socialHandle: savedCust ? (savedCust.socialHandle || "") : ""
-      } : null;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8500);
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           headers: { "Content-Type": "text/plain;charset=utf-8" },
+          signal: controller.signal,
           body: JSON.stringify({
             action: "chat",
             sessionId: chatSessionId,
             customerInfo: customerInfoPayload,
             message: text,
-            history: chatHistory.slice(-8)
+            history: chatHistory.slice(-6)
           })
         });
+        clearTimeout(timeoutId);
         const json = await res.json();
         removeTypingIndicator();
 
@@ -2074,10 +2746,14 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           animateReveal: true
         });
       } catch (err) {
+        clearTimeout(timeoutId);
         removeTypingIndicator();
-        const fallbackMsg = IS_DEBUG
-          ? `[Lỗi kỹ thuật]: ${err.message}`
-          : "Dạ mình nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho mình ạ.";
+        const isTimeout = err && err.name === "AbortError";
+        const fallbackMsg = isTimeout
+          ? "Dạ kết nối phản hồi tự động đang hơi chậm, bạn nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads hoặc bấm xem menu giấy bên dưới để tiệm hỗ trợ ngay nhé ạ!"
+          : (IS_DEBUG
+            ? `[Lỗi kỹ thuật]: ${err.message}`
+            : "Dạ mình nhắn trực tiếp giúp tiệm qua Facebook/Instagram/Threads để tiệm tư vấn chính xác nhất cho mình ạ.");
         appendBotMessage(fallbackMsg, {
           showContactButtons: true,
           contactPrefill: text
@@ -2093,6 +2769,23 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       loadCartFromStorage();
       renderWelcome();
       await loadInventory();
+
+      const savedMessages = loadChatMessagesFromStorage();
+      if (savedMessages.length > 0) {
+        persistedChatFeed = savedMessages;
+        savedMessages.forEach(m => {
+          if (!m || !m.text) return;
+          if (m.role === "user") {
+            appendUserMessage(m.text, true);
+          } else {
+            appendBotMessage(m.text, {
+              ...(m.extra || {}),
+              animateReveal: false,
+              skipPersist: true
+            });
+          }
+        });
+      }
     })();
   </script>
 </body>
