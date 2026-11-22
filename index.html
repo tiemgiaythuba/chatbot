@@ -827,17 +827,124 @@
     }
     .toast.show { opacity: 1; }
 
-    .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; }
+    .typing-bubble {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: var(--bg-soft) !important;
+      border-style: dashed !important;
+    }
+    .typing-label {
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      font-style: italic;
+      transition: opacity 0.22s ease;
+    }
+    .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; margin-top: 3px; flex-shrink: 0; }
+/* ... existing code ... -->
+    function appendUserMessage(text) {
+      const row = document.createElement("div");
+      row.className = "msg-row user";
+      row.innerHTML = `<div class="bubble"></div>`;
+      row.querySelector(".bubble").textContent = text;
+      chatStream.appendChild(row);
+      chatHistory.push({ role: "user", text });
+      scrollBottom();
+    }
+
+    const TYPING_OPENERS = [
+      "Tiệm đang nhập, bạn chờ chút nhé...",
+      "Tiệm đang soạn tin nhắn cho bạn...",
+      "Chờ tiệm một xíu nhé, tiệm đang trả lời..."
+    ];
+
+    const RECYCLED_PAPER_FUN_FACTS = [
+      "💡 Fun fact: Mỗi tờ giấy thủ công ở tiệm đều được xeo tay từng tờ nên mép xơ và vân giấy không tờ nào giống hệt tờ nào đâu ạ.",
+      "💡 Bạn có biết: Giấy tái chế thủ công có sợi giấy ngắn và xốp tự nhiên nên thấm mực nhanh và giữ mùi thảo mộc rất dịu ạ.",
+      "💡 Góc nhỏ của tiệm: Vỏ quýt, quế, sả hay bã cà phê đều có thể phối vào bột giấy để tạo màu và hương thơm tự nhiên đó ạ.",
+      "💡 Mẹo nhỏ: Vì giấy thủ công không cắt máy công nghiệp nên mỗi tờ giữ nguyên viền xơ mềm mại rất hợp làm thiệp & viết thư ạ.",
+      "💡 Fun fact: Tái chế giấy giúp tiết kiệm đáng kể nước và gỗ tự nhiên, lại biến giấy cũ thành những trang viết mới đầy cảm hứng ạ.",
+      "💡 Góc nhỏ của tiệm: Sau khi xeo và ép nước, từng tờ giấy thủ công cần được phơi khô tự nhiên và gia keo nhẹ để hạn chế lem mực ạ.",
+      "💡 Bạn có biết: Không có hai mẻ giấy thủ công nào giống nhau 100%, vì sắc độ còn tùy thuộc vào từng mẻ nguyên liệu tái chế nữa ạ."
+    ];
+
+    let lastFunFactIdx = -1;
+
+    function buildWaitingSteps() {
+      const opener = TYPING_OPENERS[Math.floor(Math.random() * TYPING_OPENERS.length)];
+      let factIdx = Math.floor(Math.random() * RECYCLED_PAPER_FUN_FACTS.length);
+      if (RECYCLED_PAPER_FUN_FACTS.length > 1 && factIdx === lastFunFactIdx) {
+        factIdx = (factIdx + 1) % RECYCLED_PAPER_FUN_FACTS.length;
+      }
+      lastFunFactIdx = factIdx;
+
+      return [
+        opener,
+        RECYCLED_PAPER_FUN_FACTS[factIdx],
+        "Tiệm sắp gõ xong rồi, bạn chờ thêm xíu nữa ạ..."
+      ];
+    }
+
+    function appendTypingIndicator() {
+      removeTypingIndicator();
+
+      const dot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+      if (dot && statusText && lastReadyStatusText) {
+        dot.className = "status-dot loading";
+        statusText.textContent = "Tiệm đang nhập...";
+      }
+
+      const steps = buildWaitingSteps();
+      let stepIdx = 0;
+
+      const row = document.createElement("div");
+      row.id = "typingRow";
+      row.className = "msg-row bot";
+      row.innerHTML = `
+        <div class="bubble typing-bubble">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+          <span id="typingStepLabel" class="typing-label">${escapeHtml(steps[0])}</span>
+        </div>
+      `;
+      chatStream.appendChild(row);
+      scrollBottom();
+
+      typingStepTimer = setInterval(() => {
+        const labelEl = document.getElementById("typingStepLabel");
+        if (!labelEl) return;
+        if (stepIdx < steps.length - 1) {
+          stepIdx++;
+          labelEl.style.opacity = "0.25";
+          setTimeout(() => {
+            const freshEl = document.getElementById("typingStepLabel");
+            if (freshEl) {
+              freshEl.textContent = steps[stepIdx];
+              freshEl.style.opacity = "1";
+              scrollBottom();
+            }
+          }, 160);
+        }
+      }, 1500);
+    }
+    .typing-label {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      font-style: italic;
+      transition: opacity 0.22s ease;
+    }
+    .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; flex-shrink: 0; }
     .typing-dots span {
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: var(--text-muted);
+      background: var(--primary);
       animation: bounce 1.2s infinite ease-in-out;
     }
     .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
-    @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
+    @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.45; } 40% { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -930,6 +1037,8 @@
     let detailSlideIndex = 0;
     let detailImages = [];
     let detailTimer = null;
+    let typingStepTimer = null;
+    let lastReadyStatusText = "";
 
     const chatStream = document.getElementById("chatStream");
     const chatInput = document.getElementById("chatInput");
@@ -1203,7 +1312,8 @@
 
         dot.className = "status-dot";
         const availableCount = products.filter(p => p.stock > 0).length;
-        statusText.textContent = `Sẵn sàng • ${availableCount} mẫu đang có sẵn`;
+        lastReadyStatusText = `Sẵn sàng • ${availableCount} mẫu đang có sẵn`;
+        statusText.textContent = lastReadyStatusText;
       } catch (err) {
         dot.className = "status-dot error";
         statusText.textContent = "Lỗi kết nối kho — chạm để thử lại";
@@ -1697,7 +1807,7 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       const shouldSaveInfo = document.getElementById("saveCustInfoChk")?.checked !== false;
 
       if (!customerName || !phone || !address || !socialHandle) {
-        showToast("Mình điền đủ thông tin giúp tiệm nhé ạ");
+        showToast("Mình điền đủ thông tin giúp tiệm ạ");
         return;
       }
 
@@ -1779,16 +1889,91 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
       scrollBottom();
     }
 
-    function appendTypingIndicator() {
+    function getThinkingStepsForQuery(queryText) {
+      const q = String(queryText || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d");
+
+      if (/\b(mua|dat|lay|gia|bao nhieu|con|het|goi|to|a4|a5|a6|kit|so tay|bao thu|vo quyt|que|sa|ca phe|rom|chuoi|hoa)\b/.test(q)) {
+        return [
+          "Tiệm đang kiểm tra kệ giấy trong kho...",
+          "Đang tính số lượng & giá giúp bạn...",
+          "Đang soạn phản hồi gửi bạn...",
+          "Chờ tiệm thêm một xíu nữa ạ..."
+        ];
+      }
+      if (/\b(ship|giao|van chuyen|si|chiet khau|yeu cau|rieng)\b/.test(q)) {
+        return [
+          "Tiệm đang xem yêu cầu của bạn...",
+          "Đang kiểm tra quy định & chính sách tiệm...",
+          "Đang viết câu trả lời cho bạn...",
+          "Chờ tiệm thêm một xíu nữa ạ..."
+        ];
+      }
+      return [
+        "Tiệm đang đọc câu hỏi của bạn...",
+        "Đang xem lại đặc tính giấy thủ công...",
+        "Đang soạn lời tư vấn cho bạn...",
+        "Chờ tiệm thêm một xíu nữa ạ..."
+      ];
+    }
+
+    function appendTypingIndicator(userText = "") {
+      removeTypingIndicator();
+
+      const dot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+      if (dot && statusText && lastReadyStatusText) {
+        dot.className = "status-dot loading";
+        statusText.textContent = "Tiệm đang trả lời...";
+      }
+
+      const steps = getThinkingStepsForQuery(userText);
+      let stepIdx = 0;
+
       const row = document.createElement("div");
       row.id = "typingRow";
       row.className = "msg-row bot";
-      row.innerHTML = `<div class="bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+      row.innerHTML = `
+        <div class="bubble typing-bubble">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+          <span id="typingStepLabel" class="typing-label">${escapeHtml(steps[0])}</span>
+        </div>
+      `;
       chatStream.appendChild(row);
       scrollBottom();
+
+      typingStepTimer = setInterval(() => {
+        const labelEl = document.getElementById("typingStepLabel");
+        if (!labelEl) return;
+        if (stepIdx < steps.length - 1) {
+          stepIdx++;
+          labelEl.style.opacity = "0.25";
+          setTimeout(() => {
+            const freshEl = document.getElementById("typingStepLabel");
+            if (freshEl) {
+              freshEl.textContent = steps[stepIdx];
+              freshEl.style.opacity = "1";
+              scrollBottom();
+            }
+          }, 160);
+        }
+      }, 1150);
     }
 
     function removeTypingIndicator() {
+      if (typingStepTimer) {
+        clearInterval(typingStepTimer);
+        typingStepTimer = null;
+      }
+      const dot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+      if (dot && statusText && lastReadyStatusText) {
+        dot.className = "status-dot";
+        statusText.textContent = lastReadyStatusText;
+      }
       const el = document.getElementById("typingRow");
       if (el) el.remove();
     }
@@ -1799,72 +1984,90 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
 
       const bubble = document.createElement("div");
       bubble.className = "bubble";
-      bubble.textContent = replyText;
       row.appendChild(bubble);
 
-      if (Array.isArray(extra.suggestedItems) && extra.suggestedItems.length > 0) {
-        const validSuggestions = extra.suggestedItems
-          .map(s => {
-            const prod = products.find(p => p.id === s.id || p.name === s.name);
-            if (!prod || prod.stock <= 0) return null;
-            let mode = s.buyMode === "unit" ? "unit" : "pack";
-            if (mode === "pack" && !hasPackOption(prod)) mode = "unit";
-            if (mode === "unit" && !hasUnitOption(prod) && hasPackOption(prod)) mode = "pack";
+      const renderAttachments = () => {
+        if (Array.isArray(extra.suggestedItems) && extra.suggestedItems.length > 0) {
+          const validSuggestions = extra.suggestedItems
+            .map(s => {
+              const prod = products.find(p => p.id === s.id || p.name === s.name);
+              if (!prod || prod.stock <= 0) return null;
+              let mode = s.buyMode === "unit" ? "unit" : "pack";
+              if (mode === "pack" && !hasPackOption(prod)) mode = "unit";
+              if (mode === "unit" && !hasUnitOption(prod) && hasPackOption(prod)) mode = "pack";
 
-            const perUnit = mode === "pack" ? prod.packSize : 1;
-            const unitPrice = mode === "pack" ? prod.packPrice : prod.unitPrice;
-            const label = mode === "pack" ? (prod.packUnit || "gói") : prod.baseUnit;
-            const maxQty = Math.floor(prod.stock / perUnit);
-            const qty = Math.min(Math.max(1, Number(s.qty || 1)), maxQty);
-            if (qty <= 0 || unitPrice <= 0) return null;
+              const perUnit = mode === "pack" ? prod.packSize : 1;
+              const unitPrice = mode === "pack" ? prod.packPrice : prod.unitPrice;
+              const label = mode === "pack" ? (prod.packUnit || "gói") : prod.baseUnit;
+              const maxQty = Math.floor(prod.stock / perUnit);
+              const qty = Math.min(Math.max(1, Number(s.qty || 1)), maxQty);
+              if (qty <= 0 || unitPrice <= 0) return null;
 
-            return { prod, mode, qty, unitPrice, label };
-          })
-          .filter(Boolean);
+              return { prod, mode, qty, unitPrice, label };
+            })
+            .filter(Boolean);
 
-        if (validSuggestions.length > 0) {
-          const box = document.createElement("div");
-          box.className = "suggest-box";
-          validSuggestions.forEach(item => {
-            const itemEl = document.createElement("div");
-            itemEl.className = "suggest-item";
-            itemEl.innerHTML = `
-              <span><strong>${escapeHtml(item.prod.name)}</strong> (${item.qty} ${escapeHtml(item.label)} • ${formatShortK(item.unitPrice * item.qty)})</span>
-              <button class="suggest-add">+ Thêm giỏ</button>
-            `;
-            itemEl.querySelector("button").onclick = () => addToCart(item.prod.id, item.mode, item.qty);
-            box.appendChild(itemEl);
-          });
-          row.appendChild(box);
+          if (validSuggestions.length > 0) {
+            const box = document.createElement("div");
+            box.className = "suggest-box";
+            validSuggestions.forEach(item => {
+              const itemEl = document.createElement("div");
+              itemEl.className = "suggest-item";
+              itemEl.innerHTML = `
+                <span><strong>${escapeHtml(item.prod.name)}</strong> (${item.qty} ${escapeHtml(item.label)} • ${formatShortK(item.unitPrice * item.qty)})</span>
+                <button class="suggest-add">+ Thêm giỏ</button>
+              `;
+              itemEl.querySelector("button").onclick = () => addToCart(item.prod.id, item.mode, item.qty);
+              box.appendChild(itemEl);
+            });
+            row.appendChild(box);
+          }
         }
-      }
 
-      if (extra.showContactButtons) {
-        const prefill = extra.contactPrefill || replyText;
-        const contactCard = document.createElement("div");
-        contactCard.className = "contact-card";
-        contactCard.innerHTML = `
-          <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:var(--primary);">Nhắn trực tiếp cho tiệm qua ứng dụng bạn đang dùng:</div>
-          <div class="prefill-box">
-            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(prefill)}</span>
-            <button type="button" class="copy-mini">Copy nội dung</button>
-          </div>
-          <div class="social-links">
-            <a class="social-btn social-fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer">Facebook</a>
-            <a class="social-btn social-ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer">Threads</a>
-          </div>
-        `;
-        contactCard.querySelector(".copy-mini").onclick = () => copyText(prefill);
-        contactCard.querySelectorAll(".social-btn").forEach(a => {
-          a.addEventListener("click", () => copyText(prefill));
-        });
-        row.appendChild(contactCard);
-      }
+        if (extra.showContactButtons) {
+          const prefill = extra.contactPrefill || replyText;
+          const contactCard = document.createElement("div");
+          contactCard.className = "contact-card";
+          contactCard.innerHTML = `
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:var(--primary);">Nhắn trực tiếp cho tiệm qua ứng dụng bạn đang dùng:</div>
+            <div class="prefill-box">
+              <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(prefill)}</span>
+              <button type="button" class="copy-mini">Copy nội dung</button>
+            </div>
+            <div class="social-links">
+              <a class="social-btn social-fb" href="${SOCIAL_LINKS.facebook}" target="_blank" rel="noopener noreferrer">Facebook</a>
+              <a class="social-btn social-ig" href="${SOCIAL_LINKS.instagram}" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a class="social-btn social-th" href="${SOCIAL_LINKS.threads}" target="_blank" rel="noopener noreferrer">Threads</a>
+            </div>
+          `;
+          contactCard.querySelector(".copy-mini").onclick = () => copyText(prefill);
+          contactCard.querySelectorAll(".social-btn").forEach(a => {
+            a.addEventListener("click", () => copyText(prefill));
+          });
+          row.appendChild(contactCard);
+        }
+        scrollBottom();
+      };
 
       chatStream.appendChild(row);
       chatHistory.push({ role: "model", text: replyText });
-      scrollBottom();
+
+      if (extra.animateReveal && replyText.length > 0) {
+        const chunkSize = Math.max(3, Math.ceil(replyText.length / 24));
+        let cursor = 0;
+        const revealTimer = setInterval(() => {
+          cursor = Math.min(replyText.length, cursor + chunkSize);
+          bubble.textContent = replyText.slice(0, cursor);
+          scrollBottom();
+          if (cursor >= replyText.length) {
+            clearInterval(revealTimer);
+            renderAttachments();
+          }
+        }, 16);
+      } else {
+        bubble.textContent = replyText;
+        renderAttachments();
+      }
     }
 
     function sendQuickText(text) {
@@ -1913,7 +2116,8 @@ Mình có thể xem nhanh các mẫu giấy đang có sẵn, hỏi số lượng
           intent: ai.intent,
           showContactButtons: Boolean(ai.showContactButtons),
           contactPrefill: ai.contactPrefill || text,
-          suggestedItems: ai.suggestedItems || []
+          suggestedItems: ai.suggestedItems || [],
+          animateReveal: true
         });
       } catch (err) {
         removeTypingIndicator();
