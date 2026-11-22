@@ -1422,6 +1422,24 @@
     const CART_STORAGE_KEY = "tiemgiay_cart_v1";
     const MIX_STORAGE_KEY = "tiemgiay_mix_v1";
     const CUSTOMER_STORAGE_KEY = "tiemgiay_customer_v1";
+    const SHIP_CONFIG_STORAGE_KEY = "tiemgiay_ship_config_v1";
+
+    function saveShipConfigCache() {
+      try {
+        localStorage.setItem(SHIP_CONFIG_STORAGE_KEY, JSON.stringify(shipConfig));
+      } catch (e) {}
+    }
+
+    function loadShipConfigCache() {
+      try {
+        const raw = localStorage.getItem(SHIP_CONFIG_STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") {
+          shipConfig = { ...shipConfig, ...parsed };
+        }
+      } catch (e) {}
+    }
 
     // Khởi tạo cuộc trò chuyện mới (không tải lại trang, giữ nguyên giỏ hàng)
     function startNewChat() {
@@ -1919,7 +1937,11 @@
           }
           if (data.shipConfig) {
             shipConfig = { ...shipConfig, ...data.shipConfig };
+            saveShipConfigCache();
             updatePromoBanner();
+            if (document.getElementById("cartDrawer").classList.contains("open")) {
+              renderCartDrawer();
+            }
           }
           reconcileCartWithStock();
           renderCategories();
@@ -2900,6 +2922,8 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
+      loadShipConfigCache();
+      updatePromoBanner();
       loadCartFromStorage();
       loadCustomerDraft();
       chatHistory = [{ role: "model", text: WELCOME_MESSAGE }];
