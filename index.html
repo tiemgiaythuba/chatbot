@@ -2869,6 +2869,11 @@
       input.value = "";
       sendBtn.disabled = true;
 
+      const isDesktop = window.matchMedia("(pointer: fine)").matches;
+      if (!isDesktop) {
+        input.blur();
+      }
+
       appendUserMessage(text);
       chatHistory.push({ role: "user", text });
 
@@ -2917,7 +2922,9 @@
         });
       } finally {
         sendBtn.disabled = false;
-        input.focus();
+        if (isDesktop) {
+          input.focus();
+        }
       }
     }
 
@@ -2929,6 +2936,15 @@
       chatHistory = [{ role: "model", text: WELCOME_MESSAGE }];
       appendBotMessage(WELCOME_MESSAGE);
       loadProducts();
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener("resize", () => {
+          const container = document.getElementById("chatMessages");
+          if (container) {
+            container.scrollTop = container.scrollHeight;
+          }
+        });
+      }
     });
   </script>
 </body>
