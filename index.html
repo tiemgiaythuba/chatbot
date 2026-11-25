@@ -1198,7 +1198,7 @@
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
           <span>Chat mới</span>
         </button>
-        <button class="chip" onclick="sendQuickPrompt('Hôm nay tiệm còn những loại giấy nào?')">Còn giấy gì?</button>
+        <button class="chip" onclick="sendQuickPrompt('Hôm nay tiệm còn những loại giấy nào?')">Tiệm còn giấy gì?</button>
         <button class="chip" onclick="openLookupOrderModal()">Kiểm tra đơn hàng</button>
         <button class="chip" onclick="sendQuickPrompt('Phí ship và chính sách freeship thế nào?')">Phí ship & Freeship</button>
         <button class="chip" onclick="sendQuickPrompt('Giấy viết được bút mực không?')">Viết bút mực được không?</button>
@@ -2553,7 +2553,7 @@
 
       const upsellHtml = smallUpsells.length ? `
         <div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--border);">
-          <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:5px;">Gợi ý món nhỏ dưới 40K để đủ Freeship:</div>
+          <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:5px;">Gợi ý món hàng để đủ Freeship:</div>
           <div style="display:flex; flex-direction:column; gap:5px;">
             ${smallUpsells.map(u => `
               <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; background:var(--bg-surface); padding:6px 8px; border-radius:8px; border:1px solid var(--border);">
