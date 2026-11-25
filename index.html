@@ -1254,6 +1254,8 @@
       <div class="drawer-body">
         <div id="cartItemsList"></div>
 
+        <div id="freeshipProgressBox" style="display:none;"></div>
+
         <div class="summary-card" id="cartSummaryBox" style="display:none;">
           <div class="summary-row">
             <span>Tiền giấy & dụng cụ</span>
@@ -2034,7 +2036,7 @@
         <div class="mix-card">
           <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
             <div>
-              <span class="mix-badge">Gói Mix tự chọn</span>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:4px;"><span class="mix-badge" style="margin-bottom:0;">Gói Mix tự chọn</span><button type="button" class="btn-add-mini" onclick="randomizeMixPack()">Chọn ngẫu nhiên đủ 10 tờ</button></div>
               <div class="prod-title">Gói Mix 10 tờ giấy A5 tùy chọn</div>
               <div class="prod-specs">Chọn tự do đủ 10 tờ từ các mẫu giấy A5 đang có sẵn trong kho.</div>
             </div>
@@ -2083,6 +2085,47 @@
       }
       saveCartToStorage();
       renderMixPackBuilder();
+    }
+
+    function randomizeMixPack() {
+      const a5List = getMixableA5Products();
+      if (!a5List.length) return;
+
+      const availMap = {};
+      let totalAvail = 0;
+      a5List.forEach(p => {
+        const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id));
+        availMap[p.id] = freeUnits;
+        totalAvail += freeUnits;
+      });
+
+      if (totalAvail < MIX_PACK_SIZE) {
+        showToast(`Tổng giấy A5 sẵn có (trừ phần trong giỏ) hiện chỉ còn ${totalAvail} tờ ạ`);
+        return;
+      }
+
+      const shuffled = [...a5List].sort(() => Math.random() - 0.5);
+      const nextDraft = {};
+      let remaining = MIX_PACK_SIZE;
+
+      while (remaining > 0) {
+        let allocatedInRound = false;
+        for (let i = 0; i < shuffled.length && remaining > 0; i++) {
+          const p = shuffled[i];
+          const cur = nextDraft[p.id] || 0;
+          if (cur < availMap[p.id]) {
+            nextDraft[p.id] = cur + 1;
+            remaining--;
+            allocatedInRound = true;
+          }
+        }
+        if (!allocatedInRound) break;
+      }
+
+      mixDraft = nextDraft;
+      saveCartToStorage();
+      renderMixPackBuilder();
+      showToast("Đã chọn ngẫu nhiên đủ 10 tờ A5 từ các mẫu có sẵn!");
     }
 
     function addMixPackToCart() {
@@ -2189,10 +2232,23 @@
 
         let actionsHtml = "";
         if (p.stock <= 0) {
+          const unsizedCount = Math.max(0, Number(p.unsizedStock || 0));
+          const waitBoxHtml = unsizedCount > 0 ? `
+            <div style="background:var(--warn-bg); border:1px solid #EBD3B5; border-radius:10px; padding:8px 10px; margin-top:6px;">
+              <div style="font-size:12px; font-weight:600; color:var(--warn-text); margin-bottom:5px;">
+                Mẻ này đang đợi gia keo (${unsizedCount} ${escapeHtml(p.baseUnit)}). Để lại @ID hoặc SĐT để tiệm nhắn ngay khi hoàn thành:
+              </div>
+              <div style="display:flex; gap:6px;">
+                <input type="text" id="waitInp_${escapeHtml(p.id)}" aria-label="Tài khoản hoặc SĐT nhận thông báo" class="form-input" style="padding:7px 10px; font-size:12.5px;" placeholder="@instagram / @threads hoặc SĐT..." />
+                <button type="button" class="btn-order" id="waitBtn_${escapeHtml(p.id)}" onclick="submitWaitlist('${safeId}', '${safeName}')">Nhận tin</button>
+              </div>
+            </div>
+          ` : "";
           actionsHtml = `
             <button class="btn-order secondary" style="width:100%; padding:9px;" onclick="askPreorder('${safeName}')">
               Nhắn tiệm đặt làm thêm
             </button>
+            ${waitBoxHtml}
           `;
         } else {
           if (hasPack) {
@@ -2246,6 +2302,52 @@
     function askPreorder(prodName) {
       switchView("chat");
       sendQuickPrompt(`Mình muốn đặt trước mẫu ${prodName} thì bao lâu có ạ?`);
+    }
+
+    async function submitWaitlist(prodId, prodName) {
+      const inp = document.getElementById("waitInp_" + prodId);
+      const btn = document.getElementById("waitBtn_" + prodId);
+      const contactValue = (inp ? inp.value : "").trim();
+      if (!contactValue) {
+        showToast("Bạn nhập @username hoặc SĐT giúp tiệm nhé");
+        if (inp) inp.focus();
+        return;
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Đang lưu...";
+      }
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "register_waitlist",
+            waitlist: {
+              productId: prodId,
+              productName: prodName,
+              contactValue
+            }
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          if (inp) inp.value = "";
+          if (btn) btn.textContent = "✓ Đã lưu";
+          showToast("Đã lưu thông tin! Tiệm sẽ nhắn ngay khi mẻ giấy gia keo xong.");
+        } else {
+          showToast(data.error || "Chưa lưu được, bạn thử lại nhé");
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Nhận tin";
+          }
+        }
+      } catch (e) {
+        showToast("Lỗi kết nối, bạn thử lại nhé");
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Nhận tin";
+        }
+      }
     }
 
     // -------------------------------------------------------------------------
@@ -2400,13 +2502,94 @@
       document.getElementById("cartDrawer").classList.remove("open");
     }
 
+    function renderFreeshipProgress(subtotal, shipFee) {
+      const box = document.getElementById("freeshipProgressBox");
+      if (!box) return;
+      const minOrder = Number(shipConfig.freeshipMinOrder || 0);
+      if (!shipConfig.freeshipEnabled || minOrder <= 0 || !cart.length) {
+        box.style.display = "none";
+        box.innerHTML = "";
+        return;
+      }
+
+      box.style.display = "block";
+      if (shipFee === 0) {
+        box.innerHTML = `
+          <div style="background:var(--accent-soft); border:1px solid #C8DBC9; color:#2E5A36; border-radius:12px; padding:9px 12px; font-size:12.5px; font-weight:600;">
+            ✓ Đơn hàng của bạn đã đủ điều kiện Miễn phí vận chuyển!
+          </div>
+        `;
+        return;
+      }
+
+      const missing = Math.max(0, minOrder - subtotal);
+      const pct = Math.min(100, Math.round((subtotal / minOrder) * 100));
+
+      const smallUpsells = [];
+      products.forEach(p => {
+        if (smallUpsells.length >= 3) return;
+        const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id));
+        if (freeUnits <= 0) return;
+        const isItem = p.productType === "item";
+        const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1 && freeUnits >= Number(p.packSize);
+        if (Number(p.unitPrice) > 0 && Number(p.unitPrice) <= 40000) {
+          smallUpsells.push({
+            id: p.id,
+            name: p.name,
+            label: `1 ${p.baseUnit}`,
+            price: Number(p.unitPrice),
+            mode: "unit"
+          });
+        } else if (hasPack && Number(p.packPrice) <= 40000) {
+          smallUpsells.push({
+            id: p.id,
+            name: p.name,
+            label: `1 ${p.packUnit || "gói"}`,
+            price: Number(p.packPrice),
+            mode: "pack"
+          });
+        }
+      });
+
+      const upsellHtml = smallUpsells.length ? `
+        <div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--border);">
+          <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:5px;">Gợi ý món nhỏ dưới 40K để đủ Freeship:</div>
+          <div style="display:flex; flex-direction:column; gap:5px;">
+            ${smallUpsells.map(u => `
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; background:var(--bg-surface); padding:6px 8px; border-radius:8px; border:1px solid var(--border);">
+                <div style="min-width:0; font-size:12px;">
+                  <strong style="color:var(--text-main);">${escapeHtml(u.name)}</strong>
+                  <span style="color:var(--text-muted);"> (${escapeHtml(u.label)} • ${formatVND(u.price)})</span>
+                </div>
+                <button type="button" class="btn-add-mini" onclick="addToCart('${escapeAttrJs(u.id)}', '${u.mode}', 1); renderCartDrawer();">+ Thêm</button>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+      ` : "";
+
+      box.innerHTML = `
+        <div style="background:var(--bg-card); border:1.5px solid #C8DBC9; border-radius:12px; padding:10px 12px;">
+          <div style="font-size:12.5px; color:#2E5A36; font-weight:600; margin-bottom:6px;">
+            Thêm <strong>${formatVND(missing)}</strong> nữa để được Freeship <strong>${formatVND(shipConfig.customerShipFee)}</strong>
+          </div>
+          <div style="height:6px; background:var(--bg-soft); border-radius:999px; overflow:hidden;">
+            <div style="height:100%; width:${pct}%; background:var(--accent); transition:width 0.25s;"></div>
+          </div>
+          ${upsellHtml}
+        </div>
+      `;
+    }
+
     function renderCartDrawer() {
       const listEl = document.getElementById("cartItemsList");
       const sumBox = document.getElementById("cartSummaryBox");
       const formEl = document.getElementById("checkoutForm");
+      const fsBox = document.getElementById("freeshipProgressBox");
 
       if (!cart.length) {
         listEl.innerHTML = `<div style="text-align:center; padding:26px 12px; color:var(--text-muted); font-size:13.5px;">Giỏ hàng đang trống.<br/>Bạn có thể hỏi trợ lý AI hoặc chọn mẫu ở tab <strong>Danh mục</strong> nhé!</div>`;
+        if (fsBox) { fsBox.style.display = "none"; fsBox.innerHTML = ""; }
         sumBox.style.display = "none";
         formEl.style.display = "none";
         return;
@@ -2434,6 +2617,7 @@
       document.getElementById("sumShip").textContent = shipFee === 0 ? "Miễn phí (0đ)" : formatVND(shipFee);
       document.getElementById("sumTotal").textContent = formatVND(total);
 
+      renderFreeshipProgress(subtotal, shipFee);
       sumBox.style.display = "flex";
       formEl.style.display = "flex";
     }
@@ -2675,6 +2859,94 @@
       appendBotMessage(`Tiệm đã ghi nhận bạn chuyển khoản cho đơn #${orderId} rồi ạ! Tiệm sẽ kiểm tra tài khoản và nhắn xác nhận gói hàng ngay nhé.`);
     }
 
+    let lastLookedUpOrders = [];
+
+    function reorderFromLookup(orderIdx) {
+      const ord = lastLookedUpOrders[orderIdx];
+      if (!ord) return;
+
+      let oldItems = [];
+      try { oldItems = JSON.parse(ord.itemsJson || "[]"); } catch (e) {}
+      if (!Array.isArray(oldItems) || !oldItems.length) {
+        showToast("Đơn cũ này chưa lưu chi tiết món để đặt lại ạ");
+        return;
+      }
+
+      let addedCount = 0;
+      const skippedNames = [];
+
+      oldItems.forEach(it => {
+        const wantedQty = Math.max(1, Number(it.qty || 1));
+        if (it.buyMode === "mix" && Array.isArray(it.mixBreakdown) && it.mixBreakdown.length) {
+          const canMake = it.mixBreakdown.every(part => {
+            const p = products.find(prod => prod.id === part.id);
+            if (!p) return false;
+            const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id));
+            return freeUnits >= Number(part.units || 0) * wantedQty;
+          });
+          if (canMake) {
+            const mixKey = "MIX_" + it.mixBreakdown.map(b => `${b.id}x${b.units}`).join("_");
+            const existing = cart.find(c => c.key === mixKey);
+            if (existing) {
+              existing.qty += wantedQty;
+            } else {
+              cart.push({
+                key: mixKey,
+                id: "",
+                name: it.name,
+                buyMode: "mix",
+                unitLabel: it.unitLabel || "gói 10 tờ",
+                price: Number(it.price || MIX_PACK_PRICE),
+                baseUnitsPerQty: MIX_PACK_SIZE,
+                qty: wantedQty,
+                mixBreakdown: it.mixBreakdown
+              });
+            }
+            addedCount++;
+          } else {
+            skippedNames.push(it.name);
+          }
+        } else if (it.id) {
+          const p = products.find(prod => prod.id === it.id);
+          const mode = it.buyMode === "pack" ? "pack" : "unit";
+          const perQty = mode === "pack" ? Math.max(1, Number(p?.packSize || 1)) : 1;
+          const freeUnits = p ? Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id)) : 0;
+          if (p && freeUnits >= perQty) {
+            const maxCanAdd = Math.min(wantedQty, Math.floor(freeUnits / perQty));
+            addToCart(p.id, mode, maxCanAdd);
+            addedCount++;
+          } else {
+            skippedNames.push(it.name);
+          }
+        }
+      });
+
+      const nameEl = document.getElementById("custName");
+      const phoneEl = document.getElementById("custPhone");
+      const addrEl = document.getElementById("custAddress");
+      const platEl = document.getElementById("custPlatform");
+      const handleEl = document.getElementById("custHandle");
+
+      if (ord.customerName && nameEl && !nameEl.value.trim()) nameEl.value = ord.customerName;
+      if (ord.phone && phoneEl && !phoneEl.value.trim()) phoneEl.value = String(ord.phone).replace(/^'/, "");
+      if (ord.address && addrEl && !addrEl.value.trim()) addrEl.value = ord.address;
+      if (ord.platform && platEl) platEl.value = ord.platform;
+      if (ord.socialHandle && handleEl && !handleEl.value.trim()) {
+        handleEl.value = String(ord.socialHandle).split("|")[0].trim();
+      }
+
+      saveCustomerDraft();
+      saveCartToStorage();
+      updateCartBadge();
+      openCart();
+
+      if (skippedNames.length) {
+        showToast(`Đã thêm món còn hàng. Tạm hết: ${skippedNames.join(", ")}`);
+      } else if (addedCount > 0) {
+        showToast("Đã thêm lại các món từ đơn cũ vào giỏ!");
+      }
+    }
+
     function openLookupOrderModal() {
       const modal = document.getElementById("lookupOrderModal");
       if (!modal) return;
@@ -2724,8 +2996,9 @@
 
         if (data.bankConfig) bankConfig = data.bankConfig;
 
+        lastLookedUpOrders = data.orders;
         appendBotMessage(`Tiệm tìm thấy ${data.orders.length} đơn hàng của bạn đây ạ:`);
-        data.orders.forEach(o => {
+        data.orders.forEach((o, idx) => {
           const container = document.getElementById("chatMessages");
           const row = document.createElement("div");
           row.className = "msg-row bot";
@@ -2749,6 +3022,9 @@
             <div><strong>Sản phẩm:</strong> ${escapeHtml(o.itemsSummary)}</div>
             <div style="margin-top:4px;"><strong>Tổng đơn:</strong> ${formatVND(o.total)} (${escapeHtml(o.paymentMethod)})</div>
             ${trackingHtml}
+            <div style="margin-top:8px; padding-top:7px; border-top:1px dashed var(--border); display:flex; justify-content:flex-end;">
+              <button type="button" class="btn-add-mini" onclick="reorderFromLookup(${idx})">↻ Đặt lại các món này</button>
+            </div>
           `;
           row.appendChild(card);
           container.appendChild(row);
