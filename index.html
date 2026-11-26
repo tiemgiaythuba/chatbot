@@ -35,7 +35,9 @@
       --radius-md: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    button, a, input, select, textarea, [role="button"] { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:2px solid #9B8B77; outline-offset:2px; }
 
     html, body {
       height: 100%;
@@ -1263,8 +1265,8 @@
 
     <!-- Mode Switcher -->
     <nav class="mode-tabs" role="tablist" aria-label="Chế độ xem">
-      <button type="button" role="tab" aria-selected="false" class="mode-tab" id="tabChatBtn" onclick="switchView('chat')">Tư vấn & Đặt nhanh</button>
       <button type="button" role="tab" aria-selected="true" class="mode-tab active" id="tabCatalogBtn" onclick="switchView('catalog')">Danh mục</button>
+      <button type="button" role="tab" aria-selected="false" class="mode-tab" id="tabChatBtn" onclick="switchView('chat')">Tư vấn &amp; Đặt nhanh</button>
     </nav>
 
     <!-- View 1: Chat -->
@@ -1317,7 +1319,7 @@
     </section>
 
     <!-- Nút nổi danh mục, cùng vị trí và ngôn ngữ thiết kế với dock điều hướng admin -->
-    <div class="floating-cat-wrap" id="floatingCatWrap">
+    <div class="floating-cat-wrap visible" id="floatingCatWrap">
       <div class="floating-cat-menu" id="floatingCatMenu" aria-hidden="true"></div>
       <button type="button" class="floating-cat-btn" id="floatingCatBtn" onclick="toggleFloatingCatMenu(event)" aria-label="Mở danh mục sản phẩm" aria-expanded="false" aria-controls="floatingCatMenu" title="Danh mục">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
@@ -2178,8 +2180,10 @@
           showToast(`Mỗi gói Mix tối đa ${MIX_PACK_SIZE} tờ ạ`);
           return;
         }
-        if (cur + 1 > Number(p.stock || 0)) {
-          showToast(`Mẫu ${p.name} chỉ còn sẵn ${p.stock} ${p.baseUnit}`);
+        const reservedUnits = getProductReservedBaseUnits(p.id);
+        const freeUnits = Math.max(0, Number(p.stock || 0) - reservedUnits);
+        if (cur + 1 > freeUnits) {
+          showToast(`Mẫu ${p.name} chỉ còn sẵn ${freeUnits} ${p.baseUnit} ngoài giỏ hàng`);
           return;
         }
         mixDraft[prodId] = cur + 1;
@@ -2248,6 +2252,22 @@
       if (total !== MIX_PACK_SIZE) {
         showToast(`Bạn chọn đủ ${MIX_PACK_SIZE} tờ giúp tiệm nhé`);
         return;
+      }
+
+      // Revalidate against current cart reservations at commit time; the draft may
+      // have been built before another item or Mix pack was added to the cart.
+      for (const part of breakdown) {
+        const product = a5List.find(item => item.id === part.id);
+        if (!product) {
+          showToast(`Không tìm thấy mẫu ${part.name}; vui lòng chọn lại gói Mix`);
+          return;
+        }
+        const reservedUnits = getProductReservedBaseUnits(part.id);
+        const freeUnits = Math.max(0, Number(product.stock || 0) - reservedUnits);
+        if (part.units > freeUnits) {
+          showToast(`Mẫu ${product.name} chỉ còn sẵn ${freeUnits} tờ ngoài giỏ hàng; vui lòng chỉnh lại gói Mix`);
+          return;
+        }
       }
 
       const detailLabel = breakdown.map(b => `${b.units} ${b.name}`).join(", ");
@@ -3030,14 +3050,33 @@
       const addrEl = document.getElementById("custAddress");
       const platEl = document.getElementById("custPlatform");
       const handleEl = document.getElementById("custHandle");
+      const backupPlatformEl = document.getElementById("custBackupPlatform");
+      const backupHandleEl = document.getElementById("custBackupHandle");
 
       if (ord.customerName && nameEl && !nameEl.value.trim()) nameEl.value = ord.customerName;
       if (ord.phone && phoneEl && !phoneEl.value.trim()) phoneEl.value = String(ord.phone).replace(/^'/, "");
       if (ord.address && addrEl && !addrEl.value.trim()) addrEl.value = ord.address;
       if (ord.platform && platEl) platEl.value = ord.platform;
-      if (ord.socialHandle && handleEl && !handleEl.value.trim()) {
-        handleEl.value = String(ord.socialHandle).split("|")[0].trim();
+      const oldSocial = String(ord.socialHandle || "");
+      if (oldSocial && handleEl && !handleEl.value.trim()) {
+        handleEl.value = oldSocial.split("|")[0].trim();
       }
+
+      // Newer order payloads may expose the backup fields directly; older
+      // records stored them in socialHandle as "| Dự phòng: @id (Instagram)".
+      let backupPlatform = String(ord.backupPlatform || "").trim();
+      let backupHandle = String(ord.backupHandle || "").trim();
+      const backupMatch = oldSocial.match(/\|\s*Dự phòng\s*:\s*(.*?)\s*\((Instagram|Threads|Facebook)\)\s*$/i);
+      if (backupMatch) {
+        if (!backupHandle) backupHandle = backupMatch[1].trim();
+        if (!backupPlatform) backupPlatform = backupMatch[2].trim();
+      }
+      if (backupPlatformEl && ["Instagram", "Threads", "Facebook"].includes(backupPlatform)) {
+        backupPlatformEl.value = backupPlatform;
+      }
+      if (backupHandleEl && backupHandle) backupHandleEl.value = backupHandle;
+      if (platEl) updateSocialPlatformUi(true);
+      if (backupPlatformEl) handleBackupPlatformChange(true);
 
       saveCustomerDraft();
       saveCartToStorage();
@@ -3309,6 +3348,7 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
+      switchView("catalog");
       loadShipConfigCache();
       updatePromoBanner();
       loadCartFromStorage();
