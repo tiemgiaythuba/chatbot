@@ -654,24 +654,28 @@
       line-height: 1.45;
     }
 
-    /* Floating category dock: one glass FAB, text labels in the expanding menu */
+    /* Floating category dock: strictly circular hit target, submenu out of flow & non-interactive when collapsed */
     .floating-cat-wrap {
       position: fixed;
       bottom: max(18px, env(safe-area-inset-bottom));
       right: max(18px, calc(50vw - 266px));
       z-index: 35;
+      width: 58px;
+      height: 58px;
       display: none;
-      flex-direction: column;
-      align-items: flex-end;
+      pointer-events: none;
     }
-    .floating-cat-wrap.visible { display:flex; }
+    .floating-cat-wrap.visible { display:block; }
     .floating-cat-menu {
+      position: absolute;
+      right: 0;
+      bottom: calc(100% + 10px);
       background: rgba(250,249,246,.9);
       border: 1px solid rgba(255,255,255,.92);
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(46,41,35,.14), inset 0 1px 0 rgba(255,255,255,.96);
       padding: 7px;
-      margin-bottom: 10px;
+      margin-bottom: 0;
       min-width: 188px;
       max-width: min(260px, calc(100vw - 32px));
       max-height: 55vh;
@@ -681,13 +685,14 @@
       gap: 3px;
       opacity: 0;
       visibility: hidden;
+      pointer-events: none;
       transform: translateY(10px) scale(.97);
       transform-origin: bottom right;
       transition: opacity .18s ease, transform .28s cubic-bezier(.2,.9,.25,1), visibility .18s;
       -webkit-backdrop-filter: blur(18px) saturate(1.2);
       backdrop-filter: blur(18px) saturate(1.2);
     }
-    .floating-cat-menu.open { opacity:1; visibility:visible; transform:translateY(0) scale(1); }
+    .floating-cat-menu.open { opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0) scale(1); }
     .floating-cat-item {
       width:100%;
       min-height:42px;
@@ -707,6 +712,8 @@
     .floating-cat-item:active { transform:scale(.98); }
     .floating-cat-item.active { background:var(--primary); color:#fff; font-weight:600; }
     .floating-cat-btn {
+      position: relative;
+      z-index: 2;
       width:58px;
       height:58px;
       padding:0;
@@ -717,6 +724,7 @@
       border:1px solid rgba(255,255,255,.95);
       border-radius:50%;
       cursor:pointer;
+      pointer-events:auto;
       box-shadow:0 8px 24px rgba(46,41,35,.14), inset 0 1px 0 rgba(255,255,255,.98);
       -webkit-backdrop-filter:blur(16px) saturate(1.25);
       backdrop-filter:blur(16px) saturate(1.25);
@@ -890,6 +898,42 @@
       font-weight: 700;
       font-size: 15.5px;
       color: var(--primary);
+    }
+
+    .voucher-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .voucher-input-row {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .preorder-notice-box {
+      background: var(--warn-bg);
+      border: 1px solid #EBD3B5;
+      color: var(--warn-text);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+
+    .unsized-hint-line {
+      font-size: 12px;
+      color: var(--warn-text);
+      background: var(--warn-bg);
+      border: 1px solid #F0D9BC;
+      border-radius: 8px;
+      padding: 6px 9px;
+      line-height: 1.4;
     }
 
     .form-group {
@@ -1318,7 +1362,7 @@
       </div>
     </section>
 
-    <!-- Nút nổi danh mục, cùng vị trí và ngôn ngữ thiết kế với dock điều hướng admin -->
+    <!-- Nút nổi danh mục, thu gọn vùng chạm đúng bằng nút tròn khi đóng -->
     <div class="floating-cat-wrap visible" id="floatingCatWrap">
       <div class="floating-cat-menu" id="floatingCatMenu" aria-hidden="true"></div>
       <button type="button" class="floating-cat-btn" id="floatingCatBtn" onclick="toggleFloatingCatMenu(event)" aria-label="Mở danh mục sản phẩm" aria-expanded="false" aria-controls="floatingCatMenu" title="Danh mục">
@@ -1338,12 +1382,32 @@
       <div class="drawer-body">
         <div id="cartItemsList"></div>
 
+        <!-- Khung nhập mã Voucher riêng của khách hàng -->
+        <div class="voucher-card" id="voucherBox" style="display:none;">
+          <label for="voucherCodeInput" style="font-size:12.5px; font-weight:600; color:var(--primary);">Mã ưu đãi / Voucher riêng (nếu có)</label>
+          <div class="voucher-input-row">
+            <input type="text" id="voucherCodeInput" class="form-input" style="padding:8px 11px; text-transform:uppercase; font-weight:600;" placeholder="Nhập mã (VD: THUBA-10A8)" oninput="this.value=this.value.toUpperCase().replace(/\s+/g,'')" />
+            <button type="button" id="applyVoucherBtn" class="btn-order" style="padding:8px 13px;" onclick="applyCustomerVoucher()">Áp dụng</button>
+            <button type="button" id="removeVoucherBtn" class="btn-order secondary" style="padding:8px 10px; display:none;" onclick="removeCustomerVoucher()">Bỏ mã</button>
+          </div>
+          <div id="voucherStatusMsg" style="font-size:12px; color:var(--text-muted); display:none; line-height:1.45;"></div>
+        </div>
+
+        <!-- Cảnh báo thời gian giao hàng 2–3 tuần khi đơn có món đặt làm thủ công -->
+        <div id="preorderCartNotice" class="preorder-notice-box" style="display:none;">
+          Đơn hàng có sản phẩm đặt làm thủ công. Tiệm sẽ hoàn thiện và giao chung toàn bộ đơn sau <strong>2–3 tuần</strong> kể từ ngày xác nhận.
+        </div>
+
         <div id="freeshipProgressBox" style="display:none;"></div>
 
         <div class="summary-card" id="cartSummaryBox" style="display:none;">
           <div class="summary-row">
             <span>Tiền giấy & dụng cụ</span>
             <span id="sumSubtotal">0đ</span>
+          </div>
+          <div class="summary-row" id="sumDiscountRow" style="display:none; color:#2E5A36;">
+            <span id="sumDiscountLabel">Ưu đãi giảm giá</span>
+            <span id="sumDiscount">-0đ</span>
           </div>
           <div class="summary-row">
             <span>Phí vận chuyển</span>
@@ -1414,7 +1478,7 @@
               </button>
               <button type="button" id="payChoiceQr" class="pay-choice-btn" onclick="setCheckoutPaymentMethod('Chuyển khoản trước')">
                 <div class="pay-choice-title">Quét QR chuyển khoản</div>
-                <div class="pay-choice-sub">Hiện mã VietQR ngay sau khi đặt</div>
+                <div class="pay-choice-sub" id="payChoiceQrSub">Hiện mã VietQR ngay sau khi đặt</div>
               </button>
             </div>
           </div>
@@ -1423,6 +1487,8 @@
             <label for="custNote">Ghi chú thêm (nếu có)</label>
             <input type="text" id="custNote" class="form-input" placeholder="VD: Giao giờ hành chính..." />
           </div>
+
+          <div id="checkoutErrorBox" style="display:none; background:#FBECE9; border:1px solid #ECCAC4; color:#B84A39; border-radius:10px; padding:9px 11px; font-size:12.5px; line-height:1.45;"></div>
 
           <button type="submit" class="submit-order-btn" id="submitOrderBtn">Gửi đơn đặt hàng</button>
         </form>
@@ -1500,6 +1566,20 @@
       freeshipMinOrder: 200000,
       freeshipKit: true
     };
+    let promoConfig = {
+      enabled: false,
+      label: "",
+      percent: 10,
+      startAt: 0,
+      endAt: 0,
+      mode: "BEST_ONE"
+    };
+    let voucherConfig = {
+      voucherInputEnabled: true
+    };
+    let clockOffset = 0;
+    let appliedVoucher = null;
+    let lastPromoActiveSnapshot = false;
     let selectedCheckoutPayment = "COD";
     let zaloManualEdited = false;
 
@@ -1509,6 +1589,137 @@
     const MIX_STORAGE_KEY = "tiemgiay_mix_v1";
     const CUSTOMER_STORAGE_KEY = "tiemgiay_customer_v1";
     const SHIP_CONFIG_STORAGE_KEY = "tiemgiay_ship_config_v1";
+
+    // =========================================================================
+    // ĐỒNG BỘ MÚI GIỜ +07:00, CÔNG THỨC LÀM TRÒN & CHỐNG XUNG ĐỘT KHUYẾN MÃI
+    // =========================================================================
+    function getServerNowMs() {
+      return Date.now() + clockOffset;
+    }
+
+    function isStorePromoActiveNow(nowMs = getServerNowMs()) {
+      if (!promoConfig || !promoConfig.enabled || Number(promoConfig.percent || 0) <= 0) return false;
+      const startAt = Number(promoConfig.startAt || 0);
+      const endAt = Number(promoConfig.endAt || 0);
+      if (startAt > 0 && nowMs < startAt) return false;
+      if (endAt > 0 && nowMs > endAt) return false;
+      return true;
+    }
+
+    function formatVnEpochTime(epochMs) {
+      const ms = Number(epochMs || 0);
+      if (!ms || ms <= 0) return "";
+      const d = new Date(ms + 7 * 3600000);
+      if (isNaN(d.getTime())) return "";
+      const dd = String(d.getUTCDate()).padStart(2, "0");
+      const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+      const hh = String(d.getUTCHours()).padStart(2, "0");
+      const mi = String(d.getUTCMinutes()).padStart(2, "0");
+      return `${hh}:${mi} ${dd}/${mm}`;
+    }
+
+    // Công thức làm tròn chuẩn dùng chung Frontend & Backend (làm tròn về hàng nghìn)
+    function calcRoundedPercentDiscount(subtotal, percent) {
+      const sub = Math.max(0, Number(subtotal || 0));
+      const pct = Math.max(0, Math.min(100, Number(percent || 0)));
+      if (sub <= 0 || pct <= 0) return 0;
+      return Math.min(sub, Math.round((sub * pct) / 100000) * 1000);
+    }
+
+    function calcVoucherDiscountAmount(baseAmount, voucher) {
+      const base = Math.max(0, Number(baseAmount || 0));
+      if (!voucher || base <= 0) return 0;
+      if (voucher.discountType === "percent") {
+        return calcRoundedPercentDiscount(base, Number(voucher.discountValue || 0));
+      }
+      return Math.min(base, Math.max(0, Number(voucher.discountValue || 0)));
+    }
+
+    function evaluateOrderDiscounts(subtotal) {
+      const sub = Math.max(0, Number(subtotal || 0));
+      const promoActive = isStorePromoActiveNow();
+      const dPromo = promoActive ? calcRoundedPercentDiscount(sub, promoConfig.percent) : 0;
+
+      let validVoucher = null;
+      let voucherWarning = "";
+      if (appliedVoucher && appliedVoucher.code) {
+        const minOrd = Math.max(0, Number(appliedVoucher.minOrder || 0));
+        if (sub < minOrd) {
+          voucherWarning = `Mã ${appliedVoucher.code} áp dụng cho đơn từ ${formatVND(minOrd)} (giỏ hiện tại còn thiếu ${formatVND(minOrd - sub)}).`;
+        } else {
+          validVoucher = appliedVoucher;
+        }
+      }
+
+      const mode = promoConfig.mode === "STACKABLE" ? "STACKABLE" : "BEST_ONE";
+      let discountAmount = 0;
+      let discountSource = "";
+      let voucherCode = "";
+      let discountType = "amount";
+      let discountValue = 0;
+      let discountLabel = "Ưu đãi giảm giá";
+      let conflictNotice = "";
+
+      if (mode === "STACKABLE") {
+        const afterPromo = Math.max(0, sub - dPromo);
+        const dVoucher = validVoucher ? calcVoucherDiscountAmount(afterPromo, validVoucher) : 0;
+        discountAmount = Math.min(sub, dPromo + dVoucher);
+
+        if (dPromo > 0 && dVoucher > 0) {
+          discountSource = "stack";
+          voucherCode = validVoucher.code;
+          discountType = "amount";
+          discountValue = discountAmount;
+          discountLabel = `${promoConfig.label || `Ưu đãi -${promoConfig.percent}%`} + ${validVoucher.code}`;
+          conflictNotice = `Đã áp dụng đồng thời ưu đãi toàn tiệm và mã ${validVoucher.code}.`;
+        } else if (dVoucher > 0) {
+          discountSource = "voucher";
+          voucherCode = validVoucher.code;
+          discountType = validVoucher.discountType === "percent" ? "percent" : "amount";
+          discountValue = Number(validVoucher.discountValue || 0);
+          discountLabel = `Mã ưu đãi (${validVoucher.code})`;
+        } else if (dPromo > 0) {
+          discountSource = "promo";
+          discountType = "percent";
+          discountValue = Number(promoConfig.percent || 0);
+          discountLabel = promoConfig.label || `Ưu đãi toàn tiệm (-${promoConfig.percent}%)`;
+        }
+      } else {
+        // BEST_ONE (Không cộng dồn — chọn mức giảm cao hơn và giữ lượt voucher nếu dPromo >= dVoucher)
+        const dVoucher = validVoucher ? calcVoucherDiscountAmount(sub, validVoucher) : 0;
+        if (dPromo <= 0 && dVoucher <= 0) {
+          discountAmount = 0;
+        } else if (dVoucher > dPromo) {
+          discountAmount = dVoucher;
+          discountSource = "voucher";
+          voucherCode = validVoucher.code;
+          discountType = validVoucher.discountType === "percent" ? "percent" : "amount";
+          discountValue = Number(validVoucher.discountValue || 0);
+          discountLabel = `Mã ưu đãi (${validVoucher.code})`;
+        } else {
+          discountAmount = dPromo;
+          discountSource = "promo";
+          voucherCode = "";
+          discountType = "percent";
+          discountValue = Number(promoConfig.percent || 0);
+          discountLabel = promoConfig.label || `Ưu đãi toàn tiệm (-${promoConfig.percent}%)`;
+          if (validVoucher && dPromo >= dVoucher) {
+            conflictNotice = "Ưu đãi toàn tiệm đang giảm bằng hoặc nhiều hơn mã của bạn nên hệ thống tự áp dụng ưu đãi chung — mã riêng của bạn vẫn được giữ nguyên lượt dùng cho lần sau!";
+          }
+        }
+      }
+
+      return {
+        discountAmount,
+        discountSource,
+        voucherCode,
+        discountType,
+        discountValue,
+        discountLabel,
+        voucherWarning,
+        conflictNotice
+      };
+    }
 
     function saveShipConfigCache() {
       try {
@@ -1847,21 +2058,12 @@
             validCart.push(item);
           }
         } else {
+          // Sản phẩm thường / giấy hết kho sẵn vẫn được giữ trong giỏ dưới dạng Đặt làm 2–3 tuần
           const p = products.find(prod => prod.id === item.id);
-          if (!p || p.stock <= 0) {
+          if (!p || p.visible === false) {
             changed = true;
           } else {
-            const perQty = Math.max(1, Number(item.baseUnitsPerQty || 1));
-            const maxQty = Math.floor(p.stock / perQty);
-            if (maxQty <= 0) {
-              changed = true;
-            } else if (item.qty > maxQty) {
-              item.qty = maxQty;
-              changed = true;
-              validCart.push(item);
-            } else {
-              validCart.push(item);
-            }
+            validCart.push(item);
           }
         }
       });
@@ -2008,13 +2210,24 @@
     function updatePromoBanner() {
       const textEl = document.getElementById("promoBannerText");
       if (!textEl) return;
+
+      const promoActive = isStorePromoActiveNow();
+      lastPromoActiveSnapshot = promoActive;
+
+      let promoLead = "";
+      if (promoActive) {
+        const lbl = escapeHtml(promoConfig.label || `Ưu đãi toàn tiệm -${promoConfig.percent}%`);
+        const endStr = Number(promoConfig.endAt || 0) > 0 ? ` (đến ${escapeHtml(formatVnEpochTime(promoConfig.endAt))})` : "";
+        promoLead = `<strong>${lbl}</strong>${endStr} • `;
+      }
+
       const feeNum = Number(shipConfig.customerShipFee ?? 15000);
       const feeText = feeNum === 0
         ? "Miễn phí"
         : (feeNum >= 1000 && feeNum % 1000 === 0 ? (feeNum / 1000) + "K" : formatVND(feeNum));
 
       if (!shipConfig.freeshipEnabled) {
-        textEl.innerHTML = `Phí ship toàn quốc đồng giá <strong>${escapeHtml(feeText)}</strong>.`;
+        textEl.innerHTML = `${promoLead}Phí ship toàn quốc đồng giá <strong>${escapeHtml(feeText)}</strong>.`;
         return;
       }
 
@@ -2025,11 +2238,22 @@
       if (shipConfig.freeshipKit) parts.push(`các <strong>Bộ kit</strong>`);
 
       if (!parts.length) {
-        textEl.innerHTML = `Phí ship toàn quốc đồng giá <strong>${escapeHtml(feeText)}</strong>.`;
+        textEl.innerHTML = `${promoLead}Phí ship toàn quốc đồng giá <strong>${escapeHtml(feeText)}</strong>.`;
       } else {
-        textEl.innerHTML = `Ship toàn quốc <strong>${escapeHtml(feeText)}</strong> — <strong>Freeship</strong> ${parts.join(" & ")}.`;
+        textEl.innerHTML = `${promoLead}Ship toàn quốc <strong>${escapeHtml(feeText)}</strong> — <strong>Freeship</strong> ${parts.join(" & ")}.`;
       }
     }
+
+    // Tự động cập nhật giao diện ngay khi ưu đãi toàn tiệm hết hạn hoặc bắt đầu mà không cần tải lại trang
+    setInterval(() => {
+      const curActive = isStorePromoActiveNow();
+      if (curActive !== lastPromoActiveSnapshot) {
+        updatePromoBanner();
+        if (document.getElementById("cartDrawer").classList.contains("open")) {
+          renderCartDrawer();
+        }
+      }
+    }, 15000);
 
     // -------------------------------------------------------------------------
     // 1. TẢI DANH MỤC TỪ GOOGLE SHEETS
@@ -2043,18 +2267,45 @@
           if (data.bankConfig) {
             bankConfig = data.bankConfig;
           }
+          const srvNow = Number(data.serverNowMs || (data.promoConfig && data.promoConfig.serverNowMs) || 0);
+          if (srvNow > 0) {
+            clockOffset = srvNow - Date.now();
+          }
+          if (data.promoConfig) {
+            const pCfg = data.promoConfig;
+            promoConfig = {
+              enabled: pCfg.enabled !== undefined
+                ? Boolean(pCfg.enabled)
+                : (String(pCfg.PROMO_ENABLED || "").toUpperCase() === "TRUE"),
+              label: String(pCfg.label ?? pCfg.PROMO_LABEL ?? ""),
+              percent: Math.max(0, Math.min(100, Number(pCfg.percent ?? pCfg.PROMO_PERCENT ?? 10))),
+              startAt: Number(pCfg.startAt ?? pCfg.PROMO_START_AT ?? 0),
+              endAt: Number(pCfg.endAt ?? pCfg.PROMO_END_AT ?? 0),
+              mode: String(pCfg.mode ?? pCfg.PROMO_VOUCHER_MODE ?? "BEST_ONE") === "STACKABLE" ? "STACKABLE" : "BEST_ONE"
+            };
+          }
+          if (data.voucherConfig) {
+            const vCfg = data.voucherConfig;
+            voucherConfig = {
+              voucherInputEnabled: vCfg.voucherInputEnabled !== undefined
+                ? Boolean(vCfg.voucherInputEnabled)
+                : (String(vCfg.VOUCHER_INPUT_ENABLED ?? "TRUE").toUpperCase() !== "FALSE")
+            };
+          } else if (data.VOUCHER_INPUT_ENABLED !== undefined) {
+            voucherConfig.voucherInputEnabled = String(data.VOUCHER_INPUT_ENABLED).toUpperCase() !== "FALSE";
+          }
           if (data.shipConfig) {
             shipConfig = { ...shipConfig, ...data.shipConfig };
             saveShipConfigCache();
-            updatePromoBanner();
-            if (document.getElementById("cartDrawer").classList.contains("open")) {
-              renderCartDrawer();
-            }
           }
+          updatePromoBanner();
           reconcileCartWithStock();
           renderCategories();
           renderMixPackBuilder();
           renderProducts();
+          if (document.getElementById("cartDrawer").classList.contains("open")) {
+            renderCartDrawer();
+          }
         }
       } catch (err) {
         document.getElementById("productGrid").innerHTML =
@@ -2096,7 +2347,7 @@
     }
 
     // -------------------------------------------------------------------------
-    // GÓI MIX TÙY CHỌN 10 TỜ GIẤY A5 (65.000đ)
+    // GÓI MIX TÙY CHỌN 10 TỜ GIẤY A5 (65.000đ — CHỈ CHỌN MẪU CÒN SẴN STOCK > 0)
     // -------------------------------------------------------------------------
     function getMixableA5Products() {
       return products.filter(p => {
@@ -2180,7 +2431,7 @@
           showToast(`Mỗi gói Mix tối đa ${MIX_PACK_SIZE} tờ ạ`);
           return;
         }
-        const reservedUnits = getProductReservedBaseUnits(p.id);
+        const reservedUnits = getProductReservedReadyUnits(p.id);
         const freeUnits = Math.max(0, Number(p.stock || 0) - reservedUnits);
         if (cur + 1 > freeUnits) {
           showToast(`Mẫu ${p.name} chỉ còn sẵn ${freeUnits} ${p.baseUnit} ngoài giỏ hàng`);
@@ -2202,7 +2453,7 @@
       const availMap = {};
       let totalAvail = 0;
       a5List.forEach(p => {
-        const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id));
+        const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedReadyUnits(p.id));
         availMap[p.id] = freeUnits;
         totalAvail += freeUnits;
       });
@@ -2254,15 +2505,13 @@
         return;
       }
 
-      // Revalidate against current cart reservations at commit time; the draft may
-      // have been built before another item or Mix pack was added to the cart.
       for (const part of breakdown) {
         const product = a5List.find(item => item.id === part.id);
         if (!product) {
           showToast(`Không tìm thấy mẫu ${part.name}; vui lòng chọn lại gói Mix`);
           return;
         }
-        const reservedUnits = getProductReservedBaseUnits(part.id);
+        const reservedUnits = getProductReservedReadyUnits(part.id);
         const freeUnits = Math.max(0, Number(product.stock || 0) - reservedUnits);
         if (part.units > freeUnits) {
           showToast(`Mẫu ${product.name} chỉ còn sẵn ${freeUnits} tờ ngoài giỏ hàng; vui lòng chỉnh lại gói Mix`);
@@ -2312,19 +2561,22 @@
         const isItem = p.productType === "item";
         const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
         const hasUnit = Number(p.unitPrice) > 0;
-        const packsAvail = hasPack ? Math.floor(p.stock / p.packSize) : 0;
+        const curStock = Math.max(0, Number(p.stock || 0));
+        const unsizedCount = Math.max(0, Number(p.unsizedStock || 0));
+        const packsAvail = hasPack ? Math.floor(curStock / p.packSize) : 0;
+        const isOutOfReadyStock = curStock <= 0;
 
         let badgeClass = "stock-ok";
         let badgeText = isItem
-          ? `Còn ${p.stock} ${escapeHtml(p.baseUnit)}`
+          ? `Còn ${curStock} ${escapeHtml(p.baseUnit)}`
           : (hasPack
-            ? `Sẵn ${p.stock} ${escapeHtml(p.baseUnit)} (${packsAvail} ${escapeHtml(p.packUnit || "gói")})`
-            : `Còn ${p.stock} ${escapeHtml(p.baseUnit)}`);
+            ? `Sẵn ${curStock} ${escapeHtml(p.baseUnit)} (${packsAvail} ${escapeHtml(p.packUnit || "gói")})`
+            : `Còn ${curStock} ${escapeHtml(p.baseUnit)}`);
 
-        if (p.stock <= 0) {
-          badgeClass = "stock-out";
-          badgeText = p.unsizedStock > 0 ? "Đang đợi gia keo (~1 tuần)" : "Hết hàng sẵn";
-        } else if ((hasPack && packsAvail <= 2) || (!hasPack && p.stock <= 5)) {
+        if (isOutOfReadyStock) {
+          badgeClass = "stock-low";
+          badgeText = "Đặt làm mới • Giao sau 2–3 tuần";
+        } else if ((hasPack && packsAvail <= 2) || (!hasPack && curStock <= 5)) {
           badgeClass = "stock-low";
         }
 
@@ -2333,7 +2585,6 @@
           : (p.imageUrl ? String(p.imageUrl).split(/[\n,]+/).map(u => u.trim()).filter(Boolean).slice(0, 3) : []);
 
         const safeId = escapeAttrJs(p.id);
-        const safeName = escapeAttrJs(p.name);
         const loadingAttr = cardIdx < 2 ? 'fetchpriority="high"' : 'loading="lazy"';
 
         let galleryHtml = "";
@@ -2354,59 +2605,42 @@
           `;
         }
 
+        const unsizedNoteHtml = (isOutOfReadyStock && unsizedCount > 0)
+          ? `<div class="unsized-hint-line">Đang có sẵn <strong>${unsizedCount} ${escapeHtml(p.baseUnit)}</strong> đợi gia keo — có thể giao sớm hơn (~1 tuần).</div>`
+          : "";
+
         let actionsHtml = "";
-        if (p.stock <= 0) {
-          const unsizedCount = Math.max(0, Number(p.unsizedStock || 0));
-          const waitBoxHtml = unsizedCount > 0 ? `
-            <div style="background:var(--warn-bg); border:1px solid #EBD3B5; border-radius:10px; padding:8px 10px; margin-top:6px;">
-              <div style="font-size:12px; font-weight:600; color:var(--warn-text); margin-bottom:5px;">
-                Mẻ này đang đợi gia keo (${unsizedCount} ${escapeHtml(p.baseUnit)}). Để lại @ID hoặc SĐT để tiệm nhắn ngay khi hoàn thành:
+        if (hasPack) {
+          const packPreorderMode = curStock < Number(p.packSize);
+          const packBtnLabel = packPreorderMode
+            ? `+ Thêm ${escapeHtml(p.packUnit || "gói")} (2–3 tuần)`
+            : `+ Thêm ${escapeHtml(p.packUnit || "gói")}`;
+          actionsHtml += `
+            <div class="buy-option-row">
+              <div>
+                <div class="buy-option-label">Mua theo ${escapeHtml(p.packUnit || "gói")} (${p.packSize} ${escapeHtml(p.baseUnit)})</div>
+                <div class="buy-option-price">${formatVND(p.packPrice)}</div>
               </div>
-              <div style="display:flex; gap:6px;">
-                <input type="text" id="waitInp_${escapeHtml(p.id)}" aria-label="Tài khoản hoặc SĐT nhận thông báo" class="form-input" style="padding:7px 10px; font-size:12.5px;" placeholder="@instagram / @threads hoặc SĐT..." />
-                <button type="button" class="btn-order" id="waitBtn_${escapeHtml(p.id)}" onclick="submitWaitlist('${safeId}', '${safeName}')">Nhận tin</button>
-              </div>
+              <button class="btn-order" onclick="addToCart('${safeId}', 'pack', 1)">${packBtnLabel}</button>
             </div>
-          ` : "";
-          actionsHtml = `
-            <button class="btn-order secondary" style="width:100%; padding:9px;" onclick="askPreorder('${safeName}')">
-              Nhắn tiệm đặt làm thêm
-            </button>
-            ${waitBoxHtml}
           `;
-        } else {
-          if (hasPack) {
-            const canBuyPack = p.stock >= p.packSize;
-            actionsHtml += `
-              <div class="buy-option-row">
-                <div>
-                  <div class="buy-option-label">Mua theo ${escapeHtml(p.packUnit || "gói")} (${p.packSize} ${escapeHtml(p.baseUnit)})</div>
-                  <div class="buy-option-price">${formatVND(p.packPrice)}</div>
-                </div>
-                ${canBuyPack
-                  ? `<button class="btn-order" onclick="addToCart('${safeId}', 'pack', 1)">+ Thêm ${escapeHtml(p.packUnit || "gói")}</button>`
-                  : `<span style="font-size:11.5px; color:var(--text-muted);">Không đủ 1 ${escapeHtml(p.packUnit || "gói")}</span>`
-                }
+        }
+        if (hasUnit) {
+          const unitLabelText = isItem
+            ? `Giá bán / 1 ${escapeHtml(p.baseUnit)}`
+            : `Mua lẻ từng ${escapeHtml(p.baseUnit)}`;
+          const addBtnText = isOutOfReadyStock
+            ? (isItem ? `+ Thêm vào giỏ (2–3 tuần)` : `+ Thêm lẻ (2–3 tuần)`)
+            : (isItem ? `+ Thêm vào giỏ` : `+ Thêm lẻ`);
+          actionsHtml += `
+            <div class="buy-option-row">
+              <div>
+                <div class="buy-option-label">${unitLabelText}</div>
+                <div class="buy-option-price">${formatVND(p.unitPrice)}</div>
               </div>
-            `;
-          }
-          if (hasUnit) {
-            const unitLabelText = isItem
-              ? `Giá bán / 1 ${escapeHtml(p.baseUnit)}`
-              : `Mua lẻ từng ${escapeHtml(p.baseUnit)}`;
-            const addBtnText = isItem
-              ? `+ Thêm vào giỏ`
-              : `+ Thêm lẻ`;
-            actionsHtml += `
-              <div class="buy-option-row">
-                <div>
-                  <div class="buy-option-label">${unitLabelText}</div>
-                  <div class="buy-option-price">${formatVND(p.unitPrice)}</div>
-                </div>
-                <button class="btn-order ${hasPack ? 'secondary' : ''}" onclick="addToCart('${safeId}', 'unit', 1)">${addBtnText}</button>
-              </div>
-            `;
-          }
+              <button class="btn-order ${hasPack ? 'secondary' : ''}" onclick="addToCart('${safeId}', 'unit', 1)">${addBtnText}</button>
+            </div>
+          `;
         }
 
         return `
@@ -2417,6 +2651,7 @@
               <span class="stock-pill ${badgeClass}">${badgeText}</span>
             </div>
             ${formatSpecsHtml(p.specs)}
+            ${unsizedNoteHtml}
             <div class="prod-actions">${actionsHtml}</div>
           </div>
         `;
@@ -2475,10 +2710,12 @@
     }
 
     // -------------------------------------------------------------------------
-    // 2. GIỎ HÀNG & TÍNH SHIP TỰ ĐỘNG
+    // 2. GIỎ HÀNG, TÁCH KHO SẴN / ĐẶT LÀM 2–3 TUẦN & TÍNH SHIP / KHUYẾN MÃI
     // -------------------------------------------------------------------------
-    function getProductReservedBaseUnits(prodId, excludeKey = "") {
-      return cart.reduce((sum, item) => {
+    function getProductReservedReadyUnits(prodId, excludeKey = "") {
+      const p = products.find(prod => prod.id === prodId);
+      const maxReady = p ? Math.max(0, Number(p.stock || 0)) : Infinity;
+      const rawUsed = cart.reduce((sum, item) => {
         if (item.key === excludeKey) return sum;
         if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
           const part = item.mixBreakdown.find(b => b.id === prodId);
@@ -2489,6 +2726,51 @@
         }
         return sum;
       }, 0);
+      return Math.min(maxReady, rawUsed);
+    }
+
+    // Phân bổ chính xác deductedReadyUnits và preorderUnits cho từng dòng giỏ hàng (chống âm kho)
+    function computeCartItemsAllocation() {
+      const remainingReadyByProd = {};
+      products.forEach(p => {
+        remainingReadyByProd[p.id] = Math.max(0, Number(p.stock || 0));
+      });
+
+      return cart.map(item => {
+        const baseUnits = Number(item.qty || 1) * Number(item.baseUnitsPerQty || 1);
+        if (item.buyMode === "mix" && Array.isArray(item.mixBreakdown)) {
+          item.mixBreakdown.forEach(part => {
+            if (remainingReadyByProd[part.id] !== undefined) {
+              remainingReadyByProd[part.id] = Math.max(0, remainingReadyByProd[part.id] - Number(part.units || 0) * Number(item.qty || 1));
+            }
+          });
+          return {
+            ...item,
+            baseUnits,
+            deductedReadyUnits: baseUnits,
+            preorderUnits: 0,
+            isPreorder: false,
+            baseUnitName: "tờ"
+          };
+        }
+
+        const p = products.find(prod => prod.id === item.id);
+        const availReady = p ? (remainingReadyByProd[p.id] ?? Math.max(0, Number(p.stock || 0))) : 0;
+        const deductedReadyUnits = Math.min(availReady, baseUnits);
+        const preorderUnits = Math.max(0, baseUnits - deductedReadyUnits);
+        if (p && remainingReadyByProd[p.id] !== undefined) {
+          remainingReadyByProd[p.id] = Math.max(0, availReady - deductedReadyUnits);
+        }
+
+        return {
+          ...item,
+          baseUnits,
+          deductedReadyUnits,
+          preorderUnits,
+          isPreorder: preorderUnits > 0,
+          baseUnitName: p ? p.baseUnit : item.unitLabel
+        };
+      });
     }
 
     function addToCart(prodId, buyMode = "pack", qtyToAdd = 1) {
@@ -2504,15 +2786,9 @@
 
       const existing = cart.find(c => c.key === itemKey);
       const currentQty = existing ? existing.qty : 0;
-      const otherReservedUnits = getProductReservedBaseUnits(p.id, itemKey);
+      const otherReservedUnits = getProductReservedReadyUnits(p.id, itemKey);
       const totalNeededUnits = otherReservedUnits + (currentQty + qtyToAdd) * baseUnitsPerQty;
-
-      if (totalNeededUnits > p.stock) {
-        const remainUnits = Math.max(0, p.stock - otherReservedUnits);
-        const maxQty = Math.floor(remainUnits / baseUnitsPerQty);
-        showToast(`Kho chỉ còn đủ tối đa ${maxQty} ${unitLabel} ${p.name}`);
-        return;
-      }
+      const curStock = Math.max(0, Number(p.stock || 0));
 
       if (existing) {
         existing.qty += qtyToAdd;
@@ -2532,7 +2808,16 @@
 
       saveCartToStorage();
       updateCartBadge();
-      showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name}`);
+
+      if (totalNeededUnits > curStock) {
+        if (curStock > 0) {
+          showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name} (có sẵn ${curStock} ${p.baseUnit}, phần còn lại đặt làm 2–3 tuần)`);
+        } else {
+          showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name} (Đặt làm thủ công • 2–3 tuần)`);
+        }
+      } else {
+        showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name}`);
+      }
     }
 
     function updateCartQty(itemKey, delta) {
@@ -2548,7 +2833,7 @@
         for (let i = 0; i < item.mixBreakdown.length; i++) {
           const part = item.mixBreakdown[i];
           const p = products.find(prod => prod.id === part.id);
-          const otherReserved = getProductReservedBaseUnits(part.id, itemKey);
+          const otherReserved = getProductReservedReadyUnits(part.id, itemKey);
           if (!p || otherReserved + nextQty * Number(part.units) > p.stock) {
             showToast(`Kho không đủ giấy ${part.name} để tăng thêm gói Mix`);
             return;
@@ -2556,12 +2841,7 @@
         }
         item.qty = nextQty;
       } else {
-        const p = products.find(prod => prod.id === item.id);
-        const otherReserved = getProductReservedBaseUnits(item.id, itemKey);
-        if (p && otherReserved + nextQty * item.baseUnitsPerQty > p.stock) {
-          showToast(`Kho chỉ còn sẵn ${p.stock} ${p.baseUnit}`);
-          return;
-        }
+        // Cho phép tăng số lượng thoải mái; phần vượt tồn kho sẵn tự chuyển sang đặt làm 2–3 tuần
         item.qty = nextQty;
       }
 
@@ -2576,18 +2856,95 @@
     }
 
     function calculateTotals() {
-      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-      const hasKit = cart.some(item => {
+      const allocatedItems = computeCartItemsAllocation();
+      const hasPreorder = allocatedItems.some(it => it.isPreorder);
+      const subtotal = allocatedItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      const discountEval = evaluateOrderDiscounts(subtotal);
+      const discountAmount = discountEval.discountAmount;
+      const discountedSubtotal = Math.max(0, subtotal - discountAmount);
+
+      const hasKit = allocatedItems.some(item => {
         const text = (String(item.name || "") + " " + String(item.category || "")).toLowerCase();
         return text.includes("kit");
       });
       const minOrder = Number(shipConfig.freeshipMinOrder || 0);
       const qualifiesFree = Boolean(shipConfig.freeshipEnabled) && (
-        (minOrder > 0 && subtotal >= minOrder) ||
+        (minOrder > 0 && discountedSubtotal >= minOrder) ||
         (Boolean(shipConfig.freeshipKit) && hasKit)
       );
       const shipFee = qualifiesFree ? 0 : Number(shipConfig.customerShipFee ?? 15000);
-      return { subtotal, shipFee, total: subtotal + shipFee };
+      return {
+        allocatedItems,
+        hasPreorder,
+        subtotal,
+        ...discountEval,
+        discountedSubtotal,
+        shipFee,
+        total: discountedSubtotal + shipFee
+      };
+    }
+
+    async function applyCustomerVoucher() {
+      const inp = document.getElementById("voucherCodeInput");
+      const btn = document.getElementById("applyVoucherBtn");
+      const code = (inp ? inp.value : "").trim().toUpperCase();
+      if (!code) {
+        showToast("Bạn nhập mã ưu đãi trước nhé");
+        if (inp) inp.focus();
+        return;
+      }
+
+      const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Đang kiểm tra...";
+      }
+
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: "POST",
+          body: JSON.stringify({
+            action: "validate_voucher",
+            code,
+            subtotal
+          })
+        });
+        const data = await res.json();
+        if (data.ok && data.voucher) {
+          appliedVoucher = {
+            ...data.voucher,
+            code: String(data.voucher.code || code).trim().toUpperCase()
+          };
+          if (inp) inp.value = appliedVoucher.code;
+          showToast(`Đã áp dụng mã ${appliedVoucher.code}`);
+          renderCartDrawer();
+        } else {
+          appliedVoucher = null;
+          renderCartDrawer();
+          const msgEl = document.getElementById("voucherStatusMsg");
+          if (msgEl) {
+            msgEl.style.display = "block";
+            msgEl.style.color = "#B84A39";
+            msgEl.textContent = data.error || "Mã giảm giá không hợp lệ, bạn kiểm tra lại nhé.";
+          }
+        }
+      } catch (err) {
+        showToast("Không thể kiểm tra mã lúc này, bạn thử lại nhé!");
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Áp dụng";
+        }
+      }
+    }
+
+    function removeCustomerVoucher() {
+      appliedVoucher = null;
+      const inp = document.getElementById("voucherCodeInput");
+      if (inp) inp.value = "";
+      renderCartDrawer();
+      showToast("Đã gỡ mã ưu đãi");
     }
 
     function setCheckoutPaymentMethod(method, persist = true) {
@@ -2617,6 +2974,8 @@
     }
 
     function openCart() {
+      const errBox = document.getElementById("checkoutErrorBox");
+      if (errBox) { errBox.style.display = "none"; errBox.textContent = ""; }
       renderCartDrawer();
       updateSocialPlatformUi(true);
       document.getElementById("cartDrawer").classList.add("open");
@@ -2626,7 +2985,7 @@
       document.getElementById("cartDrawer").classList.remove("open");
     }
 
-    function renderFreeshipProgress(subtotal, shipFee) {
+    function renderFreeshipProgress(discountedSubtotal, shipFee) {
       const box = document.getElementById("freeshipProgressBox");
       if (!box) return;
       const minOrder = Number(shipConfig.freeshipMinOrder || 0);
@@ -2646,13 +3005,13 @@
         return;
       }
 
-      const missing = Math.max(0, minOrder - subtotal);
-      const pct = Math.min(100, Math.round((subtotal / minOrder) * 100));
+      const missing = Math.max(0, minOrder - discountedSubtotal);
+      const pct = Math.min(100, Math.round((discountedSubtotal / minOrder) * 100));
 
       const smallUpsells = [];
       products.forEach(p => {
         if (smallUpsells.length >= 3) return;
-        const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id));
+        const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedReadyUnits(p.id));
         if (freeUnits <= 0) return;
         const isItem = p.productType === "item";
         const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1 && freeUnits >= Number(p.packSize);
@@ -2710,22 +3069,48 @@
       const sumBox = document.getElementById("cartSummaryBox");
       const formEl = document.getElementById("checkoutForm");
       const fsBox = document.getElementById("freeshipProgressBox");
+      const voucherBox = document.getElementById("voucherBox");
+      const preorderNotice = document.getElementById("preorderCartNotice");
+      const qrSubEl = document.getElementById("payChoiceQrSub");
 
       if (!cart.length) {
         listEl.innerHTML = `<div style="text-align:center; padding:26px 12px; color:var(--text-muted); font-size:13.5px;">Giỏ hàng đang trống.<br/>Bạn có thể hỏi trợ lý AI hoặc chọn mẫu ở tab <strong>Danh mục</strong> nhé!</div>`;
+        if (voucherBox) voucherBox.style.display = "none";
+        if (preorderNotice) preorderNotice.style.display = "none";
         if (fsBox) { fsBox.style.display = "none"; fsBox.innerHTML = ""; }
         sumBox.style.display = "none";
         formEl.style.display = "none";
         return;
       }
 
-      listEl.innerHTML = cart.map(item => {
+      const totals = calculateTotals();
+      const {
+        allocatedItems,
+        hasPreorder,
+        subtotal,
+        discountAmount,
+        discountLabel,
+        voucherWarning,
+        conflictNotice,
+        discountedSubtotal,
+        shipFee,
+        total
+      } = totals;
+
+      listEl.innerHTML = allocatedItems.map(item => {
         const safeKey = escapeAttrJs(item.key);
+        let preorderTagHtml = "";
+        if (item.isPreorder) {
+          preorderTagHtml = item.deductedReadyUnits > 0
+            ? `<div style="font-size:11.5px; color:var(--warn-text); font-weight:600; margin-top:2px;">Đặt làm 2–3 tuần (${item.preorderUnits} ${escapeHtml(item.baseUnitName)} làm mới, ${item.deductedReadyUnits} ${escapeHtml(item.baseUnitName)} có sẵn)</div>`
+            : `<div style="font-size:11.5px; color:var(--warn-text); font-weight:600; margin-top:2px;">Đặt làm thủ công • 2–3 tuần</div>`;
+        }
         return `
           <div class="cart-item">
             <div style="flex:1; min-width:0;">
               <div style="font-weight:600; font-size:13.5px;">${escapeHtml(item.name)}</div>
               <div style="font-size:12px; color:var(--text-muted);">${formatVND(item.price)} / ${escapeHtml(item.unitLabel)}</div>
+              ${preorderTagHtml}
             </div>
             <div class="qty-box">
               <button class="qty-btn" aria-label="Giảm số lượng ${escapeHtml(item.name)}" onclick="updateCartQty('${safeKey}', -1)">−</button>
@@ -2736,12 +3121,68 @@
         `;
       }).join("");
 
-      const { subtotal, shipFee, total } = calculateTotals();
+      // Hiển thị hộp nhập mã Voucher riêng nếu tiệm đang bật
+      if (voucherBox) {
+        const showVoucherBox = Boolean(voucherConfig.voucherInputEnabled) || Boolean(appliedVoucher);
+        voucherBox.style.display = showVoucherBox ? "flex" : "none";
+        const vInp = document.getElementById("voucherCodeInput");
+        const removeBtn = document.getElementById("removeVoucherBtn");
+        const statusMsg = document.getElementById("voucherStatusMsg");
+
+        if (vInp && appliedVoucher && !vInp.value) {
+          vInp.value = appliedVoucher.code;
+        }
+        if (removeBtn) {
+          removeBtn.style.display = appliedVoucher ? "inline-block" : "none";
+        }
+        if (statusMsg) {
+          if (voucherWarning) {
+            statusMsg.style.display = "block";
+            statusMsg.style.color = "var(--warn-text)";
+            statusMsg.textContent = voucherWarning;
+          } else if (conflictNotice) {
+            statusMsg.style.display = "block";
+            statusMsg.style.color = "#2E5A36";
+            statusMsg.textContent = conflictNotice;
+          } else if (appliedVoucher) {
+            const vDesc = appliedVoucher.discountType === "percent"
+              ? `giảm ${appliedVoucher.discountValue}%`
+              : `giảm ${formatVND(appliedVoucher.discountValue)}`;
+            statusMsg.style.display = "block";
+            statusMsg.style.color = "#2E5A36";
+            statusMsg.textContent = `✓ Đã nhận mã ${appliedVoucher.code} (${vDesc}).`;
+          } else {
+            statusMsg.style.display = "none";
+            statusMsg.textContent = "";
+          }
+        }
+      }
+
+      // Thông báo đặt trước 2-3 tuần và gợi ý chuyển khoản ưu tiên lên lịch làm giấy
+      if (preorderNotice) {
+        preorderNotice.style.display = hasPreorder ? "block" : "none";
+      }
+      if (qrSubEl) {
+        qrSubEl.textContent = hasPreorder
+          ? "Khuyên dùng chuyển khoản trước để tiệm ưu tiên lên lịch làm giấy thủ công."
+          : "Hiện mã VietQR ngay sau khi đặt";
+      }
+
       document.getElementById("sumSubtotal").textContent = formatVND(subtotal);
+      const discRow = document.getElementById("sumDiscountRow");
+      if (discRow) {
+        if (discountAmount > 0) {
+          discRow.style.display = "flex";
+          document.getElementById("sumDiscountLabel").textContent = discountLabel;
+          document.getElementById("sumDiscount").textContent = `-${formatVND(discountAmount)}`;
+        } else {
+          discRow.style.display = "none";
+        }
+      }
       document.getElementById("sumShip").textContent = shipFee === 0 ? "Miễn phí (0đ)" : formatVND(shipFee);
       document.getElementById("sumTotal").textContent = formatVND(total);
 
-      renderFreeshipProgress(subtotal, shipFee);
+      renderFreeshipProgress(discountedSubtotal, shipFee);
       sumBox.style.display = "flex";
       formEl.style.display = "flex";
     }
@@ -2753,11 +3194,26 @@
       cleanSocialInputOnBlur();
       cleanBackupSocialInputOnBlur();
 
+      const errBox = document.getElementById("checkoutErrorBox");
+      if (errBox) { errBox.style.display = "none"; errBox.textContent = ""; }
+
       const btn = document.getElementById("submitOrderBtn");
       btn.disabled = true;
       btn.textContent = "Đang gửi đơn hàng...";
 
-      const { subtotal, shipFee, total } = calculateTotals();
+      const {
+        allocatedItems,
+        hasPreorder,
+        subtotal,
+        discountType,
+        discountValue,
+        discountAmount,
+        discountSource,
+        voucherCode,
+        shipFee,
+        total
+      } = calculateTotals();
+
       const chosenPlatform = document.getElementById("custPlatform").value;
       const rawPhone = document.getElementById("custPhone").value.trim();
       let finalSocialHandle = document.getElementById("custHandle").value.trim();
@@ -2784,17 +3240,26 @@
         note: document.getElementById("custNote").value.trim(),
         sessionId: chatSessionId,
         chatTranscript: chatHistory.slice(-20),
-        items: cart.map(c => ({
+        hasPreorder,
+        items: allocatedItems.map(c => ({
           id: c.id,
           name: c.name,
           buyMode: c.buyMode,
           unitLabel: c.unitLabel,
           qty: c.qty,
           price: c.price,
-          baseUnits: c.qty * c.baseUnitsPerQty,
+          baseUnits: c.baseUnits,
+          deductedReadyUnits: c.deductedReadyUnits,
+          preorderUnits: c.preorderUnits,
+          isPreorder: c.isPreorder,
           mixBreakdown: c.mixBreakdown || null
         })),
         subtotal,
+        discountType,
+        discountValue,
+        discountAmount,
+        discountSource,
+        voucherCode,
         shipFee,
         total
       };
@@ -2809,18 +3274,25 @@
         if (data.ok) {
           saveCustomerDraft();
           cart = [];
+          appliedVoucher = null;
+          const vInp = document.getElementById("voucherCodeInput");
+          if (vInp) vInp.value = "";
           saveCartToStorage();
           updateCartBadge();
           closeCart();
           switchView("chat");
           const savedSocialDisplay = data.socialHandle || finalSocialHandle;
+          const finalChargedTotal = data.total !== undefined ? Number(data.total) : total;
+          const preorderTail = hasPreorder
+            ? `\n(Đơn có sản phẩm đặt làm thủ công — tiệm sẽ hoàn thiện và giao chung sau 2–3 tuần ạ.)`
+            : "";
           const confirmMsg = selectedCheckoutPayment === "Chuyển khoản trước"
-            ? `Cảm ơn ${orderPayload.customerName}! Đơn hàng #${data.orderId} (${formatVND(total)}) đã được ghi nhận.\nBạn quét mã VietQR bên dưới để thanh toán, sau đó bấm xác nhận để tiệm gói hàng nhé!`
-            : `Cảm ơn ${orderPayload.customerName}! Đơn hàng #${data.orderId} (${formatVND(total)} - Thanh toán COD) đã được gửi về tiệm.\nTiệm sẽ nhắn xác nhận lại qua ${orderPayload.platform} (${savedSocialDisplay}) trước khi gói hàng nhé!`;
+            ? `Cảm ơn ${orderPayload.customerName}! Đơn hàng #${data.orderId} (${formatVND(finalChargedTotal)}) đã được ghi nhận.\nBạn quét mã VietQR bên dưới để thanh toán, sau đó bấm xác nhận để tiệm gói hàng nhé!${preorderTail}`
+            : `Cảm ơn ${orderPayload.customerName}! Đơn hàng #${data.orderId} (${formatVND(finalChargedTotal)} - Thanh toán COD) đã được gửi về tiệm.\nTiệm sẽ nhắn xác nhận lại qua ${orderPayload.platform} (${savedSocialDisplay}) trước khi gói hàng nhé!${preorderTail}`;
           appendBotMessage(confirmMsg);
 
           if (selectedCheckoutPayment === "Chuyển khoản trước") {
-            appendVietQrCard(data.orderId, total);
+            appendVietQrCard(data.orderId, finalChargedTotal);
           }
           appendProactiveOrderConfirmCard(data.orderId, {
             ...orderPayload,
@@ -2828,7 +3300,20 @@
           });
           loadProducts();
         } else {
-          showToast("Lỗi gửi đơn: " + (data.error || "Thử lại nhé"));
+          // Quy tắc 2: Nếu mã giảm giá vừa hết lượt hoặc ưu đãi hết hạn, dừng tạo đơn & báo khách xác nhận lại giá
+          const errText = data.error || "Chưa tạo được đơn hàng, bạn kiểm tra lại giỏ giúp tiệm nhé!";
+          if (/mã giảm giá|voucher|hết lượt|hết hạn/i.test(errText)) {
+            appliedVoucher = null;
+            const vInp = document.getElementById("voucherCodeInput");
+            if (vInp) vInp.value = "";
+          }
+          await loadProducts();
+          renderCartDrawer();
+          if (errBox) {
+            errBox.textContent = errText;
+            errBox.style.display = "block";
+          }
+          showToast(errText);
         }
       } catch (err) {
         showToast("Không thể kết nối máy chủ. Bạn thử lại nhé!");
@@ -3005,7 +3490,7 @@
           const canMake = it.mixBreakdown.every(part => {
             const p = products.find(prod => prod.id === part.id);
             if (!p) return false;
-            const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id));
+            const freeUnits = Math.max(0, Number(p.stock || 0) - getProductReservedReadyUnits(p.id));
             return freeUnits >= Number(part.units || 0) * wantedQty;
           });
           if (canMake) {
@@ -3033,11 +3518,8 @@
         } else if (it.id) {
           const p = products.find(prod => prod.id === it.id);
           const mode = it.buyMode === "pack" ? "pack" : "unit";
-          const perQty = mode === "pack" ? Math.max(1, Number(p?.packSize || 1)) : 1;
-          const freeUnits = p ? Math.max(0, Number(p.stock || 0) - getProductReservedBaseUnits(p.id)) : 0;
-          if (p && freeUnits >= perQty) {
-            const maxCanAdd = Math.min(wantedQty, Math.floor(freeUnits / perQty));
-            addToCart(p.id, mode, maxCanAdd);
+          if (p && p.visible !== false) {
+            addToCart(p.id, mode, wantedQty);
             addedCount++;
           } else {
             skippedNames.push(it.name);
@@ -3062,8 +3544,6 @@
         handleEl.value = oldSocial.split("|")[0].trim();
       }
 
-      // Newer order payloads may expose the backup fields directly; older
-      // records stored them in socialHandle as "| Dự phòng: @id (Instagram)".
       let backupPlatform = String(ord.backupPlatform || "").trim();
       let backupHandle = String(ord.backupHandle || "").trim();
       const backupMatch = oldSocial.match(/\|\s*Dự phòng\s*:\s*(.*?)\s*\((Instagram|Threads|Facebook)\)\s*$/i);
@@ -3084,7 +3564,7 @@
       openCart();
 
       if (skippedNames.length) {
-        showToast(`Đã thêm món còn hàng. Tạm hết: ${skippedNames.join(", ")}`);
+        showToast(`Đã thêm món vào giỏ. Ngừng bán: ${skippedNames.join(", ")}`);
       } else if (addedCount > 0) {
         showToast("Đã thêm lại các món từ đơn cũ vào giỏ!");
       }
@@ -3223,13 +3703,16 @@
           const label = mode === "pack" ? (p.packUnit || "gói") : p.baseUnit;
           const price = mode === "pack" ? p.packPrice : p.unitPrice;
           const qty = Math.max(1, Number(sug.qty || 1));
+          const stockText = Number(p.stock || 0) > 0
+            ? `Kho sẵn ${p.stock} ${escapeHtml(p.baseUnit)}`
+            : `Đặt làm mới (2–3 tuần)`;
 
           const card = document.createElement("div");
           card.className = "mini-prod-card";
           card.innerHTML = `
             <div class="mini-prod-info">
               <div class="mini-prod-name">${escapeHtml(p.name)}</div>
-              <div class="mini-prod-meta">${formatVND(price)}/${escapeHtml(label)} • Kho sẵn ${p.stock} ${escapeHtml(p.baseUnit)}</div>
+              <div class="mini-prod-meta">${formatVND(price)}/${escapeHtml(label)} • ${stockText}</div>
             </div>
             <button type="button" class="btn-add-mini" onclick="addToCart('${escapeAttrJs(p.id)}', '${mode}', ${qty})">
               + Thêm ${qty} ${escapeHtml(label)}
@@ -3311,31 +3794,24 @@
           body: JSON.stringify({
             action: "chat",
             message: text,
-            history: chatHistory.slice(-8),
+            history: chatHistory.slice(-10),
             sessionId: chatSessionId,
             customerInfo: currentCustInfo
           })
         });
-        const result = await res.json();
+        const data = await res.json();
         typingEl.remove();
 
-        if (result.ok && result.data) {
-          const ai = result.data;
-          appendBotMessage(ai.reply, {
-            suggestedItems: ai.suggestedItems || [],
-            showContactButtons: Boolean(ai.showContactButtons),
-            contactPrefill: ai.contactPrefill || text
-          });
-          chatHistory.push({ role: "model", text: ai.reply });
-        } else {
-          appendBotMessage("Xin lỗi bạn, kết nối hơi chập chờn. Bạn thử nhắn lại hoặc bấm liên hệ trực tiếp với tiệm nhé!", {
-            showContactButtons: true,
-            contactPrefill: text
-          });
-        }
+        const replyText = data.reply || "Bạn nhắn rõ hơn giúp tiệm nhé!";
+        chatHistory.push({ role: "model", text: replyText });
+        appendBotMessage(replyText, {
+          suggestedItems: data.suggestedItems || [],
+          showContactButtons: Boolean(data.showContactButtons),
+          contactPrefill: text
+        });
       } catch (err) {
         typingEl.remove();
-        appendBotMessage("Hiện tại trợ lý AI đang tạm gián đoạn kết nối. Bạn có thể chọn giấy ở tab Danh mục hoặc nhắn trực tiếp cho tiệm qua các kênh dưới đây nhé!", {
+        appendBotMessage("Kết nối với tiệm hơi chập chờn một chút, bạn thử nhắn lại giúp tiệm nhé!", {
           showContactButtons: true,
           contactPrefill: text
         });
@@ -3348,7 +3824,6 @@
     }
 
     window.addEventListener("DOMContentLoaded", () => {
-      switchView("catalog");
       loadShipConfigCache();
       updatePromoBanner();
       loadCartFromStorage();
@@ -3356,15 +3831,6 @@
       chatHistory = [{ role: "model", text: WELCOME_MESSAGE }];
       appendBotMessage(WELCOME_MESSAGE);
       loadProducts();
-
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener("resize", () => {
-          const container = document.getElementById("chatMessages");
-          if (container) {
-            container.scrollTop = container.scrollHeight;
-          }
-        });
-      }
     });
   </script>
 </body>
