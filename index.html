@@ -57,7 +57,7 @@
 
     .app-shell {
       width: 100%;
-      max-width: 560px;
+      max-width: 1080px;
       background: var(--bg-surface);
       display: flex;
       flex-direction: column;
@@ -652,84 +652,80 @@
       line-height: 1.45;
     }
 
-    /* Floating Category Quick Menu (Bottom-Left) */
+    /* Floating category dock: one glass FAB, text labels in the expanding menu */
     .floating-cat-wrap {
       position: fixed;
-      bottom: 18px;
-      left: max(14px, calc(50vw - 266px));
+      bottom: max(18px, env(safe-area-inset-bottom));
+      right: max(18px, calc(50vw - 266px));
       z-index: 35;
       display: none;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: flex-end;
     }
-    .floating-cat-wrap.visible {
-      display: flex;
-    }
-
+    .floating-cat-wrap.visible { display:flex; }
     .floating-cat-menu {
-      background: var(--bg-card);
-      border: 1.5px solid var(--primary);
-      border-radius: 14px;
-      box-shadow: 0 10px 28px rgba(45, 36, 30, 0.18);
-      padding: 6px;
-      margin-bottom: 8px;
-      min-width: 180px;
-      max-width: 240px;
+      background: rgba(250,249,246,.9);
+      border: 1px solid rgba(255,255,255,.92);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(46,41,35,.14), inset 0 1px 0 rgba(255,255,255,.96);
+      padding: 7px;
+      margin-bottom: 10px;
+      min-width: 188px;
+      max-width: min(260px, calc(100vw - 32px));
       max-height: 55vh;
       overflow-y: auto;
-      display: none;
+      display: flex;
       flex-direction: column;
-      gap: 2px;
-      animation: fadeUp 0.16s ease;
+      gap: 3px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px) scale(.97);
+      transform-origin: bottom right;
+      transition: opacity .18s ease, transform .28s cubic-bezier(.2,.9,.25,1), visibility .18s;
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      backdrop-filter: blur(18px) saturate(1.2);
     }
-    .floating-cat-menu.open {
-      display: flex;
-    }
-
+    .floating-cat-menu.open { opacity:1; visibility:visible; transform:translateY(0) scale(1); }
     .floating-cat-item {
-      background: transparent;
-      border: none;
-      text-align: left;
-      padding: 9px 12px;
-      border-radius: 9px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-main);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
+      width:100%;
+      min-height:42px;
+      background:transparent;
+      border:1px solid transparent;
+      text-align:left;
+      padding:9px 12px;
+      border-radius:11px;
+      font-family:inherit;
+      font-size:13px;
+      font-weight:500;
+      color:var(--text-main);
+      cursor:pointer;
+      transition:background .18s ease, color .18s ease, transform .25s cubic-bezier(.2,.9,.25,1);
     }
-    .floating-cat-item:hover {
-      background: var(--bg-soft);
-    }
-    .floating-cat-item.active {
-      background: var(--primary);
-      color: #fff;
-      font-weight: 600;
-    }
-
+    .floating-cat-item:hover { background:#F0ECE4; }
+    .floating-cat-item:active { transform:scale(.98); }
+    .floating-cat-item.active { background:var(--primary); color:#fff; font-weight:600; }
     .floating-cat-btn {
-      background: var(--primary);
-      color: #fff;
-      border: 1.5px solid rgba(255, 255, 255, 0.18);
-      border-radius: 999px;
-      padding: 10px 15px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      box-shadow: 0 6px 18px rgba(45, 36, 30, 0.24);
-      transition: transform 0.15s, background 0.15s;
+      width:58px;
+      height:58px;
+      padding:0;
+      display:grid;
+      place-items:center;
+      background:rgba(255,255,255,.82);
+      color:var(--primary);
+      border:1px solid rgba(255,255,255,.95);
+      border-radius:50%;
+      cursor:pointer;
+      box-shadow:0 8px 24px rgba(46,41,35,.14), inset 0 1px 0 rgba(255,255,255,.98);
+      -webkit-backdrop-filter:blur(16px) saturate(1.25);
+      backdrop-filter:blur(16px) saturate(1.25);
+      transition:transform .3s cubic-bezier(.2,.9,.25,1), background .2s ease, box-shadow .2s ease;
     }
-    .floating-cat-btn:hover {
-      background: var(--primary-hover);
-    }
-    .floating-cat-btn:active {
-      transform: scale(0.97);
-    }
+    .floating-cat-btn svg { width:22px; height:22px; transition:transform .24s ease; }
+    .floating-cat-wrap.menu-open .floating-cat-btn { background:rgba(255,255,255,.96); box-shadow:0 10px 28px rgba(46,41,35,.18), inset 0 1px 0 #fff; }
+    .floating-cat-wrap.menu-open .floating-cat-btn svg { transform:rotate(90deg); }
+    .floating-cat-btn:hover { transform:translateY(-1px); }
+    .floating-cat-btn:active { transform:scale(.94); transition-duration:.12s; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
     .prod-actions {
       display: flex;
@@ -796,7 +792,7 @@
 
     .drawer-panel {
       width: 100%;
-      max-width: 560px;
+      max-width: 760px;
       max-height: 92vh;
       background: var(--bg-surface);
       border-top-left-radius: 22px;
@@ -1135,6 +1131,60 @@
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
+    /* Refined handmade-shop storefront */
+    :root {
+      --bg-outer: #F5F1E9;
+      --bg-surface: #FBF9F5;
+      --bg-card: #FFFFFF;
+      --bg-soft: #EEE8DC;
+      --border: #E4DDD1;
+      --primary: #594638;
+      --primary-hover: #44362B;
+      --accent: #68765B;
+      --accent-soft: #EEF1E9;
+      --text-main: #2E2923;
+      --text-muted: #71685E;
+      --shadow-sm: 0 2px 8px rgba(46, 41, 35, 0.04);
+      --shadow-md: 0 8px 24px rgba(46, 41, 35, 0.08);
+      --radius-lg: 14px;
+      --radius-md: 10px;
+    }
+
+    body { background: var(--bg-outer); }
+    .app-shell { border-inline: 1px solid rgba(89, 70, 56, 0.06); }
+    .header { padding: 14px 22px; }
+    .brand-logo { border: 0; }
+    .brand-title { font-size: 18px; }
+    .mode-tabs { padding: 0 22px; gap: 8px; }
+    .mode-tab { padding: 13px 10px; }
+    .catalog-wrap { padding: 22px 26px 84px; }
+    .promo-banner { border: 0; border-radius: 8px; background: #F0EBDD; color: var(--text-main); }
+    .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .product-card { border-color: rgba(89, 70, 56, 0.10); box-shadow: none; padding: 16px; gap: 10px; }
+    .product-card:hover { box-shadow: var(--shadow-sm); border-color: #D6CBBB; }
+    .prod-title { font-size: 17px; }
+    .prod-img { border-radius: 8px; }
+    .prod-thumb { border-radius: 7px; }
+    .btn-order { border-radius: 9px; padding: 9px 13px; }
+    .mix-card { border-width: 1px; box-shadow: none; }
+    .chat-messages { padding: 22px; }
+    .floating-cat-btn { box-shadow: 0 4px 12px rgba(46, 41, 35, 0.16); }
+
+    @media (min-width: 900px) {
+      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .prod-gallery { flex-direction: column; }
+      .prod-thumbs { order: 2; width: 100%; flex-direction: row; }
+      .prod-thumb { width: 54px; height: 54px; }
+    }
+
+    @media (max-width: 680px) {
+      .app-shell { max-width: 560px; }
+      .catalog-wrap { padding: 16px 16px 84px; }
+      .product-grid { grid-template-columns: 1fr; gap: 12px; }
+      .mode-tabs { padding: 0; gap: 0; }
+      .header { padding: 12px 14px; }
+    }
+
     @media (max-width: 400px) {
       .brand-title { font-size: 15px; }
       .brand-sub { font-size: 10.5px; }
@@ -1153,6 +1203,38 @@
     @keyframes slideUp {
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
+    }
+
+    /* Storefront shares the admin's quiet, warm minimal design language */
+    body { -webkit-font-smoothing:antialiased; }
+    .header {
+      background:rgba(251,249,245,.94);
+      border-bottom-color:rgba(89,70,56,.09);
+      box-shadow:0 2px 10px rgba(46,41,35,.035);
+      -webkit-backdrop-filter:blur(12px);
+      backdrop-filter:blur(12px);
+    }
+    .mode-tabs { background:#FBF9F5; }
+    .mode-tab { transition:color .18s ease, background .18s ease, border-color .18s ease; }
+    .mode-tab.active { background:#F5F1E9; }
+    .product-card { background:#fff; border-color:#E8E3DA; border-radius:14px; box-shadow:none; transition:border-color .18s ease, box-shadow .18s ease, transform .26s cubic-bezier(.2,.9,.25,1); }
+    .product-card:hover { border-color:#D8CFC1; box-shadow:0 3px 12px rgba(46,41,35,.05); }
+    .product-card:active { transform:scale(.995); }
+    .btn-order, .cart-trigger, .new-chat-btn, .send-btn, .chip, .cat-pill, .floating-cat-btn {
+      transition:transform .28s cubic-bezier(.2,.9,.25,1), background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .btn-order { background:var(--primary); border-radius:10px; }
+    .btn-order.secondary { background:#F7F5F0; border-color:var(--border); }
+    .new-chat-btn { background:#F7F5F0; border-color:var(--border); }
+    .cart-trigger { box-shadow:0 2px 6px rgba(46,41,35,.1); }
+    .cart-trigger:active, .new-chat-btn:active, .send-btn:active, .btn-order:active, .chip:active, .cat-pill:active { transform:scale(.96); transition-duration:.12s; }
+    .product-card .prod-img { background:#F3F0EA; }
+    @media (max-width:680px) {
+      .header { background:rgba(251,249,245,.96); }
+      .floating-cat-wrap { right:16px; bottom:max(16px, env(safe-area-inset-bottom)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; }
     }
   </style>
 </head>
@@ -1181,12 +1263,12 @@
 
     <!-- Mode Switcher -->
     <nav class="mode-tabs" role="tablist" aria-label="Chế độ xem">
-      <button type="button" role="tab" aria-selected="true" class="mode-tab active" id="tabChatBtn" onclick="switchView('chat')">Tư vấn & Đặt nhanh</button>
-      <button type="button" role="tab" aria-selected="false" class="mode-tab" id="tabCatalogBtn" onclick="switchView('catalog')">Danh mục</button>
+      <button type="button" role="tab" aria-selected="false" class="mode-tab" id="tabChatBtn" onclick="switchView('chat')">Tư vấn & Đặt nhanh</button>
+      <button type="button" role="tab" aria-selected="true" class="mode-tab active" id="tabCatalogBtn" onclick="switchView('catalog')">Danh mục</button>
     </nav>
 
     <!-- View 1: Chat -->
-    <section class="view-panel active" id="viewChat">
+    <section class="view-panel" id="viewChat">
       <div class="ai-notice-bar">
         <span></span>
         <span>Trợ lý AI phản hồi dựa trên dữ liệu của tiệm nên có thể mất vài giây và đôi khi chưa thật sự chuẩn xác - cần tư vấn kỹ hơn bạn cứ nhắn trực tiếp cho tiệm nhé!</span>
@@ -1198,7 +1280,7 @@
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
           <span>Chat mới</span>
         </button>
-        <button class="chip" onclick="sendQuickPrompt('Hôm nay tiệm còn những loại giấy nào?')">Tiệm còn giấy gì?</button>
+        <button class="chip" onclick="sendQuickPrompt('Hôm nay tiệm còn những loại giấy nào?')">Còn giấy gì?</button>
         <button class="chip" onclick="openLookupOrderModal()">Kiểm tra đơn hàng</button>
         <button class="chip" onclick="sendQuickPrompt('Phí ship và chính sách freeship thế nào?')">Phí ship & Freeship</button>
         <button class="chip" onclick="sendQuickPrompt('Giấy viết được bút mực không?')">Viết bút mực được không?</button>
@@ -1220,7 +1302,7 @@
     </section>
 
     <!-- View 2: Catalog -->
-    <section class="view-panel" id="viewCatalog">
+    <section class="view-panel active" id="viewCatalog">
       <div class="catalog-wrap">
         <div class="promo-banner" id="promoBanner">
           <span></span>
@@ -1234,12 +1316,12 @@
       </div>
     </section>
 
-    <!-- Nút nổi mở nhanh danh mục giấy (chỉ hiện chữ) ở góc trái -->
+    <!-- Nút nổi danh mục, cùng vị trí và ngôn ngữ thiết kế với dock điều hướng admin -->
     <div class="floating-cat-wrap" id="floatingCatWrap">
-      <div class="floating-cat-menu" id="floatingCatMenu"></div>
-      <button type="button" class="floating-cat-btn" id="floatingCatBtn" onclick="toggleFloatingCatMenu(event)">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        <span>Danh mục</span>
+      <div class="floating-cat-menu" id="floatingCatMenu" aria-hidden="true"></div>
+      <button type="button" class="floating-cat-btn" id="floatingCatBtn" onclick="toggleFloatingCatMenu(event)" aria-label="Mở danh mục sản phẩm" aria-expanded="false" aria-controls="floatingCatMenu" title="Danh mục">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+        <span class="sr-only">Danh mục</span>
       </button>
     </div>
   </div>
@@ -1803,19 +1885,41 @@
       const floatWrap = document.getElementById("floatingCatWrap");
       const floatMenu = document.getElementById("floatingCatMenu");
       if (floatWrap) floatWrap.classList.toggle("visible", mode === "catalog");
-      if (floatMenu) floatMenu.classList.remove("open");
+      if (floatMenu) {
+        floatMenu.classList.remove("open");
+        floatMenu.setAttribute("aria-hidden", "true");
+      }
+      const floatBtn = document.getElementById("floatingCatBtn");
+      const floatWrapEl = document.getElementById("floatingCatWrap");
+      if (floatBtn) floatBtn.setAttribute("aria-expanded", "false");
+      if (floatWrapEl) floatWrapEl.classList.remove("menu-open");
     }
 
-    // Điều khiển menu danh mục nổi ở góc trái
+    // Điều khiển menu danh mục nổi ở góc phải
     function toggleFloatingCatMenu(e) {
       if (e) e.stopPropagation();
       const menu = document.getElementById("floatingCatMenu");
-      if (menu) menu.classList.toggle("open");
+      const wrap = document.getElementById("floatingCatWrap");
+      const btn = document.getElementById("floatingCatBtn");
+      if (!menu || !wrap || !btn) return;
+      const isOpen = menu.classList.toggle("open");
+      wrap.classList.toggle("menu-open", isOpen);
+      menu.setAttribute("aria-hidden", String(!isOpen));
+      btn.setAttribute("aria-expanded", String(isOpen));
+      btn.setAttribute("aria-label", isOpen ? "Đóng danh mục sản phẩm" : "Mở danh mục sản phẩm");
+    }
+
+    function closeFloatingCategoryMenu() {
+      const menu = document.getElementById("floatingCatMenu");
+      const wrap = document.getElementById("floatingCatWrap");
+      const btn = document.getElementById("floatingCatBtn");
+      if (menu) { menu.classList.remove("open"); menu.setAttribute("aria-hidden", "true"); }
+      if (wrap) wrap.classList.remove("menu-open");
+      if (btn) { btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-label", "Mở danh mục sản phẩm"); }
     }
 
     function selectFloatingCategory(cat, scrollToMix = false) {
-      const menu = document.getElementById("floatingCatMenu");
-      if (menu) menu.classList.remove("open");
+      closeFloatingCategoryMenu();
       filterCategory(cat);
       const panel = document.getElementById("viewCatalog");
       if (scrollToMix) {
@@ -1830,7 +1934,7 @@
       const wrap = document.getElementById("floatingCatWrap");
       const menu = document.getElementById("floatingCatMenu");
       if (menu && wrap && !wrap.contains(e.target)) {
-        menu.classList.remove("open");
+        closeFloatingCategoryMenu();
       }
     });
 
@@ -2553,7 +2657,7 @@
 
       const upsellHtml = smallUpsells.length ? `
         <div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--border);">
-          <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:5px;">Gợi ý món hàng để đủ Freeship:</div>
+          <div style="font-size:11.5px; color:var(--text-muted); margin-bottom:5px;">Gợi ý món nhỏ dưới 40K để đủ Freeship:</div>
           <div style="display:flex; flex-direction:column; gap:5px;">
             ${smallUpsells.map(u => `
               <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; background:var(--bg-surface); padding:6px 8px; border-radius:8px; border:1px solid var(--border);">
