@@ -1554,6 +1554,15 @@
       }
     })();
 
+    function parseConfigBoolean(value, defaultValue = false) {
+      if (typeof value === "boolean") return value;
+      if (typeof value === "number") return value !== 0;
+      const normalized = String(value ?? "").trim().toUpperCase();
+      if (["TRUE", "1", "YES", "ON"].includes(normalized)) return true;
+      if (["FALSE", "0", "NO", "OFF", ""].includes(normalized)) return false;
+      return defaultValue;
+    }
+
     let products = [];
     let cart = [];
     let chatHistory = [];
@@ -1618,19 +1627,23 @@
       return `${hh}:${mi} ${dd}/${mm}`;
     }
 
-    // Công thức làm tròn chuẩn dùng chung Frontend & Backend (làm tròn về hàng nghìn)
+    // Công thức chuẩn dùng chung Frontend & Backend: làm tròn đến đồng.
     function calcRoundedPercentDiscount(subtotal, percent) {
       const sub = Math.max(0, Number(subtotal || 0));
       const pct = Math.max(0, Math.min(100, Number(percent || 0)));
       if (sub <= 0 || pct <= 0) return 0;
-      return Math.min(sub, Math.round((sub * pct) / 100000) * 1000);
+      return Math.min(sub, Math.round((sub * pct) / 100));
     }
 
     function calcVoucherDiscountAmount(baseAmount, voucher) {
       const base = Math.max(0, Number(baseAmount || 0));
       if (!voucher || base <= 0) return 0;
       if (voucher.discountType === "percent") {
-        return calcRoundedPercentDiscount(base, Number(voucher.discountValue || 0));
+        let discount = calcRoundedPercentDiscount(base, Number(voucher.discountValue || 0));
+        if (Number(voucher.maxDiscount || 0) > 0) {
+          discount = Math.min(discount, Number(voucher.maxDiscount));
+        }
+        return discount;
       }
       return Math.min(base, Math.max(0, Number(voucher.discountValue || 0)));
     }
@@ -2258,18 +2271,9 @@
     // -------------------------------------------------------------------------
     // 1. TẢI DANH MỤC TỪ GOOGLE SHEETS
     // -------------------------------------------------------------------------
-    function parseSheetBool(val, fallback = false) {
-      if (val === undefined || val === null || val === "") return fallback;
-      if (typeof val === "boolean") return val;
-      const s = String(val).trim().toUpperCase();
-      if (s === "TRUE" || s === "1") return true;
-      if (s === "FALSE" || s === "0") return false;
-      return fallback;
-    }
-
     async function loadProducts() {
       try {
-        const res = await fetch(SCRIPT_URL, { cache: "no-store" });
+        const res = await fetch(SCRIPT_URL);
         const data = await res.json();
         if (data.ok && Array.isArray(data.products)) {
           products = data.products;
@@ -2280,22 +2284,31 @@
           if (srvNow > 0) {
             clockOffset = srvNow - Date.now();
           }
-
-          const pCfg = data.promoConfig || data;
-          promoConfig = {
-            enabled: parseSheetBool(pCfg.enabled ?? pCfg.PROMO_ENABLED, false),
-            label: String(pCfg.label ?? pCfg.PROMO_LABEL ?? ""),
-            percent: Math.max(0, Math.min(100, Number(pCfg.percent ?? pCfg.PROMO_PERCENT ?? 10))),
-            startAt: Number(pCfg.startAt ?? pCfg.PROMO_START_AT ?? 0) || 0,
-            endAt: Number(pCfg.endAt ?? pCfg.PROMO_END_AT ?? 0) || 0,
-            mode: String(pCfg.mode ?? pCfg.PROMO_VOUCHER_MODE ?? "BEST_ONE") === "STACKABLE" ? "STACKABLE" : "BEST_ONE"
-          };
-
-          const vCfg = data.voucherConfig || data;
-          voucherConfig = {
-            voucherInputEnabled: parseSheetBool(vCfg.voucherInputEnabled ?? vCfg.VOUCHER_INPUT_ENABLED, true)
-          };
-
+          if (data.promoConfig) {
+            const pCfg = data.promoConfig;
+            promoConfig = {
+              enabled: parseConfigBoolean(
+                pCfg.enabled !== undefined ? pCfg.enabled : pCfg.PROMO_ENABLED,
+                false
+              ),
+              label: String(pCfg.label ?? pCfg.PROMO_LABEL ?? ""),
+              percent: Math.max(0, Math.min(100, Number(pCfg.percent ?? pCfg.PROMO_PERCENT ?? 10))),
+              startAt: Number(pCfg.startAt ?? pCfg.PROMO_START_AT ?? 0),
+              endAt: Number(pCfg.endAt ?? pCfg.PROMO_END_AT ?? 0),
+              mode: String(pCfg.mode ?? pCfg.PROMO_VOUCHER_MODE ?? "BEST_ONE") === "STACKABLE" ? "STACKABLE" : "BEST_ONE"
+            };
+          }
+          if (data.voucherConfig) {
+            const vCfg = data.voucherConfig;
+            voucherConfig = {
+              voucherInputEnabled: parseConfigBoolean(
+                vCfg.voucherInputEnabled !== undefined ? vCfg.voucherInputEnabled : vCfg.VOUCHER_INPUT_ENABLED,
+                true
+              )
+            };
+          } else if (data.VOUCHER_INPUT_ENABLED !== undefined) {
+            voucherConfig.voucherInputEnabled = parseConfigBoolean(data.VOUCHER_INPUT_ENABLED, true);
+          }
           if (data.shipConfig) {
             shipConfig = { ...shipConfig, ...data.shipConfig };
             saveShipConfigCache();
