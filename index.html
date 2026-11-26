@@ -2911,6 +2911,12 @@
       }
 
       const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const phone = (document.getElementById("custPhone")?.value || "").trim();
+      if (phone.replace(/\D/g, "").length < 9) {
+        showToast("Bạn nhập số điện thoại nhận hàng trước khi áp dụng mã nhé");
+        document.getElementById("custPhone")?.focus();
+        return;
+      }
       if (btn) {
         btn.disabled = true;
         btn.textContent = "Đang kiểm tra...";
@@ -2922,7 +2928,9 @@
           body: JSON.stringify({
             action: "validate_voucher",
             code,
-            subtotal
+            subtotal,
+            phone,
+            sessionId: chatSessionId
           })
         });
         const data = await res.json();
