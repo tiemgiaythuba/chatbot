@@ -992,6 +992,14 @@
     .feedback-gallery-count { position:absolute; right:9px; bottom:8px; padding:3px 8px; border-radius:999px; background:rgba(46,41,35,.68); color:#fff; font-size:10.5px; font-weight:600; pointer-events:none; }
     .feedback-card-quote { min-width:0; font-size:13.5px; line-height:1.55; color:var(--text-main); white-space:pre-line; overflow-wrap:anywhere; }
     .feedback-card-meta { margin-top:8px; display:flex; flex-wrap:wrap; gap:5px 9px; font-size:11.5px; color:var(--text-muted); }
+    .feedback-like-btn { display:inline-flex; align-items:center; gap:6px; margin-top:10px; min-height:34px; padding:6px 11px; border:1px solid var(--border); border-radius:999px; background:var(--bg-soft); color:var(--text-muted); font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; transition:background .18s ease, color .18s ease, transform .15s ease; }
+    .feedback-like-btn:hover:not(:disabled) { background:#FBECE9; color:#B84A39; }
+    .feedback-like-btn:active:not(:disabled) { transform:scale(.96); }
+    .feedback-like-btn.liked { background:#FBECE9; border-color:#ECCAC4; color:#B84A39; }
+    .feedback-like-btn:disabled { opacity:.6; cursor:wait; }
+    .feedback-like-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:10px; }
+    .feedback-like-row .feedback-like-btn { margin-top:0; }
+    .feedback-like-total { display:inline-flex; align-items:center; min-height:30px; padding:5px 10px; border-radius:999px; background:var(--bg-soft); color:var(--text-muted); font-size:11.5px; font-weight:600; font-variant-numeric:tabular-nums; }
     .feedback-card-badge { display:inline-flex; align-items:center; padding:3px 8px; border-radius:999px; background:var(--accent-soft); color:#2E5A36; font-size:11px; font-weight:600; }
     .feedback-product-list { display:flex; flex-direction:column; gap:7px; margin-top:10px; }
     .feedback-product-row { display:grid; grid-template-columns:minmax(0,1fr) 104px; align-items:stretch; gap:8px; min-width:0; }
@@ -1546,7 +1554,7 @@
         </div>
         <div class="cat-filter" id="catFilter"></div>
         <div class="catalog-tools">
-          <label class="catalog-search-wrap" for="productSearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="productSearch" class="catalog-search" type="search" placeholder="Tìm tên, kích thước, màu, chủ đề, công dụng..." autocomplete="off" /></label>
+          <label class="catalog-search-wrap" for="productSearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="productSearch" class="catalog-search" type="search" placeholder="Tìm tên, kích thước, màu,..." autocomplete="off" /></label>
           <div class="catalog-sort-wrap catalog-sort" id="catalogSortWrap">
             <button type="button" class="catalog-sort-trigger" id="catalogSortTrigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="catalogSortMenu">
               <span id="catalogSortLabel">Sắp xếp: Mặc định</span>
@@ -2506,6 +2514,31 @@
       if (!product) return;
       addToCart(product.id, Number(product.packPrice) > 0 && Number(product.packSize) > 1 ? "pack" : "unit", 1);
     }
+    const FEEDBACK_LIKER_KEY = "tiemgiay_feedback_liker_v1";
+    const FEEDBACK_LIKED_IDS_KEY = "tiemgiay_feedback_liked_ids_v1";
+    function getLikedFeedbackIds() { try { const ids = JSON.parse(localStorage.getItem(FEEDBACK_LIKED_IDS_KEY) || "[]"); return new Set(Array.isArray(ids) ? ids.map(String) : []); } catch (e) { return new Set(); } }
+    function getFeedbackLikerToken() {
+      try {
+        let token = localStorage.getItem(FEEDBACK_LIKER_KEY);
+        if (!token) { token = "L" + (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); localStorage.setItem(FEEDBACK_LIKER_KEY, token); }
+        return token;
+      } catch (e) { return "L" + Date.now().toString(36) + Math.random().toString(36).slice(2); }
+    }
+    async function likeFeedback(feedbackId, button) {
+      if (!feedbackId || !button || button.disabled) return;
+      button.disabled = true;
+      button.textContent = "Đang ghi nhận...";
+      try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "like_feedback", feedbackId, likerToken: getFeedbackLikerToken() }) });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || "Không ghi nhận được lượt thích");
+        const item = publishedFeedbacks.find(x => String(x.id) === String(feedbackId));
+        if (item) { item.likes = Number(data.likes || item.likes || 0); item.likedByMe = Boolean(data.liked); }
+        try { const ids = getLikedFeedbackIds(); ids.add(String(feedbackId)); localStorage.setItem(FEEDBACK_LIKED_IDS_KEY, JSON.stringify([...ids])); } catch (e) {}
+        renderPublishedFeedbacks();
+      } catch (err) { button.disabled = false; button.textContent = "♡ Thích"; showToast("Chưa thể thả tim: " + (err.message || "Lỗi kết nối")); }
+    }
+
     function renderPublishedFeedbacks() {
       const list = document.getElementById("feedbackList");
       if (!list) return;
@@ -2542,7 +2575,10 @@
           const extraProductRows = linkedProducts.filter(product => !usedProductIds.has(String(product.id))).map(linkedProductRow);
           const productRows = [...paperRows, ...extraProductRows].join("");
           const productLinks = productRows ? `<div class="feedback-product-list">${productRows}</div>` : "";
-          return `<article class="feedback-card">${gallery}<div class="feedback-card-quote">“${escapeHtml(item.content || "") }”</div><div class="feedback-card-meta"><strong>${escapeHtml(publicCustomer)}</strong>${date}${verified}</div>${productLinks}</article>`;
+          const liked = Boolean(item.likedByMe) || getLikedFeedbackIds().has(String(item.id || ""));
+          const likeCount = Math.max(0, Number(item.likes || 0));
+          const likeButton = `<div class="feedback-like-row"><button type="button" class="feedback-like-btn ${liked ? "liked" : ""}" ${liked ? "disabled" : ""} aria-label="Thả tim feedback" aria-pressed="${liked}" onclick="likeFeedback('${escapeAttrJs(item.id || "")}', this)">${liked ? "♥ Đã thích" : "♡ Thích"}</button><span class="feedback-like-total" aria-label="Tổng ${likeCount} lượt thích">♥ ${likeCount} lượt thích</span></div>`;
+          return `<article class="feedback-card">${gallery}<div class="feedback-card-quote">“${escapeHtml(item.content || "") }”</div><div class="feedback-card-meta"><strong>${escapeHtml(publicCustomer)}</strong>${date}${verified}</div>${likeButton}${productLinks}</article>`;
         }).join("");
     }
 
