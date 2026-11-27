@@ -210,16 +210,78 @@
     .catalog-search-wrap svg { position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; }
     .catalog-search { width:100%; min-height:40px; border:1px solid var(--border); border-radius:12px; background:var(--bg-card); color:var(--text-main); padding:9px 11px 9px 35px; font:inherit; font-size:13px; outline:none; }
     .catalog-search:focus { border-color:var(--primary); }
-    .catalog-sort { min-width:145px; min-height:40px; }
-    .catalog-sort-wrap { display:flex; align-items:center; gap:7px; min-width:0; color:var(--text-muted); font-size:12px; font-weight:600; white-space:nowrap; }
-    .catalog-select { min-height:40px; min-width:155px; border:1px solid var(--border); border-radius:10px; background:var(--bg-card); color:var(--text-main); padding:8px 30px 8px 10px; font:inherit; font-size:13px; outline:none; cursor:pointer; }
-    .catalog-select:focus { border-color:var(--primary); box-shadow:0 0 0 2px rgba(92,64,51,.1); }
+    .catalog-sort { min-width:180px; }
+    .catalog-sort-wrap { position:relative; min-width:0; }
+    .catalog-sort-trigger {
+      width:100%;
+      min-height:40px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:var(--bg-card);
+      color:var(--text-main);
+      padding:8px 11px;
+      font:inherit;
+      font-size:13px;
+      font-weight:600;
+      outline:none;
+      cursor:pointer;
+      transition:border-color .15s, box-shadow .15s, background .15s;
+    }
+    .catalog-sort-trigger:hover,
+    .catalog-sort-wrap.open .catalog-sort-trigger { border-color:var(--primary); box-shadow:0 0 0 2px rgba(92,64,51,.1); }
+    .catalog-sort-trigger svg { width:16px; height:16px; flex-shrink:0; transition:transform .18s ease; }
+    .catalog-sort-wrap.open .catalog-sort-trigger svg { transform:rotate(180deg); }
+    .catalog-sort-menu {
+      position:absolute;
+      top:calc(100% + 7px);
+      right:0;
+      z-index:30;
+      width:100%;
+      min-width:190px;
+      padding:6px;
+      border:1px solid rgba(89,70,56,.12);
+      border-radius:14px;
+      background:var(--bg-card);
+      box-shadow:0 12px 28px rgba(46,41,35,.14);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transform:translateY(-5px) scale(.98);
+      transform-origin:top right;
+      transition:opacity .15s ease, transform .15s ease, visibility .15s;
+    }
+    .catalog-sort-wrap.open .catalog-sort-menu { opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0) scale(1); }
+    .catalog-sort-option {
+      width:100%;
+      min-height:38px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border:0;
+      border-radius:10px;
+      background:transparent;
+      color:var(--text-main);
+      padding:8px 10px;
+      text-align:left;
+      font:inherit;
+      font-size:13px;
+      cursor:pointer;
+    }
+    .catalog-sort-option:hover { background:var(--bg-soft); }
+    .catalog-sort-option.selected { background:#F4F0E8; font-weight:600; }
+    .catalog-sort-option svg { width:16px; height:16px; color:var(--primary); flex-shrink:0; }
+    .catalog-sort-option:not(.selected) svg { visibility:hidden; }
     .catalog-filter-row { display:flex; align-items:center; gap:7px; flex-wrap:wrap; margin-bottom:10px; }
     .catalog-stock-toggle { display:inline-flex; align-items:center; gap:6px; min-height:34px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:var(--bg-card); color:var(--text-muted); font-size:12px; cursor:pointer; }
     .catalog-stock-toggle.active { background:var(--accent-soft); border-color:#B7D3BA; color:#2E5A36; font-weight:600; }
     .catalog-stock-toggle input { accent-color:var(--accent); }
     .active-filter-chip { display:inline-flex; align-items:center; gap:5px; max-width:100%; padding:6px 9px; border-radius:999px; background:var(--primary); color:#fff; font-size:11.5px; }
-    .clear-filter-btn { border:0; background:transparent; color:inherit; font:inherit; cursor:pointer; padding:0 2px; }
+    .clear-filter-btn { border:0; background:transparent; color:inherit; font:inherit; font-size:11.5px; cursor:pointer; padding:0 2px; }
     .pull-refresh-indicator { position:fixed; z-index:60; top:72px; left:50%; width:38px; height:38px; margin-left:-19px; border-radius:50%; background:var(--primary); color:#fff; display:grid; place-items:center; opacity:0; transform:translateY(-60px) rotate(0deg); pointer-events:none; transition:opacity .12s, transform .12s; box-shadow:var(--shadow-md); }
     .pull-refresh-indicator.ready { background:var(--accent); }
     .pull-refresh-indicator.refreshing { opacity:1; transform:translateY(8px) rotate(180deg); }
@@ -814,6 +876,57 @@
       color: var(--primary);
     }
 
+    .buy-option-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .catalog-qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 3px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--bg-card);
+    }
+
+    .catalog-qty-btn {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      border-radius: 7px;
+      background: var(--bg-soft);
+      color: var(--primary);
+      font: inherit;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .catalog-qty-btn:hover { background: #E8DFD1; }
+    .catalog-qty-value {
+      min-width: 20px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .catalog-stock-note {
+      margin-top: 4px;
+      font-size: 11.5px;
+      line-height: 1.4;
+      color: var(--warn-text);
+    }
+
+    .catalog-stock-note.ready {
+      color: #2E5A36;
+    }
+
     .btn-order {
       background: var(--primary);
       color: #fff;
@@ -1401,9 +1514,17 @@
         <div class="cat-filter" id="catFilter"></div>
         <div class="catalog-tools">
           <label class="catalog-search-wrap" for="productSearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="productSearch" class="catalog-search" type="search" placeholder="Tìm tên, kích thước, màu, chủ đề, công dụng..." autocomplete="off" /></label>
-          <label class="catalog-sort-wrap" for="productSort">Sắp xếp:
-            <select id="productSort" class="catalog-select catalog-sort" aria-label="Sắp xếp sản phẩm"><option value="default">Mặc định</option><option value="newest">Mới về</option><option value="priceAsc">Giá thấp đến cao</option></select>
-          </label>
+          <div class="catalog-sort-wrap catalog-sort" id="catalogSortWrap">
+            <button type="button" class="catalog-sort-trigger" id="catalogSortTrigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="catalogSortMenu">
+              <span id="catalogSortLabel">Sắp xếp: Mặc định</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+            <div class="catalog-sort-menu" id="catalogSortMenu" role="listbox" aria-label="Sắp xếp sản phẩm">
+              <button type="button" class="catalog-sort-option selected" data-sort-value="default" role="option" aria-selected="true"><span>Mặc định</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg></button>
+              <button type="button" class="catalog-sort-option" data-sort-value="newest" role="option" aria-selected="false"><span>Mới về</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg></button>
+              <button type="button" class="catalog-sort-option" data-sort-value="priceAsc" role="option" aria-selected="false"><span>Giá thấp đến cao</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg></button>
+            </div>
+          </div>
         </div>
         <div class="catalog-filter-row" id="activeProductFilters">
           <label class="catalog-stock-toggle" id="stockOnlyLabel"><input type="checkbox" id="stockOnly" /> Còn hàng</label>
@@ -1583,9 +1704,9 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbBP4TCXCwWPNOlCVhe2ke8FcG2DrH_FmVunFesAptU4eEVPuNJizwQnbBlAGycXMf/exec";
 
     const SOCIAL_LINKS = {
-      facebook: "https://www.facebook.com/share/1G8fZ6f648/?mibextid=wwXIfr",
-      instagram: "https://www.instagram.com/tiemgiay.thuba?igsh=dWphc2dxbWxkMjRs",
-      threads: "https://www.threads.com/@tiemgiay.thuba?igshid=NTc4MTIwNjQ2YQ=="
+      facebook: "https://www.facebook.com/tiemgiaythuba/",
+      instagram: "https://www.instagram.com/tiemgiaythuba/",
+      threads: "https://www.threads.com/@tiemgiaythuba"
     };
 
     const SESSION_STORAGE_KEY = "tiemgiay_session_id";
@@ -1625,6 +1746,7 @@
     let stockOnly = false;
     let productSort = "default";
     let mixDraft = {};
+    let catalogQty = {};
     let bankConfig = { bankId: "", accountNo: "", accountName: "" };
     let shipConfig = {
       customerShipFee: 15000,
@@ -2475,6 +2597,38 @@
       }
     }
 
+    function updateCatalogSortUi() {
+      const labels = {
+        default: "Mặc định",
+        newest: "Mới về",
+        priceAsc: "Giá thấp đến cao"
+      };
+      const label = document.getElementById("catalogSortLabel");
+      if (label) label.textContent = `Sắp xếp: ${labels[productSort] || labels.default}`;
+      document.querySelectorAll(".catalog-sort-option").forEach(option => {
+        const selected = option.dataset.sortValue === productSort;
+        option.classList.toggle("selected", selected);
+        option.setAttribute("aria-selected", String(selected));
+      });
+    }
+
+    function toggleCatalogSortMenu(force) {
+      const wrap = document.getElementById("catalogSortWrap");
+      const trigger = document.getElementById("catalogSortTrigger");
+      if (!wrap || !trigger) return;
+      const open = typeof force === "boolean" ? force : !wrap.classList.contains("open");
+      wrap.classList.toggle("open", open);
+      trigger.setAttribute("aria-expanded", String(open));
+    }
+
+    function selectCatalogSort(value) {
+      if (!["default", "newest", "priceAsc"].includes(value)) return;
+      productSort = value;
+      updateCatalogSortUi();
+      toggleCatalogSortMenu(false);
+      renderProducts();
+    }
+
     function clearProductFilters() {
       activeCategory = "Tất cả";
       productSearch = "";
@@ -2482,24 +2636,54 @@
       productSort = "default";
       const search = document.getElementById("productSearch");
       const stock = document.getElementById("stockOnly");
-      const sort = document.getElementById("productSort");
       if (search) search.value = "";
       if (stock) stock.checked = false;
-      if (sort) sort.value = "default";
+      updateCatalogSortUi();
+      toggleCatalogSortMenu(false);
       renderCategories();
       renderMixPackBuilder();
       renderProducts();
     }
 
     // -------------------------------------------------------------------------
-    // GÓI MIX TÙY CHỌN 10 TỜ GIẤY A5 (65.000đ — CHỈ CHỌN MẪU CÒN SẴN STOCK > 0)
+    // GÓI MIX TÙY CHỌN 10 TỜ GIẤY A5 (65.000đ — CHỈ CHỌN GIẤY A5 CÒN SẴN)
     // -------------------------------------------------------------------------
     function getMixableA5Products() {
       return products.filter(p => {
-        const isPaper = p.productType !== "item";
-        const isA5 = String(p.category || "").toLowerCase().includes("a5") || String(p.name || "").toLowerCase().includes("a5");
+        const searchable = normalizeSearchText([
+          p.category,
+          p.productType,
+          p.name,
+          p.size,
+          p.specs
+        ].join(" "));
+        const isEnvelope = /bao thu|phong bi|envelope/.test(searchable);
+        const isPaper = !isEnvelope && /giay|paper/.test(searchable);
+        const isA5 = /\ba5\b/.test(searchable);
         return isPaper && isA5 && Number(p.stock || 0) > 0;
       });
+    }
+
+    function getCatalogQtyKey(prodId, buyMode) {
+      return `${prodId}__${buyMode}`;
+    }
+
+    function getCatalogQty(prodId, buyMode) {
+      const value = Number(catalogQty[getCatalogQtyKey(prodId, buyMode)] || 1);
+      return Math.max(1, Math.min(99, value));
+    }
+
+    function changeCatalogQty(prodId, buyMode, delta) {
+      const key = getCatalogQtyKey(prodId, buyMode);
+      catalogQty[key] = Math.max(1, Math.min(99, getCatalogQty(prodId, buyMode) + Number(delta || 0)));
+      renderProducts();
+    }
+
+    function addSelectedToCart(prodId, buyMode) {
+      const qty = getCatalogQty(prodId, buyMode);
+      addToCart(prodId, buyMode, qty);
+      catalogQty[getCatalogQtyKey(prodId, buyMode)] = 1;
+      renderProducts();
     }
 
     function renderMixPackBuilder() {
@@ -2697,7 +2881,7 @@
         : products.filter(p => p.category === activeCategory);
       const query = normalizeSearchText(productSearch);
       if (query) list = list.filter(p => productSearchText(p).includes(query));
-      if (stockOnly) list = list.filter(p => Number(p.stock || 0) > 0);
+      if (stockOnly) list = list.filter(p => Math.max(0, Number(p.stock || 0) - getProductReservedReadyUnits(p.id)) > 0);
       if (productSort === "newest") list = [...list].reverse();
       if (productSort === "priceAsc") list = [...list].sort((a, b) => getProductDisplayPrice(a) - getProductDisplayPrice(b));
       renderProductFilterSummary();
@@ -2713,22 +2897,30 @@
         const hasPack = !isItem && Number(p.packPrice) > 0 && Number(p.packSize) > 1;
         const hasUnit = Number(p.unitPrice) > 0;
         const curStock = Math.max(0, Number(p.stock || 0));
+        const reservedInCart = getProductReservedReadyUnits(p.id);
+        const readyStock = Math.max(0, curStock - reservedInCart);
         const unsizedCount = Math.max(0, Number(p.unsizedStock || 0));
-        const packsAvail = hasPack ? Math.floor(curStock / p.packSize) : 0;
-        const isOutOfReadyStock = curStock <= 0;
+        const packsAvail = hasPack ? Math.floor(readyStock / p.packSize) : 0;
+        const isOutOfReadyStock = readyStock <= 0;
 
         let badgeClass = "stock-ok";
         let badgeText = isItem
-          ? `Còn ${curStock} ${escapeHtml(p.baseUnit)}`
+          ? `Còn ${readyStock} ${escapeHtml(p.baseUnit)}`
           : (hasPack
-            ? `Sẵn ${curStock} ${escapeHtml(p.baseUnit)} (${packsAvail} ${escapeHtml(p.packUnit || "gói")})`
-            : `Còn ${curStock} ${escapeHtml(p.baseUnit)}`);
+            ? `Sẵn ${readyStock} ${escapeHtml(p.baseUnit)} (${packsAvail} ${escapeHtml(p.packUnit || "gói")})`
+            : `Còn ${readyStock} ${escapeHtml(p.baseUnit)}`);
 
         if (isOutOfReadyStock) {
           badgeClass = "stock-low";
           badgeText = "Đặt làm mới • Giao sau 2–3 tuần";
-        } else if ((hasPack && packsAvail <= 2) || (!hasPack && curStock <= 5)) {
+        } else if ((hasPack && packsAvail <= 2) || (!hasPack && readyStock <= 5)) {
           badgeClass = "stock-low";
+        }
+
+        if (isOutOfReadyStock) {
+          badgeText = reservedInCart > 0 && curStock > 0
+            ? "Đã giữ hết hàng sẵn • Đặt làm 2–3 tuần"
+            : "Đặt làm mới • Giao sau 2–3 tuần";
         }
 
         const imgs = Array.isArray(p.imageUrls) && p.imageUrls.length
@@ -2760,19 +2952,33 @@
           ? `<div class="unsized-hint-line">Đang có sẵn <strong>${unsizedCount} ${escapeHtml(p.baseUnit)}</strong> đợi gia keo — có thể giao sớm hơn (~1 tuần).</div>`
           : "";
 
+        const reservedNoteHtml = reservedInCart > 0
+          ? `<div class="catalog-stock-note ${readyStock > 0 ? 'ready' : ''}">${readyStock > 0
+            ? `Trong giỏ đã giữ ${reservedInCart} ${escapeHtml(p.baseUnit)}; còn ${readyStock} ${escapeHtml(p.baseUnit)} có thể giao ngay.`
+            : `Trong giỏ đã giữ hết ${curStock} ${escapeHtml(p.baseUnit)} sẵn có; số thêm mới sẽ là đặt làm 2–3 tuần.`}</div>`
+          : "";
+
         let actionsHtml = "";
         if (hasPack) {
-          const packPreorderMode = curStock < Number(p.packSize);
+          const packQty = getCatalogQty(p.id, "pack");
+          const packPreorderMode = readyStock < packQty * Number(p.packSize);
           const packBtnLabel = packPreorderMode
-            ? `+ Thêm ${escapeHtml(p.packUnit || "gói")} (2–3 tuần)`
-            : `+ Thêm ${escapeHtml(p.packUnit || "gói")}`;
+            ? `Thêm ${packQty} ${escapeHtml(p.packUnit || "gói")} — đặt trước`
+            : `Thêm ${packQty} ${escapeHtml(p.packUnit || "gói")}`;
           actionsHtml += `
             <div class="buy-option-row">
               <div>
                 <div class="buy-option-label">Mua theo ${escapeHtml(p.packUnit || "gói")} (${p.packSize} ${escapeHtml(p.baseUnit)})</div>
                 <div class="buy-option-price">${formatVND(p.packPrice)}</div>
               </div>
-              <button class="btn-order" onclick="addToCart('${safeId}', 'pack', 1)">${packBtnLabel}</button>
+              <div class="buy-option-controls">
+                <div class="catalog-qty-stepper" aria-label="Số lượng ${escapeHtml(p.packUnit || "gói")}">
+                  <button type="button" class="catalog-qty-btn" onclick="changeCatalogQty('${safeId}', 'pack', -1)" aria-label="Giảm số lượng">−</button>
+                  <span class="catalog-qty-value">${packQty}</span>
+                  <button type="button" class="catalog-qty-btn" onclick="changeCatalogQty('${safeId}', 'pack', 1)" aria-label="Tăng số lượng">+</button>
+                </div>
+                <button class="btn-order" onclick="addSelectedToCart('${safeId}', 'pack')">${packBtnLabel}</button>
+              </div>
             </div>
           `;
         }
@@ -2780,16 +2986,24 @@
           const unitLabelText = isItem
             ? `Giá bán / 1 ${escapeHtml(p.baseUnit)}`
             : `Mua lẻ từng ${escapeHtml(p.baseUnit)}`;
-          const addBtnText = isOutOfReadyStock
-            ? (isItem ? `+ Thêm vào giỏ (2–3 tuần)` : `+ Thêm lẻ (2–3 tuần)`)
-            : (isItem ? `+ Thêm vào giỏ` : `+ Thêm lẻ`);
+          const unitQty = getCatalogQty(p.id, "unit");
+          const addBtnText = readyStock < unitQty
+            ? `Thêm ${unitQty} ${escapeHtml(p.baseUnit)} — đặt trước`
+            : `Thêm ${unitQty} ${escapeHtml(p.baseUnit)}`;
           actionsHtml += `
             <div class="buy-option-row">
               <div>
                 <div class="buy-option-label">${unitLabelText}</div>
                 <div class="buy-option-price">${formatVND(p.unitPrice)}</div>
               </div>
-              <button class="btn-order ${hasPack ? 'secondary' : ''}" onclick="addToCart('${safeId}', 'unit', 1)">${addBtnText}</button>
+              <div class="buy-option-controls">
+                <div class="catalog-qty-stepper" aria-label="Số lượng ${escapeHtml(p.baseUnit)}">
+                  <button type="button" class="catalog-qty-btn" onclick="changeCatalogQty('${safeId}', 'unit', -1)" aria-label="Giảm số lượng">−</button>
+                  <span class="catalog-qty-value">${unitQty}</span>
+                  <button type="button" class="catalog-qty-btn" onclick="changeCatalogQty('${safeId}', 'unit', 1)" aria-label="Tăng số lượng">+</button>
+                </div>
+                <button class="btn-order ${hasPack ? 'secondary' : ''}" onclick="addSelectedToCart('${safeId}', 'unit')">${addBtnText}</button>
+              </div>
             </div>
           `;
         }
@@ -2803,6 +3017,7 @@
             </div>
             ${formatSpecsHtml(p.specs)}
             ${unsizedNoteHtml}
+            ${reservedNoteHtml}
             <div class="prod-actions">${actionsHtml}</div>
           </div>
         `;
@@ -2940,6 +3155,9 @@
       const otherReservedUnits = getProductReservedReadyUnits(p.id, itemKey);
       const totalNeededUnits = otherReservedUnits + (currentQty + qtyToAdd) * baseUnitsPerQty;
       const curStock = Math.max(0, Number(p.stock || 0));
+      const availableBeforeAdd = Math.max(0, curStock - otherReservedUnits - currentQty * baseUnitsPerQty);
+      const addedReadyUnits = Math.min(availableBeforeAdd, qtyToAdd * baseUnitsPerQty);
+      const addedPreorderUnits = Math.max(0, qtyToAdd * baseUnitsPerQty - addedReadyUnits);
 
       if (existing) {
         existing.qty += qtyToAdd;
@@ -2961,10 +3179,12 @@
       updateCartBadge();
 
       if (totalNeededUnits > curStock) {
-        if (curStock > 0) {
-          showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name} (có sẵn ${curStock} ${p.baseUnit}, phần còn lại đặt làm 2–3 tuần)`);
+        if (addedReadyUnits > 0 && addedPreorderUnits > 0) {
+          showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name} (${addedReadyUnits} ${p.baseUnit} giao ngay, ${addedPreorderUnits} ${p.baseUnit} đặt làm 2–3 tuần)`);
+        } else if (addedReadyUnits > 0) {
+          showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name} (${addedReadyUnits} ${p.baseUnit} giao ngay)`);
         } else {
-          showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name} (Đặt làm thủ công • 2–3 tuần)`);
+          showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name} (toàn bộ đặt làm 2–3 tuần)`);
         }
       } else {
         showToast(`Đã thêm ${qtyToAdd} ${unitLabel} ${p.name}`);
@@ -2999,6 +3219,7 @@
       saveCartToStorage();
       updateCartBadge();
       renderCartDrawer();
+      renderProducts();
     }
 
     function updateCartBadge() {
@@ -4075,10 +4296,21 @@
       updateOrderLookupButton();
       const search = document.getElementById("productSearch");
       const stock = document.getElementById("stockOnly");
-      const sort = document.getElementById("productSort");
       if (search) search.addEventListener("input", () => { productSearch = search.value; renderProducts(); });
       if (stock) stock.addEventListener("change", () => { stockOnly = stock.checked; renderProducts(); });
-      if (sort) sort.addEventListener("change", () => { productSort = sort.value; renderProducts(); });
+      const sortTrigger = document.getElementById("catalogSortTrigger");
+      if (sortTrigger) sortTrigger.addEventListener("click", () => toggleCatalogSortMenu());
+      document.querySelectorAll(".catalog-sort-option").forEach(option => {
+        option.addEventListener("click", () => selectCatalogSort(option.dataset.sortValue));
+      });
+      document.addEventListener("click", event => {
+        const wrap = document.getElementById("catalogSortWrap");
+        if (wrap && !wrap.contains(event.target)) toggleCatalogSortMenu(false);
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") toggleCatalogSortMenu(false);
+      });
+      updateCatalogSortUi();
       loadProducts();
     });
   </script>
