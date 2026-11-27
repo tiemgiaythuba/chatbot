@@ -3824,13 +3824,15 @@
         });
         const data = await res.json();
         typingEl.remove();
-
-        const replyText = data.reply || "Bạn nhắn rõ hơn giúp tiệm nhé!";
+        // Backend trả payload AI trong data; vẫn hỗ trợ dạng phẳng để tương thích
+        // với các phiên bản Web App cũ đang được cache.
+        const chatData = data && data.data && typeof data.data === "object" ? data.data : data;
+        const replyText = chatData.reply || "Bạn nhắn rõ hơn giúp tiệm nhé!";
         chatHistory.push({ role: "model", text: replyText });
         appendBotMessage(replyText, {
-          suggestedItems: data.suggestedItems || [],
-          showContactButtons: Boolean(data.showContactButtons),
-          contactPrefill: text
+          suggestedItems: chatData.suggestedItems || [],
+          showContactButtons: Boolean(chatData.showContactButtons),
+          contactPrefill: chatData.contactPrefill || text
         });
       } catch (err) {
         typingEl.remove();
@@ -3846,6 +3848,44 @@
       }
     }
 
+    // Kéo xuống ở đầu trang trên điện thoại để tải lại dữ liệu mới nhất.
+    // Giỏ hàng, bản nháp thông tin khách và phiên chat đã được lưu localStorage.
+    function initPullToRefresh() {
+      let startY = 0;
+      let pulling = false;
+      let triggered = false;
+      const isExcludedTarget = target => Boolean(target?.closest?.(
+        ".chat-messages, .drawer-backdrop, .modal-backdrop, input, textarea, select, button, a"
+      ));
+      document.addEventListener("touchstart", event => {
+        if (event.touches.length !== 1 || window.scrollY > 0 || isExcludedTarget(event.target)) {
+          pulling = false;
+          return;
+        }
+        startY = event.touches[0].clientY;
+        pulling = true;
+        triggered = false;
+      }, { passive: true });
+      document.addEventListener("touchmove", event => {
+        if (!pulling || event.touches.length !== 1) return;
+        const distance = event.touches[0].clientY - startY;
+        if (distance >= 72 && !triggered) {
+          triggered = true;
+          saveCartToStorage();
+          saveCustomerDraft();
+          showToast("Đang tải lại dữ liệu mới nhất…");
+          setTimeout(() => window.location.reload(), 180);
+        }
+      }, { passive: true });
+      document.addEventListener("touchend", () => {
+        pulling = false;
+        triggered = false;
+      }, { passive: true });
+      document.addEventListener("touchcancel", () => {
+        pulling = false;
+        triggered = false;
+      }, { passive: true });
+    }
     window.addEventListener("DOMContentLoaded", () => {
       loadShipConfigCache();
       updatePromoBanner();
@@ -3853,6 +3893,7 @@
       loadCustomerDraft();
       chatHistory = [{ role: "model", text: WELCOME_MESSAGE }];
       appendBotMessage(WELCOME_MESSAGE);
+      initPullToRefresh();
       loadProducts();
     });
   </script>
