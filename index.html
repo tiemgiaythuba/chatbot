@@ -979,11 +979,30 @@
 
     .feedback-panel { max-height: 88vh; }
     .feedback-list { display:flex; flex-direction:column; gap:12px; }
-    .feedback-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px; box-shadow:var(--shadow-sm); }
-    .feedback-card img { width:100%; max-height:260px; object-fit:cover; border-radius:10px; margin-bottom:9px; }
-    .feedback-card-quote { font-size:13.5px; line-height:1.55; color:var(--text-main); white-space:pre-line; }
+    .feedback-card { min-width:0; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px; box-shadow:var(--shadow-sm); }
+    .feedback-gallery { position:relative; margin:0 0 10px; border-radius:11px; overflow:hidden; background:var(--bg-soft); }
+    .feedback-gallery-track { display:flex; width:100%; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; touch-action:pan-x; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+    .feedback-gallery-slide { flex:0 0 100%; min-width:0; scroll-snap-align:start; }
+    .feedback-gallery-slide img { display:block; width:100%; height:clamp(170px, 42vw, 300px); max-height:300px; object-fit:contain; border-radius:0; margin:0; background:var(--bg-soft); }
+    .feedback-gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.72); border-radius:50%; background:rgba(255,255,255,.88); color:var(--text-main); box-shadow:0 2px 8px rgba(46,41,35,.16); font-family:inherit; font-size:20px; font-weight:600; line-height:1; cursor:pointer; z-index:2; }
+    .feedback-gallery-arrow:hover { background:#fff; color:var(--primary); }
+    .feedback-gallery-arrow:focus-visible, .feedback-product-name:focus-visible, .feedback-cart-btn:focus-visible { outline:2px solid var(--primary); outline-offset:2px; }
+    .feedback-gallery-prev { left:8px; }
+    .feedback-gallery-next { right:8px; }
+    .feedback-gallery-count { position:absolute; right:9px; bottom:8px; padding:3px 8px; border-radius:999px; background:rgba(46,41,35,.68); color:#fff; font-size:10.5px; font-weight:600; pointer-events:none; }
+    .feedback-card-quote { min-width:0; font-size:13.5px; line-height:1.55; color:var(--text-main); white-space:pre-line; overflow-wrap:anywhere; }
     .feedback-card-meta { margin-top:8px; display:flex; flex-wrap:wrap; gap:5px 9px; font-size:11.5px; color:var(--text-muted); }
     .feedback-card-badge { display:inline-flex; align-items:center; padding:3px 8px; border-radius:999px; background:var(--accent-soft); color:#2E5A36; font-size:11px; font-weight:600; }
+    .feedback-product-list { display:flex; flex-direction:column; gap:7px; margin-top:10px; }
+    .feedback-product-row { display:grid; grid-template-columns:minmax(0,1fr) 104px; align-items:stretch; gap:8px; min-width:0; }
+    .feedback-product-name, .feedback-product-name-static { display:flex; align-items:center; min-width:0; min-height:42px; width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:10px; background:var(--bg-soft); color:var(--text-main); font-family:inherit; font-size:12.5px; font-weight:600; line-height:1.35; text-align:left; overflow-wrap:anywhere; }
+    .feedback-product-name { justify-content:flex-start; cursor:pointer; transition:background .16s ease, border-color .16s ease, color .16s ease; }
+    .feedback-product-name:hover { background:var(--accent-soft); border-color:var(--accent); color:var(--primary); }
+    .feedback-cart-btn { display:flex; align-items:center; justify-content:center; width:100%; min-width:0; min-height:42px; padding:7px 8px; border:1px solid var(--primary); border-radius:10px; background:var(--primary); color:#fff; font-family:inherit; font-size:11.5px; font-weight:600; line-height:1.2; text-align:center; white-space:normal; cursor:pointer; transition:background .16s ease, transform .16s ease; }
+    .feedback-cart-btn:hover { background:var(--primary-hover); transform:translateY(-1px); }
+    .feedback-cart-btn:active { transform:translateY(0) scale(.98); }
+    .feedback-cart-placeholder { display:block; min-height:42px; }
+    @media (max-width:380px) { .feedback-product-row { grid-template-columns:minmax(0,1fr) 92px; gap:6px; } .feedback-product-name, .feedback-product-name-static { padding:7px 8px; font-size:11.5px; } .feedback-cart-btn { padding:6px; font-size:10.5px; } }
 
     .drawer-header {
       background: var(--bg-card);
@@ -2433,6 +2452,43 @@
       const legacy = Array.isArray(item.products) ? item.products.map(product => product.productId || product.id).filter(Boolean) : [];
       return [...new Set([...ids, ...legacy].map(String))].map(id => products.find(product => String(product.id) === id)).filter(Boolean);
     }
+    function getFeedbackImageUrls(item) {
+      const listed = Array.isArray(item?.imageUrls) ? item.imageUrls : [];
+      const candidates = (listed.length ? listed : [item?.imageUrl || ""])
+        .map(url => String(url || "").trim())
+        .filter(url => /^https?:\/\//i.test(url));
+      return [...new Set(candidates)].slice(0, 8);
+    }
+    function splitFeedbackPaperNames(value) {
+      const parts = [];
+      let current = "";
+      let depth = 0;
+      for (const char of String(value || "")) {
+        if (char === "(") depth++;
+        if (char === ")") depth = Math.max(0, depth - 1);
+        if (char === "," && depth === 0) {
+          if (current.trim()) parts.push(current.trim());
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+      if (current.trim()) parts.push(current.trim());
+      return parts;
+    }
+    function scrollFeedbackGallery(trackId, direction) {
+      const track = document.getElementById(String(trackId));
+      if (!track) return;
+      track.scrollBy({ left: Number(direction || 1) * track.clientWidth, behavior: "smooth" });
+    }
+    function updateFeedbackGalleryCounter(trackId) {
+      const track = document.getElementById(String(trackId));
+      const counter = document.getElementById(`${trackId}Counter`);
+      if (!track || !counter) return;
+      const total = track.querySelectorAll(".feedback-gallery-slide").length;
+      const current = Math.min(total, Math.max(1, Math.round(track.scrollLeft / Math.max(1, track.clientWidth)) + 1));
+      counter.textContent = `${current} / ${total}`;
+    }
     function openFeedbackProduct(productId) {
       const product = products.find(item => String(item.id) === String(productId));
       if (!product) return;
@@ -2461,15 +2517,32 @@
       list.innerHTML = items
         .slice()
         .sort((a, b) => String(b.publishedAt || b.updatedAt || "").localeCompare(String(a.publishedAt || a.updatedAt || "")))
-        .map(item => {
+        .map((item, itemIndex) => {
           const publicCustomer = getPublicFeedbackCustomer(item);
-          const image = item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="Feedback của ${escapeHtml(publicCustomer)}" loading="lazy" onerror="this.style.display='none'" />` : "";
+          const imageUrls = getFeedbackImageUrls(item);
+          const galleryId = `feedbackGallery${itemIndex}`;
+          const gallery = imageUrls.length ? `<div class="feedback-gallery">
+            <div class="feedback-gallery-track" id="${galleryId}" aria-label="Ảnh feedback của ${escapeHtml(publicCustomer)}" onscroll="updateFeedbackGalleryCounter('${galleryId}')">
+              ${imageUrls.map((url, imageIndex) => `<div class="feedback-gallery-slide"><img src="${escapeHtml(url)}" alt="Ảnh ${imageIndex + 1} của ${escapeHtml(publicCustomer)}" loading="lazy" onerror="this.style.opacity='.25'" /></div>`).join("")}
+            </div>
+            ${imageUrls.length > 1 ? `<button type="button" class="feedback-gallery-arrow feedback-gallery-prev" aria-label="Ảnh trước" onclick="scrollFeedbackGallery('${galleryId}',-1)">‹</button><button type="button" class="feedback-gallery-arrow feedback-gallery-next" aria-label="Ảnh tiếp theo" onclick="scrollFeedbackGallery('${galleryId}',1)">›</button><span class="feedback-gallery-count" id="${galleryId}Counter">1 / ${imageUrls.length}</span>` : ""}
+          </div>` : "";
           const verified = (item.verifiedPurchase || item.orderId) ? `<span class="feedback-card-badge">✓ Đã mua tại tiệm</span>` : "";
           const linkedProducts = getFeedbackLinkedProducts(item);
-          const paper = item.paperType ? `<span>${escapeHtml(item.paperType)}</span>` : "";
           const date = item.purchaseDate && !item.hidePurchaseDate ? `<span>Mua ngày ${escapeHtml(feedbackDateDisplay(item.purchaseDate))}</span>` : "";
-          const productLinks = linkedProducts.length ? `<div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;">${linkedProducts.map(product => `<button type="button" class="btn btn-soft btn-sm" onclick="openFeedbackProduct('${escapeAttrJs(product.id)}')">Giấy dùng: ${escapeHtml(product.name)}</button><button type="button" class="btn btn-primary btn-sm" onclick="addFeedbackProductToCart('${escapeAttrJs(product.id)}')">+ Thêm giỏ</button>`).join("")}</div>` : "";
-          return `<article class="feedback-card">${image}<div class="feedback-card-quote">“${escapeHtml(item.content || "") }”</div><div class="feedback-card-meta"><strong>${escapeHtml(publicCustomer)}</strong>${paper}${date}${verified}</div>${productLinks}</article>`;
+          const linkedByName = new Map(linkedProducts.map(product => [String(product.name || "").trim().toLowerCase(), product]));
+          const usedProductIds = new Set();
+          const linkedProductRow = product => `<div class="feedback-product-row"><button type="button" class="feedback-product-name" title="Xem ${escapeHtml(product.name)}" onclick="openFeedbackProduct('${escapeAttrJs(product.id)}')"><span>${escapeHtml(product.name)}</span></button><button type="button" class="feedback-cart-btn" onclick="addFeedbackProductToCart('${escapeAttrJs(product.id)}')">+ Thêm giỏ</button></div>`;
+          const paperRows = splitFeedbackPaperNames(item.paperType).map(name => {
+            const product = linkedByName.get(String(name).trim().toLowerCase());
+            if (!product) return `<div class="feedback-product-row"><span class="feedback-product-name-static">${escapeHtml(name)}</span><span class="feedback-cart-placeholder" aria-hidden="true"></span></div>`;
+            usedProductIds.add(String(product.id));
+            return linkedProductRow(product);
+          });
+          const extraProductRows = linkedProducts.filter(product => !usedProductIds.has(String(product.id))).map(linkedProductRow);
+          const productRows = [...paperRows, ...extraProductRows].join("");
+          const productLinks = productRows ? `<div class="feedback-product-list">${productRows}</div>` : "";
+          return `<article class="feedback-card">${gallery}<div class="feedback-card-quote">“${escapeHtml(item.content || "") }”</div><div class="feedback-card-meta"><strong>${escapeHtml(publicCustomer)}</strong>${date}${verified}</div>${productLinks}</article>`;
         }).join("");
     }
 
