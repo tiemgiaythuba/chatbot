@@ -35,7 +35,7 @@
       --radius-md: 12px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     button, a, input, select, textarea, [role="button"] { -webkit-tap-highlight-color: transparent; }
     button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline:2px solid #9B8B77; outline-offset:2px; }
 
@@ -203,6 +203,25 @@
       text-align: center;
       padding: 1px 4px;
       border: 2px solid var(--bg-card);
+    }
+
+    .feedback-trigger { position: relative; }
+    .feedback-trigger.is-active { color: #B84A62; background: #FBECEF; border-color: #EBC8D0; }
+    .feedback-count {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      min-width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: #B84A62;
+      color: #fff;
+      border: 2px solid var(--bg-card);
+      font-size: 10px;
+      font-weight: 700;
     }
 
     .catalog-tools { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; margin-bottom:9px; }
@@ -974,6 +993,14 @@
       animation: slideUp 0.25s ease;
     }
 
+    .feedback-panel { max-height: 88vh; }
+    .feedback-list { display:flex; flex-direction:column; gap:12px; }
+    .feedback-card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px; box-shadow:var(--shadow-sm); }
+    .feedback-card img { width:100%; max-height:260px; object-fit:cover; border-radius:10px; margin-bottom:9px; }
+    .feedback-card-quote { font-size:13.5px; line-height:1.55; color:var(--text-main); white-space:pre-line; }
+    .feedback-card-meta { margin-top:8px; display:flex; flex-wrap:wrap; gap:5px 9px; font-size:11.5px; color:var(--text-muted); }
+    .feedback-card-badge { display:inline-flex; align-items:center; padding:3px 8px; border-radius:999px; background:var(--accent-soft); color:#2E5A36; font-size:11px; font-weight:600; }
+
     .drawer-header {
       background: var(--bg-card);
       padding: 14px 18px;
@@ -1463,6 +1490,10 @@
         <button type="button" class="header-icon-btn is-hidden" id="orderLookupHeaderBtn" onclick="openLookupOrderModal()" title="Tra cứu đơn hàng" aria-label="Tra cứu đơn hàng">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path><path d="M8.5 11h5"></path></svg>
         </button>
+        <button type="button" class="header-icon-btn feedback-trigger" id="feedbackHeaderBtn" onclick="openFeedbackPanel()" title="Feedback khách hàng" aria-label="Xem feedback khách hàng">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 8.7c0 5.2-8.8 10.1-8.8 10.1S3.2 13.9 3.2 8.7A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.5Z"></path></svg>
+          <span class="feedback-count" id="feedbackCount" style="display:none;">0</span>
+        </button>
         <button type="button" class="header-icon-btn cart-trigger" onclick="openCart()" title="Mở giỏ hàng" aria-label="Mở giỏ hàng">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16l1 13H3L4 7Z"></path><path d="M8 7a4 4 0 0 1 8 0"></path></svg>
           <span class="cart-badge" id="cartBadge">0</span>
@@ -1548,6 +1579,20 @@
   </div>
 
   <!-- Cart & Checkout Drawer -->
+  <div class="drawer-backdrop" id="feedbackDrawer" onclick="if(event.target===this) closeFeedbackPanel()">
+    <div class="drawer-panel feedback-panel">
+      <div class="drawer-header">
+        <span class="drawer-title">Khách hàng nói gì về giấy?</span>
+        <button type="button" class="close-btn" aria-label="Đóng feedback" onclick="closeFeedbackPanel()">×</button>
+      </div>
+      <div class="drawer-body">
+        <div id="feedbackList" class="feedback-list">
+          <div style="text-align:center; padding:20px 8px; color:var(--text-muted); font-size:13px;">Đang tải feedback...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="drawer-backdrop" id="cartDrawer" onclick="if(event.target===this) closeCart()">
     <div class="drawer-panel">
       <div class="drawer-header">
@@ -1705,8 +1750,8 @@
 
     const SOCIAL_LINKS = {
       facebook: "https://www.facebook.com/tiemgiaythuba/",
-      instagram: "https://www.instagram.com/tiemgiaythuba/",
-      threads: "https://www.threads.com/@tiemgiaythuba"
+      instagram: "https://www.instagram.com/tiemgiay.thuba/",
+      threads: "https://www.threads.com/@tiemgiay.thuba"
     };
 
     const SESSION_STORAGE_KEY = "tiemgiay_session_id";
@@ -1739,6 +1784,7 @@
     }
 
     let products = [];
+    let publishedFeedbacks = [];
     let cart = [];
     let chatHistory = [];
     let activeCategory = "Tất cả";
@@ -2384,6 +2430,80 @@
       }, 2400);
     }
 
+    function feedbackDateDisplay(value) {
+      const raw = String(value || "").trim();
+      const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      return m ? `${m[3]}/${m[2]}/${m[1]}` : raw;
+    }
+    function getPublicFeedbackCustomer(item) {
+      const raw = String(item.customerHandle || "").trim();
+      const platform = String(item.platform || "").toLowerCase();
+      const looksLikePhone = /^\+?[\d\s().-]{8,}$/.test(raw);
+      if (platform.includes("zalo") || looksLikePhone) {
+        if (raw && !looksLikePhone && !/^\d/.test(raw)) return raw.includes("•") ? raw : `${raw} • Zalo`;
+        return `${item.customerName || "Khách hàng"} • Zalo`;
+      }
+      return raw || item.customerName || "Khách hàng";
+    }
+    function getFeedbackLinkedProducts(item) {
+      const ids = Array.isArray(item.productIds) ? item.productIds : [];
+      const legacy = Array.isArray(item.products) ? item.products.map(product => product.productId || product.id).filter(Boolean) : [];
+      return [...new Set([...ids, ...legacy].map(String))].map(id => products.find(product => String(product.id) === id)).filter(Boolean);
+    }
+    function openFeedbackProduct(productId) {
+      const product = products.find(item => String(item.id) === String(productId));
+      if (!product) return;
+      const search = document.getElementById("productSearch");
+      if (search) search.value = product.name || "";
+      productSearch = product.name || "";
+      activeCategory = "Tất cả";
+      renderCategories();
+      renderProducts();
+      closeFeedbackPanel();
+      document.getElementById("viewCatalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    function addFeedbackProductToCart(productId) {
+      const product = products.find(item => String(item.id) === String(productId));
+      if (!product) return;
+      addToCart(product.id, Number(product.packPrice) > 0 && Number(product.packSize) > 1 ? "pack" : "unit", 1);
+    }
+    function renderPublishedFeedbacks() {
+      const list = document.getElementById("feedbackList");
+      const count = document.getElementById("feedbackCount");
+      if (!list) return;
+      const items = Array.isArray(publishedFeedbacks) ? publishedFeedbacks.filter(item => item && item.status === "published") : [];
+      if (count) {
+        count.textContent = items.length > 99 ? "99+" : String(items.length);
+        count.style.display = items.length ? "grid" : "none";
+      }
+      if (!items.length) {
+        list.innerHTML = `<div style="text-align:center; padding:24px 8px; color:var(--text-muted); font-size:13px;">Tiệm đang cập nhật những chia sẻ đầu tiên của khách hàng.</div>`;
+        return;
+      }
+      list.innerHTML = items
+        .slice()
+        .sort((a, b) => String(b.publishedAt || b.updatedAt || "").localeCompare(String(a.publishedAt || a.updatedAt || "")))
+        .map(item => {
+          const publicCustomer = getPublicFeedbackCustomer(item);
+          const image = item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="Feedback của ${escapeHtml(publicCustomer)}" loading="lazy" onerror="this.style.display='none'" />` : "";
+          const verified = (item.verifiedPurchase || item.orderId) ? `<span class="feedback-card-badge">✓ Đã mua tại tiệm</span>` : "";
+          const linkedProducts = getFeedbackLinkedProducts(item);
+          const paper = item.paperType ? `<span>${escapeHtml(item.paperType)}</span>` : "";
+          const date = item.purchaseDate && !item.hidePurchaseDate ? `<span>Mua ngày ${escapeHtml(feedbackDateDisplay(item.purchaseDate))}</span>` : "";
+          const productLinks = linkedProducts.length ? `<div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;">${linkedProducts.map(product => `<button type="button" class="btn btn-soft btn-sm" onclick="openFeedbackProduct('${escapeAttrJs(product.id)}')">Giấy dùng: ${escapeHtml(product.name)}</button><button type="button" class="btn btn-primary btn-sm" onclick="addFeedbackProductToCart('${escapeAttrJs(product.id)}')">+ Thêm giỏ</button>`).join("")}</div>` : "";
+          return `<article class="feedback-card">${image}<div class="feedback-card-quote">“${escapeHtml(item.content || "") }”</div><div class="feedback-card-meta"><strong>${escapeHtml(publicCustomer)}</strong>${paper}${date}${verified}</div>${productLinks}</article>`;
+        }).join("");
+    }
+
+    function openFeedbackPanel() {
+      renderPublishedFeedbacks();
+      document.getElementById("feedbackDrawer")?.classList.add("open");
+    }
+
+    function closeFeedbackPanel() {
+      document.getElementById("feedbackDrawer")?.classList.remove("open");
+    }
+
     function openLightbox(src) {
       if (!src) return;
       const box = document.getElementById("imgLightbox");
@@ -2472,6 +2592,10 @@
         const data = await res.json();
         if (data.ok && Array.isArray(data.products)) {
           products = data.products;
+          publishedFeedbacks = Array.isArray(data.feedbacks)
+            ? data.feedbacks
+            : (Array.isArray(data.feedbackConfig?.items) ? data.feedbackConfig.items : []);
+          renderPublishedFeedbacks();
           if (data.bankConfig) {
             bankConfig = data.bankConfig;
           }
@@ -4214,6 +4338,7 @@
           })
         });
         const data = await res.json();
+        if (!res.ok || data?.ok === false) throw new Error(data?.error || "Tiệm chưa nhận được phản hồi, bạn thử lại nhé.");
         typingEl.remove();
         // Backend trả payload AI trong data; vẫn hỗ trợ dạng phẳng để tương thích
         // với các phiên bản Web App cũ đang được cache.
