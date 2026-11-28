@@ -4405,7 +4405,6 @@
         closeLookupOrderModal();
         switchView("chat");
         appendUserMessage(`Kiểm tra đơn hàng: ${q}`);
-        const typingEl = appendTypingIndicator();
         if (data.bankConfig) bankConfig = data.bankConfig;
 
         lastLookedUpOrders = data.orders;
@@ -4567,7 +4566,7 @@
       sendBtn.disabled = true;
       sendBtn.setAttribute("aria-busy", "true");
 
-      const isDesktop = window.matchMedia("(pointer: fine)").matches;
+      const isDesktop = typeof window.matchMedia === "function" && window.matchMedia("(pointer: fine)").matches;
       if (!isDesktop) {
         input.blur();
       }
@@ -4576,17 +4575,16 @@
       chatHistory.push({ role: "user", text });
 
       const typingEl = appendTypingIndicator();
-
-      const currentCustInfo = {
-        customerName: document.getElementById("custName")?.value.trim() || "",
-        phone: document.getElementById("custPhone")?.value.trim() || "",
-        platform: document.getElementById("custPlatform")?.value || "",
-        socialHandle: document.getElementById("custHandle")?.value.trim() || ""
-      };
-
-      const chatController = new AbortController();
-      const chatTimeoutId = setTimeout(() => chatController.abort(), 45000);
+      let chatTimeoutId = null;
       try {
+        const currentCustInfo = {
+          customerName: document.getElementById("custName")?.value.trim() || "",
+          phone: document.getElementById("custPhone")?.value.trim() || "",
+          platform: document.getElementById("custPlatform")?.value || "",
+          socialHandle: document.getElementById("custHandle")?.value.trim() || ""
+        };
+        const chatController = new AbortController();
+        chatTimeoutId = setTimeout(() => chatController.abort(), 45000);
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
           body: JSON.stringify({
@@ -4623,7 +4621,7 @@
           contactPrefill: text
         });
       } finally {
-        clearTimeout(chatTimeoutId);
+        if (chatTimeoutId) clearTimeout(chatTimeoutId);
         chatRequestInFlight = false;
         sendBtn.disabled = false;
         sendBtn.removeAttribute("aria-busy");
