@@ -987,18 +987,19 @@
     .feedback-panel { max-height: 88vh; }
     .feedback-list { display:flex; flex-direction:column; gap:12px; }
     .feedback-card { min-width:0; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:12px; box-shadow:var(--shadow-sm); }
-    .feedback-gallery { position:relative; margin:0 0 10px; border-radius:11px; overflow:hidden; background:var(--bg-soft); }
+    .feedback-gallery { position:relative; margin:0 0 12px; border-radius:12px; overflow:hidden; background:linear-gradient(145deg,#F4EFE7,#EAE2D6); }
     .feedback-gallery-track { display:flex; width:100%; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; touch-action:pan-x; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
-    .feedback-gallery-slide { flex:0 0 100%; min-width:0; scroll-snap-align:start; }
-    .feedback-gallery-slide img { display:block; width:100%; height:clamp(170px, 42vw, 300px); max-height:300px; object-fit:contain; border-radius:0; margin:0; background:var(--bg-soft); }
+    .feedback-gallery-slide { flex:0 0 100%; min-width:0; height:min(110vw, 55vh, 520px); display:grid; place-items:center; scroll-snap-align:start; }
+    .feedback-gallery-slide img { display:block; width:100%; height:100%; object-fit:contain; border-radius:0; margin:0 auto; background:transparent; }
     .feedback-gallery-arrow { position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.72); border-radius:50%; background:rgba(255,255,255,.88); color:var(--text-main); box-shadow:0 2px 8px rgba(46,41,35,.16); font-family:inherit; font-size:20px; font-weight:600; line-height:1; cursor:pointer; z-index:2; }
     .feedback-gallery-arrow:hover { background:#fff; color:var(--primary); }
     .feedback-gallery-arrow:focus-visible, .feedback-product-name:focus-visible, .feedback-cart-btn:focus-visible { outline:2px solid var(--primary); outline-offset:2px; }
     .feedback-gallery-prev { left:8px; }
     .feedback-gallery-next { right:8px; }
     .feedback-gallery-count { position:absolute; right:9px; bottom:8px; padding:3px 8px; border-radius:999px; background:rgba(46,41,35,.68); color:#fff; font-size:10.5px; font-weight:600; pointer-events:none; }
-    .feedback-card-quote { min-width:0; font-size:13.5px; line-height:1.55; color:var(--text-main); white-space:pre-line; overflow-wrap:anywhere; }
-    .feedback-card-meta { margin-top:8px; display:flex; flex-wrap:wrap; gap:5px 9px; font-size:11.5px; color:var(--text-muted); }
+    .feedback-card-quote { min-width:0; font-size:13.5px; line-height:1.6; color:var(--text-main); white-space:pre-line; overflow-wrap:anywhere; }
+    .feedback-card-meta { margin-top:9px; display:flex; align-items:center; flex-wrap:wrap; gap:6px 9px; font-size:11.5px; color:var(--text-muted); }
+    .feedback-card-meta strong { color:var(--primary); font-size:12px; }
     .feedback-like-btn { display:inline-flex; align-items:center; justify-content:center; gap:5px; margin-top:10px; min-height:32px; padding:4px 7px; border:0; border-radius:8px; background:transparent; color:#C74652; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:background .18s ease, transform .15s ease; }
     .feedback-like-btn:hover:not(:disabled) { background:#FBECEF; }
     .feedback-like-btn:active:not(:disabled) { transform:scale(.94); }
@@ -1009,7 +1010,16 @@
     .feedback-like-btn.liked svg { fill:currentColor; }
     .feedback-like-count { color:#C74652; font-size:12px; font-variant-numeric:tabular-nums; line-height:1; }
     .feedback-card-badge { display:inline-flex; align-items:center; padding:3px 8px; border-radius:999px; background:var(--accent-soft); color:#2E5A36; font-size:11px; font-weight:600; }
-    .feedback-product-list { display:flex; flex-direction:column; gap:7px; margin-top:10px; }
+    .feedback-purchases { margin-top:8px; border-top:1px solid var(--border); }
+    .feedback-purchases-summary { min-height:42px; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 2px; color:var(--primary); font-size:12px; font-weight:600; cursor:pointer; list-style:none; }
+    .feedback-purchases-summary::-webkit-details-marker { display:none; }
+    .feedback-purchases-summary::marker { content:""; }
+    .feedback-purchases-title { display:flex; align-items:center; gap:7px; min-width:0; }
+    .feedback-purchases-icon { width:17px; height:17px; flex:none; color:var(--accent); }
+    .feedback-purchases-chevron { width:17px; height:17px; flex:none; transition:transform .18s ease; }
+    .feedback-purchases[open] .feedback-purchases-chevron { transform:rotate(180deg); }
+    .feedback-product-list { display:flex; flex-direction:column; gap:7px; padding:0 0 10px; animation:feedbackReveal .18s ease; }
+    @keyframes feedbackReveal { from { opacity:0; transform:translateY(-3px); } to { opacity:1; transform:translateY(0); } }
     .feedback-product-row { display:grid; grid-template-columns:minmax(0,1fr) 104px; align-items:stretch; gap:8px; min-width:0; }
     .feedback-product-name, .feedback-product-name-static { display:flex; align-items:center; min-width:0; min-height:42px; width:100%; padding:8px 10px; border:1px solid var(--border); border-radius:10px; background:var(--bg-soft); color:var(--text-main); font-family:inherit; font-size:12.5px; font-weight:600; line-height:1.35; text-align:left; overflow-wrap:anywhere; }
     .feedback-product-name { justify-content:flex-start; cursor:pointer; transition:background .16s ease, border-color .16s ease, color .16s ease; }
@@ -2455,15 +2465,24 @@
       const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
       return m ? `${m[3]}/${m[2]}/${m[1]}` : raw;
     }
+    function maskPublicFeedbackName(value) {
+      const parts = String(value || "Khách hàng").trim().split(/\s+•\s+/);
+      const name = Array.from(parts.shift() || "Khách hàng");
+      const keep = name.length >= 9 ? 2 : 1;
+      const masked = name.length <= 2
+        ? `${name[0] || "K"}*`
+        : `${name.slice(0, keep).join("")}${"*".repeat(Math.max(1, name.length - keep * 2))}${name.slice(-keep).join("")}`;
+      return [masked, ...parts].join(" • ");
+    }
     function getPublicFeedbackCustomer(item) {
       const raw = String(item.customerHandle || "").trim();
       const platform = String(item.platform || "").toLowerCase();
       const looksLikePhone = /^\+?[\d\s().-]{8,}$/.test(raw);
       if (platform.includes("zalo") || looksLikePhone) {
-        if (raw && !looksLikePhone && !/^\d/.test(raw)) return raw.includes("•") ? raw : `${raw} • Zalo`;
-        return `${item.customerName || "Khách hàng"} • Zalo`;
+        if (raw && !looksLikePhone && !/^\d/.test(raw)) return maskPublicFeedbackName(raw.includes("•") ? raw : `${raw} • Zalo`);
+        return maskPublicFeedbackName(`${item.customerName || "Khách hàng"} • Zalo`);
       }
-      return raw || item.customerName || "Khách hàng";
+      return maskPublicFeedbackName(raw || item.customerName || "Khách hàng");
     }
     function getFeedbackLinkedProducts(item) {
       const ids = Array.isArray(item.productIds) ? item.productIds : [];
@@ -2584,7 +2603,8 @@
           });
           const extraProductRows = linkedProducts.filter(product => !usedProductIds.has(String(product.id))).map(linkedProductRow);
           const productRows = [...paperRows, ...extraProductRows].join("");
-          const productLinks = productRows ? `<div class="feedback-product-list">${productRows}</div>` : "";
+          const productCount = paperRows.length + extraProductRows.length;
+          const productLinks = productRows ? `<details class="feedback-purchases"><summary class="feedback-purchases-summary"><span class="feedback-purchases-title"><svg class="feedback-purchases-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5z"></path><path d="m4.3 7.7 7.7 4.5 7.7-4.5M12 12.2V21"></path></svg>Đã mua ${productCount} mặt hàng</span><svg class="feedback-purchases-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></summary><div class="feedback-product-list">${productRows}</div></details>` : "";
           const liked = Boolean(item.likedByMe) || getLikedFeedbackIds().has(String(item.id || ""));
           const likeCount = Math.max(0, Number(item.likes || 0));
           const likeButton = `<button type="button" class="feedback-like-btn ${liked ? "liked" : ""}" ${liked ? "disabled" : ""} aria-label="${liked ? "Bạn đã thích" : "Thích feedback"}; ${likeCount} lượt thích" aria-pressed="${liked}" onclick="likeFeedback('${escapeAttrJs(item.id || "")}', this)"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"></path></svg><span class="feedback-like-count">${likeCount}</span></button>`;
