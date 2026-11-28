@@ -124,8 +124,19 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 6px;
       flex-shrink: 0;
+    }
+    .header-help-btn { font-family:inherit; font-size:20px; font-weight:700; line-height:1; }
+    @media (max-width:380px) {
+      .header { padding:9px 8px; gap:4px; }
+      .brand { gap:6px; min-width:0; flex:1; }
+      .brand-logo { width:30px; height:30px; }
+      .brand-title { font-size:12px; }
+      .brand-sub { display:none; }
+      .header-actions { gap:3px; }
+      .header-actions .header-icon-btn { width:30px; height:30px; }
+      .header-actions .header-icon-btn svg { width:18px; height:18px; }
     }
 
     .header-icon-btn {
@@ -723,6 +734,8 @@
       flex-shrink: 0;
     }
 
+    .prod-thumb-btn { padding:0; border:0; border-radius:10px; background:transparent; cursor:pointer; }
+    .prod-main-image-btn { display:block; width:100%; padding:0; border:0; border-radius:var(--radius-md); background:transparent; cursor:zoom-in; }
     .prod-thumb {
       width: 66px;
       height: 66px;
@@ -1393,6 +1406,7 @@
     }
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    .chat-source-note { margin:5px 0 0; color:var(--text-muted); font-size:10.5px; line-height:1.45; }
 
     /* Refined handmade-shop storefront */
     :root {
@@ -1496,6 +1510,35 @@
       .header { background:rgba(251,249,245,.96); }
       .floating-cat-wrap { right:16px; bottom:max(16px, env(safe-area-inset-bottom)); }
     }
+    .catalog-guide-trigger { width:40px; min-width:40px; min-height:40px; display:grid; place-items:center; border:1px solid var(--border); border-radius:12px; background:#fff; color:var(--primary); font-family:inherit; font-size:19px; font-weight:700; line-height:1; cursor:pointer; box-shadow:0 1px 3px rgba(46,41,35,.04); transition:transform .22s cubic-bezier(.2,.9,.25,1),background .18s ease,border-color .18s ease; }
+    .catalog-guide-trigger:hover { background:var(--bg-soft); border-color:#D8CFC1; }
+    .catalog-guide-trigger:active { transform:scale(.94); }
+    .buyer-guide-backdrop { position:fixed; inset:0; z-index:130; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(45,36,30,.38); -webkit-backdrop-filter:blur(5px); backdrop-filter:blur(5px); opacity:0; }
+    .buyer-guide-backdrop.open { display:flex; animation:guideBackdropIn .22s ease forwards; }
+    .buyer-guide-backdrop.is-closing { animation:guideBackdropOut .18s ease forwards; }
+    .buyer-guide { width:min(100%,470px); max-height:min(88vh,680px); overflow:auto; padding:20px; border:1px solid rgba(255,255,255,.9); border-radius:20px; background:#FCFBF8; box-shadow:0 22px 60px rgba(45,36,30,.22); transform:translateY(12px) scale(.98); animation:guideCardIn .3s cubic-bezier(.2,.9,.25,1) forwards; }
+    .buyer-guide-backdrop.is-closing .buyer-guide { animation:guideCardOut .16s ease forwards; }
+    .buyer-guide-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px; }
+    .buyer-guide-kicker { color:var(--accent); font-size:10.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+    .buyer-guide-title { margin-top:3px; color:var(--primary); font-family:'Lora',serif; font-size:21px; line-height:1.25; }
+    .buyer-guide-close { width:34px; height:34px; flex:none; border:1px solid var(--border); border-radius:50%; background:var(--bg-soft); color:var(--text-muted); font:inherit; font-size:20px; cursor:pointer; }
+    .buyer-guide-intro { margin-bottom:13px; color:var(--text-muted); font-size:12.5px; line-height:1.55; }
+    .buyer-guide-steps { display:grid; gap:8px; list-style:none; margin:0 0 15px; }
+    .buyer-guide-step { display:grid; grid-template-columns:34px minmax(0,1fr); gap:10px; padding:10px; border:1px solid var(--border); border-radius:12px; background:#fff; animation:guideStepIn .36s cubic-bezier(.2,.9,.25,1) both; }
+    .buyer-guide-step:nth-child(2) { animation-delay:.05s; } .buyer-guide-step:nth-child(3) { animation-delay:.1s; } .buyer-guide-step:nth-child(4) { animation-delay:.15s; }
+    .buyer-guide-num { width:30px; height:30px; display:grid; place-items:center; border-radius:10px; background:var(--accent-soft); color:#2E5A36; font-size:12px; font-weight:700; }
+    .buyer-guide-step strong { display:block; margin:0 0 2px; color:var(--text-main); font-size:12.5px; }
+    .buyer-guide-step p { color:var(--text-muted); font-size:11.5px; line-height:1.45; }
+    .buyer-guide-actions { display:flex; gap:8px; flex-wrap:wrap; }
+    .buyer-guide-actions button { min-height:40px; flex:1; border:1px solid var(--border); border-radius:11px; padding:8px 12px; font:inherit; font-size:12.5px; font-weight:600; cursor:pointer; }
+    .buyer-guide-start { background:var(--primary); color:#fff; border-color:var(--primary)!important; }
+    .buyer-guide-chat { background:#fff; color:var(--primary); }
+    @keyframes guideBackdropIn { to { opacity:1; } }
+    @keyframes guideBackdropOut { to { opacity:0; } }
+    @keyframes guideCardIn { to { opacity:1; transform:translateY(0) scale(1); } }
+    @keyframes guideCardOut { to { opacity:0; transform:translateY(8px) scale(.985); } }
+    @keyframes guideStepIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+    @media (max-width:520px) { .buyer-guide { padding:17px; border-radius:18px; } .buyer-guide-title { font-size:19px; } }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; }
     }
@@ -1513,6 +1556,7 @@
         </div>
       </div>
       <div class="header-actions">
+        <button type="button" class="header-icon-btn header-help-btn" id="buyerGuideInfoBtn" onclick="openBuyerGuide(this)" title="Hướng dẫn mua hàng" aria-label="Mở hướng dẫn mua hàng" aria-haspopup="dialog" aria-expanded="false" aria-controls="buyerGuideBackdrop">?</button>
         <button type="button" class="header-icon-btn" id="aiToggleBtn" onclick="toggleAiChat()" title="Mở tư vấn AI" aria-label="Mở tư vấn AI">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"></path></svg>
         </button>
@@ -1535,6 +1579,7 @@
         <span></span>
         <span>Trợ lý Thứ Ba phản hồi dựa trên dữ liệu của tiệm nên có thể mất vài giây và đôi khi chưa chuẩn xác - cần tư vấn kỹ hơn bạn cứ nhắn trực tiếp cho tiệm nhé!</span>
       </div>
+      <p class="chat-source-note" style="padding:0 20px 8px;">Để tư vấn và hỗ trợ đơn hàng, tiệm lưu từng lượt chat cùng tên, số điện thoại và kênh liên hệ bạn đã nhập (nếu có) tối đa 365 ngày kể từ ngày gửi rồi xóa lịch sử chat. Thông tin trong hồ sơ đơn hàng được lưu riêng để xử lý đơn; bạn có thể nhắn tiệm nếu muốn yêu cầu xóa chat sớm.</p>
       <div class="chat-messages" id="chatMessages"></div>
 
       <div class="quick-prompts">
@@ -1606,6 +1651,23 @@
         <span class="sr-only">Danh mục</span>
       </button>
     </div>
+  </div>
+
+  <div class="buyer-guide-backdrop" id="buyerGuideBackdrop" aria-hidden="true" onclick="if(event.target===this) closeBuyerGuide()">
+    <section class="buyer-guide" role="dialog" aria-modal="true" aria-labelledby="buyerGuideTitle" aria-describedby="buyerGuideIntro" tabindex="-1">
+      <div class="buyer-guide-head">
+        <div><div class="buyer-guide-kicker">Bắt đầu thật dễ</div><h2 class="buyer-guide-title" id="buyerGuideTitle">Mua giấy trong vài bước</h2></div>
+        <button type="button" class="buyer-guide-close" aria-label="Đóng hướng dẫn" onclick="closeBuyerGuide()">×</button>
+      </div>
+      <p class="buyer-guide-intro" id="buyerGuideIntro">Bạn có thể tự chọn giấy ngay trong danh mục, hoặc hỏi trợ lý nếu chưa biết loại nào phù hợp.</p>
+      <ol class="buyer-guide-steps">
+        <li class="buyer-guide-step"><span class="buyer-guide-num">1</span><div><strong>Tìm loại giấy</strong><p>Chọn danh mục, tìm theo tên / màu / kích thước hoặc lọc “Còn hàng”. Đọc mô tả ngay trên thẻ; chạm ảnh để phóng to.</p></div></li>
+        <li class="buyer-guide-step"><span class="buyer-guide-num">2</span><div><strong>Chọn số lượng và thêm giỏ</strong><p>Chọn dạng mua và số lượng phù hợp, rồi bấm nút thêm vào giỏ trên thẻ sản phẩm.</p></div></li>
+        <li class="buyer-guide-step"><span class="buyer-guide-num">3</span><div><strong>Kiểm tra giỏ và đặt hàng</strong><p>Bấm “Giỏ hàng”, kiểm tra sản phẩm, nhập thông tin nhận hàng và chọn COD hoặc chuyển khoản trước khi xác nhận.</p></div></li>
+        <li class="buyer-guide-step"><span class="buyer-guide-num">?</span><div><strong>Cần tư vấn?</strong><p>Bấm biểu tượng chat phía trên để hỏi về loại giấy, công dụng, phí ship hoặc tình trạng đơn.</p></div></li>
+      </ol>
+      <div class="buyer-guide-actions"><button type="button" class="buyer-guide-start" onclick="closeBuyerGuide()">Đã hiểu, bắt đầu xem giấy</button><button type="button" class="buyer-guide-chat" onclick="closeBuyerGuide(); switchView('chat')">Hỏi trợ lý</button></div>
+    </section>
   </div>
 
   <!-- Cart & Checkout Drawer -->
@@ -1722,11 +1784,11 @@
           <div class="form-group">
             <label>Hình thức thanh toán *</label>
             <div class="pay-choice-grid">
-              <button type="button" id="payChoiceCod" class="pay-choice-btn active" onclick="setCheckoutPaymentMethod('COD')">
+              <button type="button" id="payChoiceCod" class="pay-choice-btn active" aria-pressed="true" onclick="setCheckoutPaymentMethod('COD')">
                 <div class="pay-choice-title">Thanh toán COD</div>
                 <div class="pay-choice-sub">Trả tiền mặt khi nhận hàng</div>
               </button>
-              <button type="button" id="payChoiceQr" class="pay-choice-btn" onclick="setCheckoutPaymentMethod('Chuyển khoản trước')">
+              <button type="button" id="payChoiceQr" class="pay-choice-btn" aria-pressed="false" onclick="setCheckoutPaymentMethod('Chuyển khoản trước')">
                 <div class="pay-choice-title">Quét QR chuyển khoản</div>
                 <div class="pay-choice-sub" id="payChoiceQrSub">Hiện mã VietQR ngay sau khi đặt</div>
               </button>
@@ -1759,6 +1821,7 @@
         </p>
         <form onsubmit="submitOrderLookup(event)" style="display:flex; flex-direction:column; gap:10px;">
           <input type="text" id="lookupQueryInput" aria-label="Số điện thoại hoặc mã đơn hàng" class="form-input" placeholder="VD: 0905xxxxxx hoặc DH261122..." required />
+          <div id="lookupErrorBox" role="alert" style="display:none; color:#B84A39; font-size:12.5px;"></div>
           <button type="submit" class="submit-order-btn" id="lookupSubmitBtn">Tra cứu đơn ngay</button>
         </form>
       </div>
@@ -1817,6 +1880,7 @@
     let publishedFeedbacks = [];
     let cart = [];
     let chatHistory = [];
+    let chatRequestInFlight = false;
     let activeCategory = "Tất cả";
     let productSearch = "";
     let stockOnly = false;
@@ -2437,11 +2501,15 @@
     }
 
     function escapeAttrJs(str) {
+      // Encode as HTML-attribute text before embedding in a single-quoted JS argument.
       return String(str ?? "")
+        .replace(/&/g, "&amp;")
         .replace(/\\/g, "\\\\")
         .replace(/'/g, "\\'")
         .replace(/"/g, "&quot;")
-        .replace(/\r?\n/g, " ");
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/[\r\n\u2028\u2029]/g, " ");
     }
 
     function formatVND(amount) {
@@ -2487,7 +2555,9 @@
     function getFeedbackLinkedProducts(item) {
       const ids = Array.isArray(item.productIds) ? item.productIds : [];
       const legacy = Array.isArray(item.products) ? item.products.map(product => product.productId || product.id).filter(Boolean) : [];
-      return [...new Set([...ids, ...legacy].map(String))].map(id => products.find(product => String(product.id) === id)).filter(Boolean);
+      return [...new Set([...ids, ...legacy].map(String))]
+        .map(id => products.find(product => String(product.id) === id && product.visible !== false))
+        .filter(Boolean);
     }
     function getFeedbackImageUrls(item) {
       const listed = Array.isArray(item?.imageUrls) ? item.imageUrls : [];
@@ -2527,8 +2597,8 @@
       counter.textContent = `${current} / ${total}`;
     }
     function openFeedbackProduct(productId) {
-      const product = products.find(item => String(item.id) === String(productId));
-      if (!product) return;
+      const product = products.find(item => String(item.id) === String(productId) && item.visible !== false);
+      if (!product) { showToast("Sản phẩm hiện không còn được hiển thị."); return; }
       const search = document.getElementById("productSearch");
       if (search) search.value = product.name || "";
       productSearch = product.name || "";
@@ -2539,46 +2609,85 @@
       document.getElementById("viewCatalog")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     function addFeedbackProductToCart(productId) {
-      const product = products.find(item => String(item.id) === String(productId));
-      if (!product) return;
+      const product = products.find(item => String(item.id) === String(productId) && item.visible !== false);
+      if (!product) { showToast("Sản phẩm hiện không còn được bán."); return; }
       addToCart(product.id, Number(product.packPrice) > 0 && Number(product.packSize) > 1 ? "pack" : "unit", 1);
     }
     const FEEDBACK_LIKER_KEY = "tiemgiay_feedback_liker_v1";
     const FEEDBACK_LIKED_IDS_KEY = "tiemgiay_feedback_liked_ids_v1";
-    function getLikedFeedbackIds() { try { const ids = JSON.parse(localStorage.getItem(FEEDBACK_LIKED_IDS_KEY) || "[]"); return new Set(Array.isArray(ids) ? ids.map(String) : []); } catch (e) { return new Set(); } }
+    let fallbackFeedbackLikerToken = "";
+    function readFeedbackStorage(key) {
+      try { return localStorage.getItem(key); } catch (e) { try { return sessionStorage.getItem(key); } catch (e2) { return null; } }
+    }
+    function writeFeedbackStorage(key, value) {
+      try { localStorage.setItem(key, value); return true; } catch (e) { try { sessionStorage.setItem(key, value); return true; } catch (e2) { return false; } }
+    }
+    function getLikedFeedbackIds() {
+      try { const ids = JSON.parse(readFeedbackStorage(FEEDBACK_LIKED_IDS_KEY) || "[]"); return new Set(Array.isArray(ids) ? ids.map(String) : []); }
+      catch (e) { return new Set(); }
+    }
     function getFeedbackLikerToken() {
-      try {
-        let token = localStorage.getItem(FEEDBACK_LIKER_KEY);
-        if (!token) { token = "L" + (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2)); localStorage.setItem(FEEDBACK_LIKER_KEY, token); }
-        return token;
-      } catch (e) { return "L" + Date.now().toString(36) + Math.random().toString(36).slice(2); }
+      const stored = readFeedbackStorage(FEEDBACK_LIKER_KEY);
+      if (stored) return stored;
+      if (!fallbackFeedbackLikerToken) {
+        const uuid = window.crypto && typeof window.crypto.randomUUID === "function" ? window.crypto.randomUUID() : `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+        fallbackFeedbackLikerToken = "L" + uuid;
+      }
+      writeFeedbackStorage(FEEDBACK_LIKER_KEY, fallbackFeedbackLikerToken);
+      return fallbackFeedbackLikerToken;
     }
     async function likeFeedback(feedbackId, button) {
-      if (!feedbackId || !button || button.disabled) return;
-      button.disabled = true;
-      button.setAttribute("aria-busy", "true");
+      if (!feedbackId || !button || button.disabled || button.dataset.pending === "true") return;
+      const item = publishedFeedbacks.find(x => String(x.id) === String(feedbackId));
+      const priorLikes = item ? Math.max(0, Number(item.likes || 0)) : Math.max(0, Number(button.querySelector(".feedback-like-count")?.textContent || 0));
+      const priorLiked = Boolean(item?.likedByMe) || getLikedFeedbackIds().has(String(feedbackId));
+      if (priorLiked) return;
+      const countEl = button.querySelector(".feedback-like-count");
+      const setButtonState = (liked, count, pending) => {
+        button.classList.toggle("liked", liked);
+        button.disabled = liked || pending;
+        button.dataset.pending = pending ? "true" : "false";
+        button.setAttribute("aria-pressed", String(liked));
+        button.setAttribute("aria-label", `${liked ? "Bạn đã thích" : "Thích feedback"}; ${count} lượt thích`);
+        if (pending) button.setAttribute("aria-busy", "true"); else button.removeAttribute("aria-busy");
+        if (countEl) countEl.textContent = String(count);
+      };
+      const optimisticLikes = priorLikes + 1;
+      if (item) { item.likes = optimisticLikes; item.likedByMe = true; }
+      setButtonState(true, optimisticLikes, true);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
       try {
-        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "like_feedback", feedbackId, likerToken: getFeedbackLikerToken() }) });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "like_feedback", feedbackId, likerToken: getFeedbackLikerToken() }), signal: controller.signal });
         const data = await res.json();
-        if (!data.ok) throw new Error(data.error || "Không ghi nhận được lượt thích");
-        const item = publishedFeedbacks.find(x => String(x.id) === String(feedbackId));
-        if (item) { item.likes = Number(data.likes || item.likes || 0); item.likedByMe = Boolean(data.liked); }
-        try { const ids = getLikedFeedbackIds(); ids.add(String(feedbackId)); localStorage.setItem(FEEDBACK_LIKED_IDS_KEY, JSON.stringify([...ids])); } catch (e) {}
-        renderPublishedFeedbacks();
-      } catch (err) { button.disabled = false; button.removeAttribute("aria-busy"); showToast("Chưa thể thả tim: " + (err.message || "Lỗi kết nối")); }
+        if (!res.ok || !data || !data.ok) throw new Error((data && data.error) || "Không ghi nhận được lượt thích");
+        const serverLikes = Number(data.likes);
+        const finalLikes = Number.isFinite(serverLikes) ? Math.max(0, serverLikes) : optimisticLikes;
+        if (item) { item.likes = finalLikes; item.likedByMe = Boolean(data.liked); }
+        const ids = getLikedFeedbackIds(); ids.add(String(feedbackId));
+        writeFeedbackStorage(FEEDBACK_LIKED_IDS_KEY, JSON.stringify([...ids]));
+        setButtonState(Boolean(data.liked), finalLikes, false);
+      } catch (err) {
+        if (item) { item.likes = priorLikes; item.likedByMe = priorLiked; }
+        setButtonState(priorLiked, priorLikes, false);
+        showToast("Chưa thể thả tim: " + (err.name === "AbortError" ? "máy chủ phản hồi quá lâu, thử lại nhé" : (err.message || "Lỗi kết nối")));
+      } finally { clearTimeout(timeoutId); }
     }
 
+    let feedbackLoadFailed = false;
     function renderPublishedFeedbacks() {
       const list = document.getElementById("feedbackList");
       if (!list) return;
+      if (feedbackLoadFailed) {
+        list.innerHTML = `<div role="status" style="text-align:center;padding:24px 8px;color:var(--text-muted);font-size:13px;">Chưa tải được feedback. Hãy kiểm tra kết nối hoặc thử tải lại.</div><button type="button" class="btn-add-mini" onclick="refreshCatalog(document.getElementById('catalogRefreshBtn'))">Thử tải lại</button>`;
+        return;
+      }
       const items = Array.isArray(publishedFeedbacks) ? publishedFeedbacks.filter(item => item && item.status === "published") : [];
       if (!items.length) {
         list.innerHTML = `<div style="text-align:center; padding:24px 8px; color:var(--text-muted); font-size:13px;">Tiệm đang cập nhật những chia sẻ đầu tiên của khách hàng.</div>`;
         return;
       }
       list.innerHTML = items
-        .slice()
-        .sort((a, b) => String(b.publishedAt || b.updatedAt || "").localeCompare(String(a.publishedAt || a.updatedAt || "")))
         .map((item, itemIndex) => {
           const publicCustomer = getPublicFeedbackCustomer(item);
           const imageUrls = getFeedbackImageUrls(item);
@@ -2636,7 +2745,9 @@
       const thumbs = Array.from(document.querySelectorAll("[data-thumb-prod]"))
         .filter(el => el.getAttribute("data-thumb-prod") === String(prodId));
       thumbs.forEach((el, i) => {
-        el.classList.toggle("active", i === idx);
+        const image = el.matches(".prod-thumb-btn") ? el.querySelector(".prod-thumb") : el;
+        if (image) image.classList.toggle("active", i === idx);
+        if (el.matches(".prod-thumb-btn")) el.setAttribute("aria-pressed", String(i === idx));
       });
     }
 
@@ -2704,11 +2815,15 @@
     // 1. TẢI DANH MỤC TỪ GOOGLE SHEETS
     // -------------------------------------------------------------------------
     async function loadProducts() {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
       try {
-        const res = await fetch(SCRIPT_URL);
+        const res = await fetch(SCRIPT_URL, { signal: controller.signal });
         const data = await res.json();
+        if (!res.ok) throw new Error(`Máy chủ phản hồi HTTP ${res.status}`);
         if (data.ok && Array.isArray(data.products)) {
           products = data.products;
+          feedbackLoadFailed = false;
           publishedFeedbacks = Array.isArray(data.feedbacks)
             ? data.feedbacks
             : (Array.isArray(data.feedbackConfig?.items) ? data.feedbackConfig.items : []);
@@ -2761,14 +2876,19 @@
         }
         throw new Error(data.error || "Dữ liệu danh mục không hợp lệ");
       } catch (err) {
-        document.getElementById("productGrid").innerHTML =
-          `<div style="text-align:center; padding:24px; color:#9C5A1E;">Không tải được dữ liệu kho. Bạn thử làm mới lại nhé!</div>`;
+        feedbackLoadFailed = true;
+        renderPublishedFeedbacks();
+        if (!products.length) {
+          const grid = document.getElementById("productGrid");
+          if (grid) grid.innerHTML = `<div role="alert" style="text-align:center;padding:24px;color:#9C5A1E;">Không tải được dữ liệu kho. Hãy kiểm tra kết nối rồi thử làm mới.</div>`;
+        }
         return false;
-      }
+      } finally { clearTimeout(timeoutId); }
     }
 
     function renderCategories() {
-      const cats = ["Tất cả", ...new Set(products.map(p => p.category).filter(Boolean))];
+      const visibleProducts = products.filter(p => p && p.visible !== false);
+      const cats = ["Tất cả", ...new Set(visibleProducts.map(p => p.category).filter(Boolean))];
       const el = document.getElementById("catFilter");
       el.innerHTML = cats.map(c => {
         const safeCat = escapeAttrJs(c);
@@ -2893,7 +3013,7 @@
     // GÓI MIX TÙY CHỌN 10 TỜ GIẤY A5 (65.000đ — CHỈ CHỌN GIẤY A5 CÒN SẴN)
     // -------------------------------------------------------------------------
     function getMixableA5Products() {
-      return products.filter(p => {
+      return products.filter(p => p && p.visible !== false).filter(p => {
         const searchable = normalizeSearchText([
           p.category,
           p.productType,
@@ -3120,9 +3240,10 @@
     }
 
     function renderProducts() {
+      const visibleProducts = products.filter(p => p && p.visible !== false);
       let list = activeCategory === "Tất cả"
-        ? products
-        : products.filter(p => p.category === activeCategory);
+        ? visibleProducts
+        : visibleProducts.filter(p => p.category === activeCategory);
       const query = normalizeSearchText(productSearch);
       if (query) list = list.filter(p => productSearchText(p).includes(query));
       if (stockOnly) list = list.filter(p => Math.max(0, Number(p.stock || 0) - getProductReservedReadyUnits(p.id)) > 0);
@@ -3179,13 +3300,13 @@
           const thumbsHtml = imgs.length > 1
             ? `<div class="prod-thumbs">${imgs.map((u, idx) => {
                 const safeUrl = escapeAttrJs(u);
-                return `<img src="${escapeHtml(u)}" width="66" height="66" loading="lazy" decoding="async" data-thumb-prod="${escapeHtml(p.id)}" class="prod-thumb ${idx === 0 ? 'active' : ''}" onclick="selectProdThumb('${safeId}', ${idx}, '${safeUrl}')" alt="Ảnh ${idx + 1} của ${escapeHtml(p.name)}" />`;
+                return `<button type="button" class="prod-thumb-btn" data-thumb-prod="${escapeHtml(p.id)}" aria-label="Chọn ảnh ${idx + 1} của ${escapeHtml(p.name)}" aria-pressed="${idx === 0 ? 'true' : 'false'}" onclick="selectProdThumb('${safeId}', ${idx}, '${safeUrl}')"><img src="${escapeHtml(u)}" width="66" height="66" loading="lazy" decoding="async" class="prod-thumb ${idx === 0 ? 'active' : ''}" alt="" /></button>`;
               }).join("")}</div>`
             : "";
           galleryHtml = `
             <div class="prod-gallery">
               <div class="prod-img-wrap">
-                <img id="mainImg_${escapeHtml(p.id)}" src="${escapeHtml(imgs[0])}" width="360" height="360" ${loadingAttr} decoding="async" class="prod-img" alt="${escapeHtml(p.name)}" onclick="openLightbox(this.src)" onerror="this.style.display='none'" />
+                <button type="button" class="prod-main-image-btn" aria-label="Phóng to ảnh ${escapeHtml(p.name)}" onclick="openLightbox(document.getElementById('mainImg_${safeId}').src)"><img id="mainImg_${escapeHtml(p.id)}" src="${escapeHtml(imgs[0])}" width="360" height="360" ${loadingAttr} decoding="async" class="prod-img" alt="${escapeHtml(p.name)}" onerror="this.parentElement.style.display='none'" /></button>
               </div>
               ${thumbsHtml}
             </div>
@@ -3575,8 +3696,14 @@
       selectedCheckoutPayment = method === "Chuyển khoản trước" ? "Chuyển khoản trước" : "COD";
       const codBtn = document.getElementById("payChoiceCod");
       const qrBtn = document.getElementById("payChoiceQr");
-      if (codBtn) codBtn.classList.toggle("active", selectedCheckoutPayment === "COD");
-      if (qrBtn) qrBtn.classList.toggle("active", selectedCheckoutPayment === "Chuyển khoản trước");
+      if (codBtn) {
+        codBtn.classList.toggle("active", selectedCheckoutPayment === "COD");
+        codBtn.setAttribute("aria-pressed", String(selectedCheckoutPayment === "COD"));
+      }
+      if (qrBtn) {
+        qrBtn.classList.toggle("active", selectedCheckoutPayment === "Chuyển khoản trước");
+        qrBtn.setAttribute("aria-pressed", String(selectedCheckoutPayment === "Chuyển khoản trước"));
+      }
       if (persist) saveCustomerDraft();
     }
 
@@ -3589,12 +3716,26 @@
       return `https://img.vietqr.io/image/${bank}-${acc}-compact2.png?amount=${Math.round(amount)}&addInfo=${addInfo}&accountName=${accName}`;
     }
 
-    function copyTextToClipboard(text, okMsg = "Đã sao chép!") {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => showToast(okMsg)).catch(() => showToast(okMsg));
-      } else {
-        showToast(okMsg);
-      }
+    async function copyTextToClipboard(text, okMsg = "Đã sao chép!") {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(String(text));
+          showToast(okMsg);
+          return true;
+        }
+      } catch (e) {}
+      let copied = false;
+      const field = document.createElement("textarea");
+      field.value = String(text);
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.left = "-9999px";
+      document.body.appendChild(field);
+      field.select();
+      try { copied = document.execCommand("copy"); } catch (e) {}
+      field.remove();
+      showToast(copied ? okMsg : "Không thể sao chép tự động. Vui lòng sao chép thủ công.");
+      return copied;
     }
 
     function openCart() {
@@ -3852,6 +3993,7 @@
         ? (document.getElementById("custBackupHandle")?.value.trim() || "")
         : "";
 
+      const requestIdKey = "tiemgiay_checkout_request_v2";
       const orderPayload = {
         customerName: document.getElementById("custName").value.trim(),
         phone: rawPhone,
@@ -3887,15 +4029,33 @@
         shipFee,
         total
       };
+      // Reuse the same key only when retrying the identical checkout payload.
+      const requestFingerprint = JSON.stringify(orderPayload);
+      let requestId = "";
+      try {
+        let savedRaw = "";
+        try { savedRaw = localStorage.getItem(requestIdKey) || ""; } catch (e) {}
+        if (!savedRaw) { try { savedRaw = sessionStorage.getItem(requestIdKey) || ""; } catch (e) {} }
+        const saved = JSON.parse(savedRaw || "null");
+        if (saved && saved.fingerprint === requestFingerprint && /^[A-Za-z0-9_-]{12,100}$/.test(saved.requestId || "")) requestId = saved.requestId;
+      } catch (e) {}
+      if (!requestId) requestId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `req_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+      orderPayload.requestId = requestId;
+      try {
+        const saved = JSON.stringify({ requestId, fingerprint: requestFingerprint });
+        try { localStorage.setItem(requestIdKey, saved); } catch (e) { sessionStorage.setItem(requestIdKey, saved); }
+      } catch (e) {}
 
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          body: JSON.stringify({ action: "create_order", order: orderPayload })
+          body: JSON.stringify({ action: "create_order", requestId: orderPayload.requestId, order: orderPayload })
         });
         const data = await res.json();
 
-        if (data.ok) {
+        if (res.ok && data && data.ok) {
+          try { localStorage.removeItem(requestIdKey); } catch (e) {}
+          try { sessionStorage.removeItem(requestIdKey); } catch (e) {}
           saveCustomerDraft();
           cart = [];
           appliedVoucher = null;
@@ -3916,7 +4076,7 @@
           appendBotMessage(confirmMsg);
 
           if (selectedCheckoutPayment === "Chuyển khoản trước") {
-            appendVietQrCard(data.orderId, finalChargedTotal);
+            appendVietQrCard(data.orderId, finalChargedTotal, orderPayload.phone);
           }
           appendProactiveOrderConfirmCard(data.orderId, {
             ...orderPayload,
@@ -3950,7 +4110,7 @@
     // -------------------------------------------------------------------------
     // 3. CHATBOT & TRA CỨU ĐƠN HÀNG & VIETQR
     // -------------------------------------------------------------------------
-    function appendVietQrCard(orderId, totalAmount) {
+    function appendVietQrCard(orderId, totalAmount, customerPhone) {
       const container = document.getElementById("chatMessages");
       const row = document.createElement("div");
       row.className = "msg-row bot";
@@ -3987,7 +4147,7 @@
             <span style="color:var(--text-muted);">Nội dung CK:</span>
             <span><strong>${escapeHtml(transferContent)}</strong> <button type="button" class="btn-add-mini" style="padding:2px 6px; font-size:11px;" onclick="copyTextToClipboard('${safeContent}', 'Đã copy nội dung CK')">Copy</button></span>
           </div>
-          <button type="button" id="btnConfirmPaid_${escapeHtml(orderId)}" class="submit-order-btn" style="margin-top:9px; padding:9px; font-size:13px;" onclick="confirmCustomerTransferred('${safeOrderId}')">
+          <button type="button" id="btnConfirmPaid_${escapeHtml(orderId)}" data-customer-phone="${escapeHtml(customerPhone || "")}" class="submit-order-btn" style="margin-top:9px; padding:9px; font-size:13px;" onclick="confirmCustomerTransferred('${safeOrderId}', this.dataset.customerPhone)">
             ✓ Tôi đã chuyển khoản xong
           </button>
         `;
@@ -4073,23 +4233,31 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    async function confirmCustomerTransferred(orderId) {
+    async function confirmCustomerTransferred(orderId, phone) {
       const btn = document.getElementById("btnConfirmPaid_" + orderId);
       if (btn) {
         btn.disabled = true;
         btn.textContent = "Đang báo cho tiệm...";
       }
       try {
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
           method: "POST",
-          body: JSON.stringify({ action: "notify_transfer_sent", orderId })
+          body: JSON.stringify({ action: "notify_transfer_sent", orderId, phone })
         });
-      } catch (e) {}
-      if (btn) {
-        btn.textContent = "✓ Đã báo tiệm kiểm tra chuyển khoản";
-        btn.style.background = "var(--accent)";
+        const data = await res.json();
+        if (!res.ok || !data || !data.ok) throw new Error((data && data.error) || "Không thể ghi nhận lúc này.");
+        if (btn) {
+          btn.textContent = "✓ Đã báo tiệm kiểm tra chuyển khoản";
+          btn.style.background = "var(--accent)";
+        }
+        appendBotMessage(`Tiệm đã ghi nhận bạn chuyển khoản cho đơn #${orderId} rồi ạ! Tiệm sẽ kiểm tra tài khoản và nhắn xác nhận gói hàng ngay nhé.`);
+      } catch (e) {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Tôi đã chuyển khoản — báo tiệm";
+        }
+        showToast(e.message || "Không thể kết nối máy chủ. Bạn thử lại nhé!");
       }
-      appendBotMessage(`Tiệm đã ghi nhận bạn chuyển khoản cho đơn #${orderId} rồi ạ! Tiệm sẽ kiểm tra tài khoản và nhắn xác nhận gói hàng ngay nhé.`);
     }
 
     let lastLookedUpOrders = [];
@@ -4216,14 +4384,12 @@
       const q = (inp ? inp.value : "").trim();
       if (!q) return;
 
+      const errorBox = document.getElementById("lookupErrorBox");
+      if (errorBox) { errorBox.style.display = "none"; errorBox.textContent = ""; }
       if (btn) {
         btn.disabled = true;
         btn.textContent = "Đang tìm đơn...";
       }
-      closeLookupOrderModal();
-      switchView("chat");
-      appendUserMessage(`Kiểm tra đơn hàng: ${q}`);
-      const typingEl = appendTypingIndicator();
 
       try {
         const res = await fetch(SCRIPT_URL, {
@@ -4231,16 +4397,15 @@
           body: JSON.stringify({ action: "lookup_order", query: q, sessionId: chatSessionId })
         });
         const data = await res.json();
-        typingEl.remove();
-
-        if (!data.ok || !Array.isArray(data.orders) || !data.orders.length) {
-          appendBotMessage(
-            `Tiệm chưa tìm thấy đơn hàng nào khớp với "${q}" ạ. Bạn kiểm tra lại SĐT/mã đơn hoặc nhắn trực tiếp cho tiệm nhé!`,
-            { showContactButtons: true, contactPrefill: `Mình cần kiểm tra đơn hàng (${q})` }
-          );
+        if (!res.ok || !data || !data.ok) throw new Error((data && data.error) || "Không thể tra cứu lúc này. Vui lòng thử lại.");
+        if (!Array.isArray(data.orders) || !data.orders.length) {
+          if (errorBox) { errorBox.textContent = `Chưa tìm thấy đơn phù hợp với “${q}”. Kiểm tra lại thông tin và thử lại nhé.`; errorBox.style.display = "block"; }
           return;
         }
-
+        closeLookupOrderModal();
+        switchView("chat");
+        appendUserMessage(`Kiểm tra đơn hàng: ${q}`);
+        const typingEl = appendTypingIndicator();
         if (data.bankConfig) bankConfig = data.bankConfig;
 
         lastLookedUpOrders = data.orders;
@@ -4278,14 +4443,12 @@
           container.scrollTop = container.scrollHeight;
         });
       } catch (err) {
-        typingEl.remove();
-        appendBotMessage("Kết nối hơi chập chờn, bạn thử tra cứu lại giúp tiệm nhé!");
+        if (errorBox) { errorBox.textContent = err.message || "Kết nối hơi chập chờn, bạn thử lại nhé!"; errorBox.style.display = "block"; }
       } finally {
         if (btn) {
           btn.disabled = false;
           btn.textContent = "Tra cứu đơn ngay";
         }
-        if (inp) inp.value = "";
       }
     }
 
@@ -4313,12 +4476,19 @@
       bubble.textContent = text;
       row.appendChild(bubble);
 
+      if (["smart_local_fallback", "smart_local_no_key", "smart_local_quota_cooldown", "smart_local_disabled"].includes(String(options.source || ""))) {
+        const sourceNote = document.createElement("div");
+        sourceNote.className = "chat-source-note";
+        sourceNote.textContent = "Tiệm đang dùng câu trả lời nhanh từ dữ liệu sẵn có vì trợ lý AI tạm thời chưa khả dụng. Bạn có thể xem thông tin sản phẩm hiện tại trên danh mục hoặc nhắn trực tiếp cho tiệm để xác nhận.";
+        row.appendChild(sourceNote);
+      }
+
       if (Array.isArray(options.suggestedItems) && options.suggestedItems.length) {
         const sugBox = document.createElement("div");
         sugBox.className = "chat-suggestions";
 
         options.suggestedItems.forEach(sug => {
-          const p = products.find(item => item.id === sug.id);
+          const p = products.find(item => String(item.id) === String(sug.id) && item.visible !== false);
           if (!p) return;
 
           const isItem = p.productType === "item";
@@ -4390,10 +4560,12 @@
       const input = document.getElementById("chatInput");
       const sendBtn = document.getElementById("sendBtn");
       const text = input.value.trim();
-      if (!text) return;
+      if (!text || chatRequestInFlight) return;
 
+      chatRequestInFlight = true;
       input.value = "";
       sendBtn.disabled = true;
+      sendBtn.setAttribute("aria-busy", "true");
 
       const isDesktop = window.matchMedia("(pointer: fine)").matches;
       if (!isDesktop) {
@@ -4412,6 +4584,8 @@
         socialHandle: document.getElementById("custHandle")?.value.trim() || ""
       };
 
+      const chatController = new AbortController();
+      const chatTimeoutId = setTimeout(() => chatController.abort(), 45000);
       try {
         const res = await fetch(SCRIPT_URL, {
           method: "POST",
@@ -4421,7 +4595,8 @@
             history: chatHistory.slice(-10),
             sessionId: chatSessionId,
             customerInfo: currentCustInfo
-          })
+          }),
+          signal: chatController.signal
         });
         const data = await res.json();
         if (!res.ok || data?.ok === false) throw new Error(data?.error || "Tiệm chưa nhận được phản hồi, bạn thử lại nhé.");
@@ -4434,16 +4609,24 @@
         appendBotMessage(replyText, {
           suggestedItems: chatData.suggestedItems || [],
           showContactButtons: Boolean(chatData.showContactButtons),
-          contactPrefill: chatData.contactPrefill || text
+          contactPrefill: chatData.contactPrefill || text,
+          source: data.source || ""
         });
       } catch (err) {
         typingEl.remove();
-        appendBotMessage("Kết nối với tiệm hơi chập chờn một chút, bạn thử nhắn lại giúp tiệm nhé!", {
+        if (chatHistory.length && chatHistory[chatHistory.length - 1].role === "user" && chatHistory[chatHistory.length - 1].text === text) chatHistory.pop();
+        const message = err && err.name === "AbortError"
+          ? "Tiệm chưa phản hồi trong 45 giây. Bạn thử gửi lại sau một chút nhé ạ."
+          : "Kết nối với tiệm hơi chập chờn một chút, bạn thử nhắn lại giúp tiệm nhé!";
+        appendBotMessage(message, {
           showContactButtons: true,
           contactPrefill: text
         });
       } finally {
+        clearTimeout(chatTimeoutId);
+        chatRequestInFlight = false;
         sendBtn.disabled = false;
+        sendBtn.removeAttribute("aria-busy");
         if (isDesktop) {
           input.focus();
         }
@@ -4469,6 +4652,54 @@
       }
     }
 
+    const BUYER_GUIDE_SEEN_KEY = "thuBaBuyerGuideSeen_v1";
+    let buyerGuideCloseTimer = null;
+    let buyerGuideOpener = null;
+    function openBuyerGuide(opener) {
+      const backdrop = document.getElementById("buyerGuideBackdrop");
+      if (!backdrop) return;
+      if (buyerGuideCloseTimer) { clearTimeout(buyerGuideCloseTimer); buyerGuideCloseTimer = null; }
+      buyerGuideOpener = opener instanceof HTMLElement ? opener : (document.activeElement instanceof HTMLElement && document.activeElement !== document.body ? document.activeElement : null);
+      backdrop.classList.remove("is-closing");
+      backdrop.classList.add("open");
+      backdrop.setAttribute("aria-hidden", "false");
+      const app = document.querySelector(".app-shell");
+      if (app) app.inert = true;
+      const trigger = document.getElementById("buyerGuideInfoBtn");
+      if (trigger) trigger.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      setTimeout(() => backdrop.querySelector(".buyer-guide-close")?.focus(), 20);
+    }
+    function closeBuyerGuide() {
+      const backdrop = document.getElementById("buyerGuideBackdrop");
+      if (!backdrop || !backdrop.classList.contains("open")) return;
+      try { localStorage.setItem(BUYER_GUIDE_SEEN_KEY, "1"); } catch (e) {}
+      backdrop.classList.add("is-closing");
+      backdrop.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      const trigger = document.getElementById("buyerGuideInfoBtn");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+      buyerGuideCloseTimer = setTimeout(() => {
+        backdrop.classList.remove("open", "is-closing");
+        const app = document.querySelector(".app-shell");
+        if (app) app.inert = false;
+        buyerGuideCloseTimer = null;
+        if (buyerGuideOpener && document.contains(buyerGuideOpener)) buyerGuideOpener.focus();
+        buyerGuideOpener = null;
+      }, 190);
+    }
+    function trapBuyerGuideFocus(event) {
+      if (event.key !== "Tab") return;
+      const backdrop = document.getElementById("buyerGuideBackdrop");
+      if (!backdrop?.classList.contains("open")) return;
+      const focusables = [...backdrop.querySelectorAll('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex]:not([tabindex="-1"])')]
+        .filter(el => el.getClientRects().length > 0);
+      if (!focusables.length) { event.preventDefault(); backdrop.querySelector(".buyer-guide")?.focus(); return; }
+      const first = focusables[0], last = focusables[focusables.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !backdrop.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && (document.activeElement === last || !backdrop.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
       loadShipConfigCache();
       updatePromoBanner();
@@ -4490,10 +4721,14 @@
         if (wrap && !wrap.contains(event.target)) toggleCatalogSortMenu(false);
       });
       document.addEventListener("keydown", event => {
-        if (event.key === "Escape") toggleCatalogSortMenu(false);
+        if (event.key === "Escape") { toggleCatalogSortMenu(false); closeBuyerGuide(); }
+        trapBuyerGuideFocus(event);
       });
       updateCatalogSortUi();
       loadProducts();
+      let guideSeen = false;
+      try { guideSeen = localStorage.getItem(BUYER_GUIDE_SEEN_KEY) === "1"; } catch (e) {}
+      if (!guideSeen) setTimeout(openBuyerGuide, 420);
     });
   </script>
 </body>
